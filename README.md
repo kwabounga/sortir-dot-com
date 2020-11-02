@@ -1,4 +1,5 @@
 # sortir-dot-com
+![Sortir.com](src_assets/exports/logo_sortir.png?raw=true "Sortir")  
 site pour gérer des sorties
 
 
