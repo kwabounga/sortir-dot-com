@@ -68,12 +68,12 @@ class Participant
     /**
      * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
      */
-    private $sortiesOrganis�es;
+    private $sortiesOrganisees;
 
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
-        $this->sortiesOrganis�es = new ArrayCollection();
+        $this->sortiesOrganisees = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -93,14 +93,14 @@ class Participant
         return $this;
     }
 
-    public function getPr�nom(): ?string
+    public function getPrenom(): ?string
     {
-        return $this->pr�nom;
+        return $this->prenom;
     }
 
-    public function setPr�nom(string $pr�nom): self
+    public function setPrenom(string $prenom): self
     {
-        $this->pr�nom = $pr�nom;
+        $this->prenom = $prenom;
 
         return $this;
     }
@@ -207,15 +207,15 @@ class Participant
     /**
      * @return Collection|Sortie[]
      */
-    public function getSortiesOrganis�es(): Collection
+    public function getSortiesOrganisees(): Collection
     {
-        return $this->sortiesOrganis�es;
+        return $this->sortiesOrganisees;
     }
 
     public function addSortiesOrganisE(Sortie $sortiesOrganisE): self
     {
-        if (!$this->sortiesOrganis�es->contains($sortiesOrganisE)) {
-            $this->sortiesOrganis�es[] = $sortiesOrganisE;
+        if (!$this->sortiesOrganisees->contains($sortiesOrganisE)) {
+            $this->sortiesOrganisees[] = $sortiesOrganisE;
             $sortiesOrganisE->setOrganisateur($this);
         }
 
@@ -224,7 +224,7 @@ class Participant
 
     public function removeSortiesOrganisE(Sortie $sortiesOrganisE): self
     {
-        if ($this->sortiesOrganis�es->removeElement($sortiesOrganisE)) {
+        if ($this->sortiesOrganisees->removeElement($sortiesOrganisE)) {
             // set the owning side to null (unless already changed)
             if ($sortiesOrganisE->getOrganisateur() === $this) {
                 $sortiesOrganisE->setOrganisateur(null);

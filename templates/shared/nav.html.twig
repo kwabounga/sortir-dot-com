@@ -11,11 +11,18 @@
             <li class="nav-item"><a class="nav-link"  href="{{ path("main_home") }}" title="Campus">Campus</a></li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProfil" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Nom profil
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED')%}{{ user.username }} profil{% else %}Profil{% endif %}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfil">
-                    <a class="dropdown-item" href="{{ path("main_home") }}" title="Mon profil">Mon profil</a>
-                    <a class="dropdown-item" href="{{ path("main_home") }}" title="Se déconnecter">Se déconnecter</a>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED')%}
+                    <a class="dropdown-item" href="{{ path("profile") }}" title="Mon profil">Mon profil</a>
+                    <a class="dropdown-item" href="{{ path("logout") }}" title="Se déconnecter">Se déconnecter</a>
+                    {% if is_granted('ROLE_ADMIN')%}
+                        <a class="dropdown-item" href="{{ path("register") }}" title="Se déconnecter">Nouvel Utilisateur</a>
+                    {% endif %}
+                {% else %}
+                    <a class="dropdown-item" href="{{ path("login") }}" title="connection">Se connecter</a>
+                {% endif %}
                 </div>
             </li>
         </ul>

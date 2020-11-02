@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class MainController extends AbstractController {
 
     /**
-     * @Route("/", name="main")
+     * @Route("/", name="home")
      */
     public function main() {
         return $this->redirectToRoute('main_home');
@@ -18,6 +18,9 @@ class MainController extends AbstractController {
      * @Route("/website", name="main_home")
      */
     public function home() {
-        return $this->render('main/home.html.twig');
+        $user = $this->getUser();
+        return $this->render('main/home.html.twig', [
+            "user" => $user
+        ]);
     }
 }

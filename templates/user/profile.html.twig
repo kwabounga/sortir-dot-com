@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Profil {% endblock %}
+{% block body  %}
+    {{ form_start(register_form) }}
+    {{ form_widget(register_form) }}
+    <button class="btn btn-sm btn-success" type="submit">Register</button>
+    <a href="{{ path('home') }}" class="btn btn-sm btn-warning">Annuler</a>
+    {{ form_end(register_form) }}
+{% endblock %}
+
