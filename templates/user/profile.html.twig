@@ -2,10 +2,22 @@
 
 {% block title %} Profil {% endblock %}
 {% block body  %}
-    {{ form_start(register_form) }}
-    {{ form_widget(register_form) }}
+
+    {{ form_label(register_form.username) }}
+    {{ form_widget(register_form.username) }}
+
+    {{ form_widget(register_form.password) }}
+    {{ form_label(register_form.firstname) }}
+    {{ form_widget(register_form.firstname) }}
+    {{ form_label(register_form.lastname) }}
+    {{ form_widget(register_form.lastname) }}
+    {{ form_label(register_form.mail) }}
+    {{ form_widget(register_form.mail) }}
+    {{ form_label(register_form.phone) }}
+    {{ form_widget(register_form.phone) }}
+
     <button class="btn btn-sm btn-success" type="submit">Register</button>
     <a href="{{ path('home') }}" class="btn btn-sm btn-warning">Annuler</a>
-    {{ form_end(register_form) }}
+
 {% endblock %}
 
