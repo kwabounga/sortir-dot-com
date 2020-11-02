@@ -34,12 +34,13 @@ class UserController extends AbstractController
             $registerForm->handleRequest($request);
             if($registerForm->isSubmitted() && $registerForm->isValid()){
                 $user->setDateCreated(new \DateTime());
-                $d = new \DateTime();
                 $hash = $encoder->encodePassword($user, $user->getPassword());
                 $user->setPassword($hash);
                 $em->persist($user);
                 $em->flush();
                 return $this->redirectToRoute('home');
+            } else {
+                $this->addFlash('error', 'what the hell');
             }
             return $this->render('user/register.html.twig', [
                 'page_name' => 'Register',
@@ -63,8 +64,10 @@ class UserController extends AbstractController
      * @return Response
      */
     public function login(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder){
+        $user = $this->getUser();
         return $this->render("user/login.html.twig", [
             'page_name' => 'Login',
+            "user" => $user,
 
         ]);
     }
@@ -77,12 +80,22 @@ class UserController extends AbstractController
     /**
      * @Route("/profile", name="profile")
      */
-    public function profile(){
-        $userForm = $this->createForm(RegisterType::class, $this->getUser());
-
+    public function profile(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder){
+        $user = $this->getUser();
+        $userForm = $this->createForm(RegisterType::class, $user);
+        $registerForm = $this->createForm(RegisterType::class,$user);
+        $registerForm->handleRequest($request);
+        if($registerForm->isSubmitted() && $registerForm->isValid()){
+            $user->setDateCreated(new \DateTime());
+            $hash = $encoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($hash);
+            $em->persist($user);
+            $em->flush();
+            return $this->redirectToRoute('profile');
+        }
         return $this->render("user/profile.html.twig", [
             'page_name' => 'profile',
-            'user' => $this->getUser(),
+            'user' => $user,
             'register_form'=> $userForm->createView()
         ]);
     }
