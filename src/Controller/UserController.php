@@ -18,7 +18,8 @@ class UserController extends AbstractController
      */
     public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $id = null)
     {
-        if($this->isGranted('ROLE_ADMIN')){
+        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        if($this->isGranted('ROLE_ADMIN') || count($users) === 0){
             if ($id){
                 $user = $this->getDoctrine()->getRepository(User::class)->find($id);
                 if(!$user){
@@ -47,6 +48,7 @@ class UserController extends AbstractController
 
             ]);
         } else {
+
             $this->addFlash('error', 'vous devez etre admin pour venir ici');
             return $this->redirectToRoute('login');
         }
