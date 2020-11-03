@@ -50,15 +50,19 @@ class UserController extends AbstractController
             $registerForm = $this->createForm(RegisterType::class,$user);
             $registerForm->handleRequest($request);
             if($registerForm->isSubmitted() && $registerForm->isValid()){
-                if(count($users) === 0){
-                    // ici premiere initialisation de la bdd lors de l'enregistrement
-                    InitialisationService::firstInitBdd($em, $encoder);
-                }
+
                 $user->setDateCreated(new \DateTime());
                 $hash = $encoder->encodePassword($user, $user->getPassword());
                 $user->setPassword($hash);
                 $em->persist($user);
                 $em->flush();
+
+                if(count($users) === 0){
+                    // ici premiere initialisation de la bdd lors de l'enregistrement
+                    InitialisationService::firstInitBdd($em, $encoder,__DIR__.'/script.sql');
+                }
+
+
                 return $this->redirectToRoute('home');
             } else if(count($users) === 0){
                 $this->addFlash('info', 'premiere connection : configuration du compte administrateur');
