@@ -30,7 +30,7 @@ class UserController extends AbstractController
     public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $id = null)
     {
 
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        //$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
         if($this->isGranted('ROLE_ADMIN') || count($users) === 0){
