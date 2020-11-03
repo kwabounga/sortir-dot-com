@@ -25,7 +25,7 @@
  
   | Nom | Route | OK |  
   | ---- | ---- | ---- |   
-  | home                 |      /                             | [ ] |      
+  | home                 |      /                             | [ ] |    
   | main_home            |      /website                      | [ ] |       
   | sortie_ajouter       |      /website/sortie/ajouter       | [ ] |        
   | sortie_detail        |      /website/sortie/{id}          | [ ] |       
@@ -35,5 +35,5 @@
   | register             |      /register/{id}                | [ ] |     
   | login                |      /login                        | ✅ |     
   | logout               |      /logout                       | ✅ |        
-  | profile              |      /profile                      | [ ] |       
+  | profile              |      /profile                      | ❌ |       
   | ville_liste          |      /website/ville/               | [ ] |        
