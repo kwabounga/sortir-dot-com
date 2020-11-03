@@ -23,7 +23,7 @@ class UserController extends AbstractController
         $roles = $em->getRepository(Role::class)->findAll();
         if(count($roles) === 0 ){
             InitialisationService::firstInitBdd($em, $encoder,__DIR__.'/script.sql');
-            $this->addFlash('info', 'Premiere initialisation');
+            $this->addFlash('infos', 'Premiere initialisation');
         }
         return $this->redirectToRoute('main_home');
     }
@@ -62,10 +62,9 @@ class UserController extends AbstractController
                     InitialisationService::firstInitBdd($em, $encoder,__DIR__.'/script.sql');
                 }
 
-
                 return $this->redirectToRoute('home');
             } else if(count($users) === 0){
-                $this->addFlash('info', 'premiere connection : configuration du compte administrateur');
+                $this->addFlash('infos', 'premiere connection : configuration du compte administrateur');
             }
             return $this->render('user/register.html.twig', [
                 'page_name' => 'Register',
