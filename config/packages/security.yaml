@@ -20,6 +20,10 @@ security:
                 path: logout
                 target: home
             http_basic: true
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path: /
     encoders:
         App\Entity\User:
             algorithm: bcrypt

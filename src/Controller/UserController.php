@@ -29,6 +29,9 @@ class UserController extends AbstractController
      */
     public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $id = null)
     {
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
         if($this->isGranted('ROLE_ADMIN') || count($users) === 0){
             if ($id){
@@ -37,7 +40,7 @@ class UserController extends AbstractController
                     $this->addFlash('error', 'pas possible de faire ca ');
                     $user = new User();
                 }
-            } else {
+            } else{
                 $user = new User();
             }
 
@@ -54,7 +57,7 @@ class UserController extends AbstractController
                 $em->persist($user);
                 $em->flush();
                 return $this->redirectToRoute('home');
-            } else {
+            } else if(count($users) === 0){
                 $this->addFlash('info', 'premiere connection : configuration du compte administrateur');
             }
             return $this->render('user/register.html.twig', [
