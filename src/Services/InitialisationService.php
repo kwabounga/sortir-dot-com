@@ -46,17 +46,7 @@ class InitialisationService
         }
 
     }
-//    private static function initSQL(EntityManagerInterface $em, $kernel, $scriptDir){
-//        $application = new \Symfony\Bundle\FrameworkBundle\Console\Application($kernel);
-//        $application->setAutoExit(false);
-////        //Create de BDD
-////        $options = array('command' => 'doctrine:database:create');
-////        $application->run(new \Symfony\Component\Console\Input\ArrayInput($options));
-//        //Create de Schema
-//        $options = array('command' => 'doctrine:schema:update',"--force" => true);
-//        $application->run(new \Symfony\Component\Console\Input\ArrayInput($options));
-//
-//    }
+
     private static function initSQL(EntityManagerInterface $em,  $scriptDir){
         $script = $scriptDir;
         dump($script);
