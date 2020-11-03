@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Form\RegisterType;
+use App\Services\InitialisationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,14 +29,9 @@ class UserController extends AbstractController
                     $user = new User();
                 }
             } else {
+                // ici premiere initialisation de la bdd
+                InitialisationService::firstInitBdd($em);
                 $user = new User();
-                $r1 = new Role();
-                $r1->setValue('ROLE_ADMIN');
-                $r2 = new Role();
-                $r2->setValue('ROLE_USER');
-                $em->persist($r1);
-                $em->persist($r2);
-                $em->flush();
             }
 
             $registerForm = $this->createForm(RegisterType::class,$user);
@@ -48,12 +44,12 @@ class UserController extends AbstractController
                 $em->flush();
                 return $this->redirectToRoute('home');
             } else {
-                $this->addFlash('error', 'what the hell');
+                $this->addFlash('info', 'premiere connection : configuration du compte administrateur');
             }
             return $this->render('user/register.html.twig', [
                 'page_name' => 'Register',
                 'register_form' => $registerForm->createView(),
-                'user' => $user
+                'user' => $user,
 
             ]);
         } else {
