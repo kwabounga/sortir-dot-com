@@ -1,6 +1,5 @@
 # sortir-dot-com
 ![Sortir.com](src_assets/exports/logo_sortir.png?raw=true "Sortir")  
-
 ## site pour gérer des sorties
 
 **INSTALLATION**  
@@ -20,6 +19,7 @@
 
 7 connection en mode admin avec admin:admin
 
+-------------------------------
 
 **ROUTES** 
  
@@ -37,3 +37,13 @@
   | logout               |      /logout                       | ✅ | ❌ | ❌       
   | profile              |      /profile                      | ❌ | ✅ | ❌       
   | ville_liste          |      /website/ville/               |   | ✅ | ❌        
+-------------------------------
+
+**RAZ**  
+
+mysql >>  `DROP TABLE sortir`
+cmdr >>   `php bin/console doctrine:database:create`
+cmdr >>   `php bin/console doctrine:schema:update --force`
+navigateur >> 'http://localhost/sortir-dot-com/public/'
+connexion >> admin / admin
+-------------------------------
