@@ -18,7 +18,7 @@ security:
                 check_path: login
             logout:
                 path: logout
-                target: home
+                target: main_home
             http_basic: true
             remember_me:
                 secret: '%kernel.secret%'
