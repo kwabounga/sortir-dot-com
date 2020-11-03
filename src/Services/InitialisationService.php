@@ -7,16 +7,79 @@ namespace App\Services;
 use App\Entity\Campus;
 use App\Entity\Etat;
 use App\Entity\Role;
+use App\Entity\User;
 use App\Entity\Ville;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class InitialisationService
 {
-    public static function firstInitBdd(EntityManagerInterface $em) {
+    public static function firstInitBdd(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $scriptDir) {
         InitialisationService::initRoles($em);
         InitialisationService::initCampus($em);
         InitialisationService::initVilles($em);
         InitialisationService::initEtats($em);
+        InitialisationService::initAdmin($em, $encoder);
+        InitialisationService::initSQL($em,  $scriptDir);
+    }
+
+    private static function initAdmin(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder){
+        $login = 'admin';
+        $passw = 'admin';
+        try {
+            $user = new User();
+            $user->setDateCreated(new \DateTime());
+            $user->setUsername($login);
+            $user->setCampus($em->getRepository(Campus::class)->find(1));
+            $user->setRole($em->getRepository(Role::class)->find(1));
+            $user->setMail('admin@admin.fr');
+            $user->setPhone('0240252525');
+            $user->setFirstname('administrateur');
+            $user->setLastname('de l\'eni');
+
+            $hash = $encoder->encodePassword($user, $passw);
+            $user->setPassword($hash);
+            $em->persist($user);
+            $em->flush();
+        } catch (\Exception $e) {
+            dump($e);
+        }
+
+    }
+//    private static function initSQL(EntityManagerInterface $em, $kernel, $scriptDir){
+//        $application = new \Symfony\Bundle\FrameworkBundle\Console\Application($kernel);
+//        $application->setAutoExit(false);
+////        //Create de BDD
+////        $options = array('command' => 'doctrine:database:create');
+////        $application->run(new \Symfony\Component\Console\Input\ArrayInput($options));
+//        //Create de Schema
+//        $options = array('command' => 'doctrine:schema:update',"--force" => true);
+//        $application->run(new \Symfony\Component\Console\Input\ArrayInput($options));
+//
+//    }
+    private static function initSQL(EntityManagerInterface $em,  $scriptDir){
+        $script = $scriptDir;
+        dump($script);
+        $buffer = null;
+        if (file_exists($script)) {
+            if(false !== $handle = @fopen($script, 'r')) {
+                $buffer = [];
+                while (($word = fgets($handle)) !== false) {
+                    $buffer[] = $word;
+                }
+                fclose($handle);
+            } else {
+                // erreur
+            }
+        } else {
+            $buffer = ['nothing here'];
+        }
+        dump($buffer);
+
+        $conn = $em->getConnection();
+        $sql = join(" ", $buffer);
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
     }
     private static function initRoles(EntityManagerInterface $em) {
         $roles = $em->getRepository(Role::class)->findAll();

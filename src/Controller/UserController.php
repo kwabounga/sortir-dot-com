@@ -18,10 +18,13 @@ class UserController extends AbstractController
     /**
      * @Route("/update/bdd", name="update_bdd")
      */
-    public function updateBdd(EntityManagerInterface $em)
+    public function updateBdd(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder)
     {
-        InitialisationService::firstInitBdd($em);
-        $this->addFlash('info', 'BDD Mise a jour');
+        $roles = $em->getRepository(Role::class)->findAll();
+        if(count($roles) === 0 ){
+            InitialisationService::firstInitBdd($em, $encoder,__DIR__.'/script.sql');
+            $this->addFlash('info', 'Premiere initialisation');
+        }
         return $this->redirectToRoute('main_home');
     }
     /**
@@ -49,7 +52,7 @@ class UserController extends AbstractController
             if($registerForm->isSubmitted() && $registerForm->isValid()){
                 if(count($users) === 0){
                     // ici premiere initialisation de la bdd lors de l'enregistrement
-                    InitialisationService::firstInitBdd($em);
+                    InitialisationService::firstInitBdd($em, $encoder);
                 }
                 $user->setDateCreated(new \DateTime());
                 $hash = $encoder->encodePassword($user, $user->getPassword());

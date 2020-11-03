@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+
+{% block body %}
+     {% for word in buffer %}
+         {{ word }}
+     {% else %}
+        nothing
+     {% endfor %}
+{% endblock %}
