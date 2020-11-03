@@ -23,17 +23,17 @@
 
 **ROUTES** 
  
-  | Nom | Route |  
-  | ---- | ---- |   
-  | home                 |      /                             |      
-  | main_home            |      /website                      |       
-  | sortie_detail        |      /website/sortie/{id}          |       
-  | sortie_ajouter       |      /website/sortie/ajouter       |        
-  | sortie_modifier      |      /website/sortie/modifier/{id} |      
-  | sortie_annuler       |      /website/sortie/annuler/{id}  |       
-  | update_bdd           |      /update/bdd                   |        
-  | register             |      /register/{id}                |     
-  | login                |      /login                        |     
-  | logout               |      /logout                       |        
-  | profile              |      /profile                      |       
-  | ville_liste          |      /website/ville/               |        
+  | Nom | Route | Ok |  
+  | ---- | ---- | ---- |   
+  | home                 |      /                             | - [ ] |      
+  | main_home            |      /website                      | - [ ] |       
+  | sortie_ajouter       |      /website/sortie/ajouter       | - [ ] |        
+  | sortie_detail        |      /website/sortie/{id}          | - [ ] |       
+  | sortie_modifier      |      /website/sortie/modifier/{id} | - [ ] |      
+  | sortie_annuler       |      /website/sortie/annuler/{id}  | - [ ] |       
+  | update_bdd           |      /update/bdd                   | - [ ] |        
+  | register             |      /register/{id}                | - [ ] |     
+  | login                |      /login                        | - [x] |     
+  | logout               |      /logout                       | - [x] |        
+  | profile              |      /profile                      | - [ ] |       
+  | ville_liste          |      /website/ville/               | - [ ] |        
