@@ -25,9 +25,9 @@ class MainController extends AbstractController {
      */
     public function home() {
         $this->addFlash('infos', '$this->addFlash(\'infos\', \'une information\');');
-        $this->addFlash('success', '$this->addFlash(\'infos\', \'une reussite\');');
-        $this->addFlash('warning', '$this->addFlash(\'infos\', \'un avertissement\');');
-        $this->addFlash('error', '$this->addFlash(\'infos\', \'une erreure qui reste\');');
+        $this->addFlash('success', '$this->addFlash(\'success\', \'une reussite\');');
+        $this->addFlash('warning', '$this->addFlash(\'warning\', \'un avertissement\');');
+        $this->addFlash('error', '$this->addFlash(\'error\', \'une erreure qui reste\');');
         return $this->render('main/home.html.twig');
     }
 }
