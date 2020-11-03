@@ -36,4 +36,4 @@
   | login                |      /login                        | ✅ | ❌ | ❌ 
   | logout               |      /logout                       | ✅ | ❌ | ❌       
   | profile              |      /profile                      | ❌ | ✅ | ❌       
-  | ville_liste          |      /website/ville/               | [ ] |        
+  | ville_liste          |      /website/ville/               |   | ✅ | ❌        
