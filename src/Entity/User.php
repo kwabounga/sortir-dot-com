@@ -85,6 +85,11 @@ class User implements UserInterface
     private $role;
 
     /**
+     * @ORM\Column(type="boolean", options={"default" : TRUE})
+     */
+    private $actif = TRUE;
+
+    /**
      * @return mixed
      */
     public function getCampus()
@@ -277,6 +282,18 @@ class User implements UserInterface
     public function setRole($role): void
     {
         $this->role = $role;
+    }
+
+    public function getActif(): ?bool
+    {
+        return $this->actif;
+    }
+
+    public function setActif(bool $actif): self
+    {
+        $this->actif = $actif;
+
+        return $this;
     }
 
 
