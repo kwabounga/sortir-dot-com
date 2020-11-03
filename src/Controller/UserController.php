@@ -16,6 +16,15 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends AbstractController
 {
     /**
+     * @Route("/update/bdd", name="update_bdd")
+     */
+    public function updateBdd(EntityManagerInterface $em)
+    {
+        InitialisationService::firstInitBdd($em);
+        $this->addFlash('info', 'BDD Mise a jour');
+        return $this->redirectToRoute('main_home');
+    }
+    /**
      * @Route("/register/{id}", name="register")
      */
     public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $id = null)
