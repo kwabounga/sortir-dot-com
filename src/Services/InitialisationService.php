@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use App\Entity\Etat;
 use App\Entity\Role;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -31,5 +32,18 @@ class InitialisationService
     }
     private static function initCampus(EntityManagerInterface $em) {  }
     private static function initVilles(EntityManagerInterface $em) {  }
-    private static function initEtats(EntityManagerInterface $em) {  }
+    private static function initEtats(EntityManagerInterface $em) {
+        $states = $em->getRepository(Etat::class)->findAll();
+        if(count($states) === 0 ){
+            $as = ['en creation', 'ouverte', 'clôturée', 'en cours', 'terminée', 'historisée'];
+            for ($i = 0 ; $i<count($as); $i++){
+                $r = new Etat();
+                $r->setLibelle($as[$i]);
+                $em->persist($r);
+            }
+            $em->flush();
+        } else {
+            // etats deja initialisés
+        }
+    }
 }

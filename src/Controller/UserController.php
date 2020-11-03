@@ -29,14 +29,16 @@ class UserController extends AbstractController
                     $user = new User();
                 }
             } else {
-                // ici premiere initialisation de la bdd
-                InitialisationService::firstInitBdd($em);
                 $user = new User();
             }
 
             $registerForm = $this->createForm(RegisterType::class,$user);
             $registerForm->handleRequest($request);
             if($registerForm->isSubmitted() && $registerForm->isValid()){
+                if(count($users) === 0){
+                    // ici premiere initialisation de la bdd lors de l'enregistrement
+                    InitialisationService::firstInitBdd($em);
+                }
                 $user->setDateCreated(new \DateTime());
                 $hash = $encoder->encodePassword($user, $user->getPassword());
                 $user->setPassword($hash);
@@ -53,7 +55,6 @@ class UserController extends AbstractController
 
             ]);
         } else {
-
             $this->addFlash('error', 'vous devez etre admin pour venir ici');
             return $this->redirectToRoute('login');
         }
