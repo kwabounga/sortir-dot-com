@@ -41,9 +41,9 @@
 
 **RAZ**  
 
-mysql >>  `DROP TABLE sortir`
-cmdr >>   `php bin/console doctrine:database:create`
-cmdr >>   `php bin/console doctrine:schema:update --force`
-navigateur >> 'http://localhost/sortir-dot-com/public/'
-connexion >> admin / admin
--------------------------------
+mysql >>  `DROP TABLE sortir`  
+cmdr >>   `php bin/console doctrine:database:create`  
+cmdr >>   `php bin/console doctrine:schema:update --force`  
+navigateur >> 'http://localhost/sortir-dot-com/public/'  
+connexion >> admin / admin  
+-------------------------------  
