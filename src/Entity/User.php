@@ -63,10 +63,75 @@ class User implements UserInterface
      */
     private $dateCreated;
 
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="etudiants")
+     */
+    private $campus;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Sortie::class, mappedBy="participants")
+     */
+    private $sorties;
+    /**
+     * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
+     */
+    private $sortiesOrganisees;
+
+
     /**
      * @ORM\ManyToOne (targetEntity="App\Entity\Role")
      */
     private $role;
+
+    /**
+     * @return mixed
+     */
+    public function getCampus()
+    {
+        return $this->campus;
+    }
+
+    /**
+     * @param mixed $campus
+     */
+    public function setCampus($campus): void
+    {
+        $this->campus = $campus;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSorties()
+    {
+        return $this->sorties;
+    }
+
+    /**
+     * @param mixed $sorties
+     */
+    public function setSorties($sorties): void
+    {
+        $this->sorties = $sorties;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSortiesOrganisees()
+    {
+        return $this->sortiesOrganisees;
+    }
+
+    /**
+     * @param mixed $sortiesOrganisees
+     */
+    public function setSortiesOrganisees($sortiesOrganisees): void
+    {
+        $this->sortiesOrganisees = $sortiesOrganisees;
+    }
+
 
     public function getId(): ?int
     {

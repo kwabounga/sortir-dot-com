@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Role;
 use App\Entity\User;
 use App\Form\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,6 +29,13 @@ class UserController extends AbstractController
                 }
             } else {
                 $user = new User();
+                $r1 = new Role();
+                $r1->setValue('ROLE_ADMIN');
+                $r2 = new Role();
+                $r2->setValue('ROLE_USER');
+                $em->persist($r1);
+                $em->persist($r2);
+                $em->flush();
             }
 
             $registerForm = $this->createForm(RegisterType::class,$user);

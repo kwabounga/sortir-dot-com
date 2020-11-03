@@ -51,30 +51,27 @@ class Sortie
 
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class)
-     * @ORM\JoinColumn(nullable=false)
      */
     private $etat;
 
     /**
      * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="sorties")
-     * @ORM\JoinColumn(nullable=false)
-     */
+      */
     private $campus;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Participant::class, inversedBy="sorties")
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sorties")
      */
     private $participants;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Participant::class, inversedBy="sortiesOrganisées")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sortiesOrganisees")
      */
     private $organisateur;
 
     /**
      * @ORM\ManyToOne(targetEntity=Lieu::class, inversedBy="sorties")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    */
     private $lieu;
 
     public function __construct()

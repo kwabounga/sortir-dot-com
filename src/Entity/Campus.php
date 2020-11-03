@@ -25,7 +25,7 @@ class Campus
     private $nom;
 
     /**
-     * @ORM\OneToMany(targetEntity=Participant::class, mappedBy="campus")
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="campus")
      */
     private $etudiants;
 
@@ -36,7 +36,7 @@ class Campus
 
     public function __construct()
     {
-        $this->Etudiants = new ArrayCollection();
+        $this->etudiants = new ArrayCollection();
         $this->sorties = new ArrayCollection();
     }
 
@@ -58,34 +58,34 @@ class Campus
     }
 
     /**
-     * @return Collection|Participant[]
+     * @return Collection|User[]
      */
     public function getEtudiants(): Collection
     {
-        return $this->Etudiants;
+        return $this->etudiants;
     }
 
-    public function addEtudiant(Participant $etudiant): self
-    {
-        if (!$this->Etudiants->contains($etudiant)) {
-            $this->Etudiants[] = $etudiant;
-            $etudiant->setCampus($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEtudiant(Participant $etudiant): self
-    {
-        if ($this->Etudiants->removeElement($etudiant)) {
-            // set the owning side to null (unless already changed)
-            if ($etudiant->getCampus() === $this) {
-                $etudiant->setCampus(null);
-            }
-        }
-
-        return $this;
-    }
+//    public function addEtudiant(User $etudiant): self
+//    {
+//        if (!$this->Etudiants->contains($etudiant)) {
+//            $this->Etudiants[] = $etudiant;
+//            $etudiant->setCampus($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeEtudiant(Participant $etudiant): self
+//    {
+//        if ($this->Etudiants->removeElement($etudiant)) {
+//            // set the owning side to null (unless already changed)
+//            if ($etudiant->getCampus() === $this) {
+//                $etudiant->setCampus(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 
     /**
      * @return Collection|Sortie[]
@@ -95,25 +95,25 @@ class Campus
         return $this->sorties;
     }
 
-    public function addSorty(Sortie $sorty): self
-    {
-        if (!$this->sorties->contains($sorty)) {
-            $this->sorties[] = $sorty;
-            $sorty->setCampus($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSorty(Sortie $sorty): self
-    {
-        if ($this->sorties->removeElement($sorty)) {
-            // set the owning side to null (unless already changed)
-            if ($sorty->getCampus() === $this) {
-                $sorty->setCampus(null);
-            }
-        }
-
-        return $this;
-    }
+//    public function addSorty(Sortie $sorty): self
+//    {
+//        if (!$this->sorties->contains($sorty)) {
+//            $this->sorties[] = $sorty;
+//            $sorty->setCampus($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeSorty(Sortie $sorty): self
+//    {
+//        if ($this->sorties->removeElement($sorty)) {
+//            // set the owning side to null (unless already changed)
+//            if ($sorty->getCampus() === $this) {
+//                $sorty->setCampus(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 }
