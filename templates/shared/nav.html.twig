@@ -8,26 +8,27 @@
     <div id="navbarId" class="collapse navbar-collapse justify-content-end">
         <ul class="navbar-nav">
             {% if is_granted('ROLE_ADMIN')%}
-                <li class="nav-item"><a class="nav-link" href="{{ path("main_home") }}" title="Villes">Villes</a></li>
-                <li class="nav-item"><a class="nav-link"  href="{{ path("main_home") }}" title="Campus">Campus</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path("ville_liste") }}" title="Villes">Villes</a></li>
+                <li class="nav-item"><a class="nav-link"  href="{{ path("campus_liste") }}" title="Campus">Campus</a></li>
             {% endif %}
 
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProfil" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED')%}{{ user.username }} profil{% else %}Profil{% endif %}
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED')%}{{ app.user.username }} {% else %}Profil{% endif %}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfil">
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED')%}
                     {% if is_granted('ROLE_ADMIN')%}
-                        <a class="dropdown-item" href="{{ path("register", {"id":user.id}) }}" title="Mon profil">Mon profil</a>
+                        <a class="dropdown-item" href="{{ path("register", {"id": app.user.id }) }}" title="Mon profil">Mon profil</a>
                     {% else  %}
-                        <a class="dropdown-item" href="{{ path("profile", {"id":user.id}) }}" title="Mon profil">Mon profil</a>
+                        <a class="dropdown-item" href="{{ path("profile", {"id": app.user.id }) }}" title="Mon profil">Mon profil</a>
                     {% endif %}
 
-                    <a class="dropdown-item" href="{{ path("logout") }}" title="Se déconnecter">Se déconnecter</a>
                     {% if is_granted('ROLE_ADMIN')%}
                         <a class="dropdown-item" href="{{ path("register") }}" title="Se déconnecter">Nouvel Utilisateur</a>
                     {% endif %}
+
+                    <a class="dropdown-item" href="{{ path("logout") }}" title="Se déconnecter">Se déconnecter</a>
                 {% else %}
                     <a class="dropdown-item" href="{{ path("login") }}" title="connection">Se connecter</a>
                 {% endif %}
