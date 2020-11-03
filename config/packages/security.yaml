@@ -1,17 +1,17 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        our_db_provider:
+        users:
             entity:
                 class: App\Entity\User
-                property: username
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             pattern: ^/
-            provider: our_db_provider
+            provider: users
             anonymous: ~
             form_login:
                 login_path: login

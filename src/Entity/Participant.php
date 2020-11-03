@@ -65,10 +65,10 @@ class Participant
      */
     private $sorties;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
-     */
-    private $sortiesOrganisees;
+//    /**
+//     * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
+//     */
+//    private $sortiesOrganisees;
 
     public function __construct()
     {
@@ -212,25 +212,25 @@ class Participant
         return $this->sortiesOrganisees;
     }
 
-    public function addSortiesOrganisE(Sortie $sortiesOrganisE): self
-    {
-        if (!$this->sortiesOrganisees->contains($sortiesOrganisE)) {
-            $this->sortiesOrganisees[] = $sortiesOrganisE;
-            $sortiesOrganisE->setOrganisateur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSortiesOrganisE(Sortie $sortiesOrganisE): self
-    {
-        if ($this->sortiesOrganisees->removeElement($sortiesOrganisE)) {
-            // set the owning side to null (unless already changed)
-            if ($sortiesOrganisE->getOrganisateur() === $this) {
-                $sortiesOrganisE->setOrganisateur(null);
-            }
-        }
-
-        return $this;
-    }
+//    public function addSortiesOrganisE(Sortie $sortiesOrganisE): self
+//    {
+//        if (!$this->sortiesOrganisees->contains($sortiesOrganisE)) {
+//            $this->sortiesOrganisees[] = $sortiesOrganisE;
+//            $sortiesOrganisE->setOrganisateur($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeSortiesOrganisE(Sortie $sortiesOrganisE): self
+//    {
+//        if ($this->sortiesOrganisees->removeElement($sortiesOrganisE)) {
+//            // set the owning side to null (unless already changed)
+//            if ($sortiesOrganisE->getOrganisateur() === $this) {
+//                $sortiesOrganisE->setOrganisateur(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 }
