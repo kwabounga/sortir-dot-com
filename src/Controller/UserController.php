@@ -134,6 +134,9 @@ class UserController extends AbstractController
      * @Route("/profile", name="profile")
      */
     public function profile(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder){
+        if($this->isGranted('ROLE_ADMIN')){
+            $this->addFlash(Msgr::TYPE_WARNING, 'en admin aller sur register pour avoir plus de modification');
+        }
         $user = $this->getUser();
         $userForm = $this->createForm(RegisterType::class, $user);
         $registerForm = $this->createForm(RegisterType::class,$user);

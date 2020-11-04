@@ -11,7 +11,7 @@
                 <li class="nav-item"><a class="nav-link" href="{{ path("ville_liste") }}" title="Villes">Villes</a></li>
                 <li class="nav-item"><a class="nav-link"  href="{{ path("campus_liste") }}" title="Campus">Campus</a></li>
             {% endif %}
-
+                <li class="nav-item"><a class="nav-link"  href="{{ path("main_home") }}" title="Campus">Accueil</a></li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProfil" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED')%}{{ app.user.username }} {% else %}Profil{% endif %}
