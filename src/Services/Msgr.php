@@ -4,14 +4,6 @@
 namespace App\Services;
 
 
-use App\Entity\Campus;
-use App\Entity\Etat;
-use App\Entity\Role;
-use App\Entity\User;
-use App\Entity\Ville;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
 class Msgr
 
 {
