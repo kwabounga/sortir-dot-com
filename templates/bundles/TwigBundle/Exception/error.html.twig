@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+{% endblock %}
+{% block body %}
+    <h1>Explosion du serveur</h1>
+    <h3>{{ uri }} </h3>
+    <p>
+        Votre demande n'as pas pu aboutir du a une explosion de nos serveurs. Cependant vous pouvez <a href="{{ path('main_home') }}">reourner à la page d'acceuil</a>.
+    </p>
+    <ul>
+        <li>{{ path(route) }}</li>
+        <li></li>
+        <li></li>
+    </ul>
+    {% for route in routes %}
+    <div>{{ route }}</div>
+    {% endfor %}
+{% endblock %}

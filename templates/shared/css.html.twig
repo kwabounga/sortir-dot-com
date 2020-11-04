@@ -1,12 +1,24 @@
 <link rel="stylesheet" href="{{ asset('css/sortir.css') }}">
 <style type="text/css">
+
+    /* proprietés css 'in dom' > acces aux vars & asset() */
+
     @font-face {
         font-family: "Roboto_Perso";
         src: url("{{ asset('fonts/Roboto-Thin.ttf') }}") format("truetype");
     }
     body {
-        background-color: lightskyblue;
+
     }
+    .floatr{
+        float: right;
+    }.floatl{
+        float: left;
+    }
+    .spacer {
+        height: 2em;
+    }
+    /* messages flash & toasts */
 
     .success-filter{
         filter: invert(38%) sepia(85%) saturate(1135%) hue-rotate(46deg) brightness(96%) contrast(101%);

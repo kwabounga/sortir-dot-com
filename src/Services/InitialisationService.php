@@ -13,19 +13,24 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class InitialisationService
+
 {
-    public static function firstInitBdd(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $scriptDir) {
+    /* initialisation de la base de donnée au demarrage */
+    public static function firstInitBdd(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $aLogin, $aPassword,$scriptDir = null) {
         InitialisationService::initRoles($em);
         InitialisationService::initCampus($em);
         InitialisationService::initVilles($em);
         InitialisationService::initEtats($em);
-        InitialisationService::initAdmin($em, $encoder);
-        InitialisationService::initSQL($em,  $scriptDir);
+        InitialisationService::initAdmin($em, $encoder, $aLogin, $aPassword);
+        if ($scriptDir !== null) {
+            InitialisationService::initSQL($em,  $scriptDir);
+        }
     }
 
-    private static function initAdmin(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder){
-        $login = 'admin';
-        $passw = 'admin';
+    // creation du compte admin
+    private static function initAdmin(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $aLogin, $aPassword){
+        $login = $aLogin;
+        $passw = $aPassword;
         try {
             $user = new User();
             $user->setDateCreated(new \DateTime());
@@ -46,7 +51,7 @@ class InitialisationService
         }
 
     }
-
+    // application du dump sql pour le jeu d'essai
     private static function initSQL(EntityManagerInterface $em,  $scriptDir){
         $script = $scriptDir;
         dump($script);
@@ -71,6 +76,7 @@ class InitialisationService
         $stmt = $conn->prepare($sql);
         $stmt->execute();
     }
+    //initialisation des role en bdd
     private static function initRoles(EntityManagerInterface $em) {
         $roles = $em->getRepository(Role::class)->findAll();
         if(count($roles) === 0 ){
@@ -85,6 +91,7 @@ class InitialisationService
             // roles deja initialisés
         }
     }
+    // initialisation des Campus en bdd
     private static function initCampus(EntityManagerInterface $em) {
         $campus = $em->getRepository(Campus::class)->findAll();
         if(count($campus) === 0 ){
@@ -99,6 +106,7 @@ class InitialisationService
             // Campus deja initialisés
         }
     }
+    //initialisation des villes de base en bdd
     private static function initVilles(EntityManagerInterface $em) {
         $villes = $em->getRepository(Ville::class)->findAll();
         if(count($villes) === 0 ){
@@ -178,6 +186,8 @@ class InitialisationService
             // villes deja initialisés
         }
     }
+
+    // initialisation de etats en bdd
     private static function initEtats(EntityManagerInterface $em) {
         $states = $em->getRepository(Etat::class)->findAll();
         if(count($states) === 0 ){
