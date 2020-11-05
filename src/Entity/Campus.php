@@ -34,10 +34,14 @@ class Campus
      */
     private $sorties;
 
-    public function __construct()
+    public function __construct($id = null)
     {
         $this->etudiants = new ArrayCollection();
         $this->sorties = new ArrayCollection();
+        if($id){
+
+            $this->id = $id;
+        }
     }
 
     public function getId(): ?int

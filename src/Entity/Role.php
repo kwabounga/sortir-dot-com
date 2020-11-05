@@ -42,5 +42,11 @@ class Role
     {
         $this->value = $value;
     }
+    public function __construct($id = null)
+    {
+        if($id){
 
+            $this->id = $id;
+        }
+    }
 }

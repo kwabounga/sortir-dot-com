@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Campus;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Form\RegisterType;
+use App\Services\CSVLoaderService;
 use App\Services\InitialisationService;
 use App\Services\Msgr;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,6 +35,31 @@ class UserController extends CommonController
         return $this->redirectToRoute('main_home');
     }
 
+    /*
+     * Creation d'utilisateurs en masse
+     * avec un csv
+     */
+    /**
+     * @Route("/register/csv", name="register_csv")
+     */
+    public function registerByCSV(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $id = null)
+    {
+        // TODO: verrouiller pour admin
+        $csv = "1; 2; 'theUsername1'; 'mail1@mail.com'; 'theUsername1'; 'firstname1'; 'lastname1'; 'phone1';
+1; 2; 'theUsername2'; 'mail2@mail.com'; 'theUsername2'; 'firstname2'; 'lastname2'; 'phone2';
+1; 2; 'theUsername3'; 'mail3@mail.com'; 'theUsername3'; 'firstname3'; 'lastname3'; 'phone3';
+1; 2; 'theUsername4'; 'mail4@mail.com'; 'theUsername4'; 'firstname4'; 'lastname4'; 'phone4';
+1; 2; 'theUsername5'; 'mail5@mail.com'; 'theUsername5'; 'firstname5'; 'lastname5'; 'phone5';
+1; 2; 'theUsername6'; 'mail6@mail.com'; 'theUsername6'; 'firstname6'; 'lastname6'; 'phone6';
+1; 2; 'theUsername7'; 'mail7@mail.com'; 'theUsername7'; 'firstname7'; 'lastname7'; 'phone7';";
+        $op = CSVLoaderService::load($em,$encoder, $csv);
+         dump($op);
+        // TODO: renviyer sur user List
+        return $this->render('main/home.html.twig', [
+            'routes' => $this->getAllRoutes(),
+            'title' => 'Home',
+        ]);
+    }
     /*
      * Creation d'utilisateurs
      * seul un role admin peut le faire
