@@ -5,16 +5,15 @@
     <div class="container">
         <div class="row">
             {% set nbRoutes = routes|length %}
-            {% set id = 0 %}
+            {% set id = 1 %}
             <div class="routes-footer col-xs-6 col-sm-6 col-md-3">
                 <ul>
             {% for i in 0..nbRoutes-1 %}
                     {# test si route admin ou si route avec value: on affiche pas  #}
-                    {# TODO: refaire les columns: la logique est pété #}
                     {% if not ('admin' in routes[i].path) and not ('{' in routes[i].path)  %}
                     <li><a class="text-success" href="{{ path(routes[i].name)}}">{{ routes[i].name|capitalize}}</a></li>
                     {# si PAS admin path #}
-                        {% if (id % 3) == 0 and (id != 0) %}
+                        {% if (id % 3) == 0 %}
                                 </ul>
                             </div>
                             <div class="routes-footer col-xs-6 col-sm-6 col-md-3">
