@@ -4,14 +4,14 @@ use App\Entity\Campus;
 use App\Entity\User;
 
 class FiltreHomeDTO {
-    public Campus $campusSearch;
+    public $campusSearch;
     public $dateDebutSearch;
     public $dateFinSearch;
 
-    public bool $sortieOrgaSearch;
-    public bool $sortieInscritSearch;
-    public bool $sortiePasInscritSearch;
-    public bool $sortiePasseeSearch;
+    public $sortieOrgaSearch;
+    public $sortieInscritSearch;
+    public $sortiePasInscritSearch;
+    public $sortiePasseeSearch;
 
     public function __construct(User $user) {
         $this->campusSearch = $user->getCampus();
