@@ -13,7 +13,7 @@ use App\Form\SortieType;
 /**
  * @Route("/website/sortie")
  */
-class SortieController extends AbstractController {
+class SortieController extends CommonController {
 
     /**
      * @Route("/{id}", name="sortie_detail", requirements={"id": "\d+"})
@@ -21,7 +21,10 @@ class SortieController extends AbstractController {
     public function detailSortie(SortieRepository $sortieRepo, $id) {
         $sortie = $sortieRepo->find($id);
 
-        return $this->render('sortie/detail_sortie.html.twig', compact("sortie"));
+        return $this->render('sortie/detail_sortie.html.twig', [
+            'title' => 'Détail Sortie',
+            'routes' => $this->getAllRoutes()
+        ]);
     }
 
     /**
@@ -45,7 +48,10 @@ class SortieController extends AbstractController {
             return $this->render('sortie/ajouter_sortie.html.twig', [
                 'page_name' => 'Création d\'une sortie',
                 'sortie_form' => $sortieForm->createView(),
-                'user' => $this->getUser() ]);
+                'user' => $this->getUser(),
+                    'title' => 'Détail Sortie',
+                    'routes' => $this->getAllRoutes()   ]
+            );
         }
         
         
