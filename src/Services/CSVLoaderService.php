@@ -16,7 +16,7 @@ class CSVLoaderService
 
 {
     /* chargement de villes a la volée avec csv */
-    public static function loadCitiesFromCSV(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $csv) {
+    public static function loadCitiesFromCSV(EntityManagerInterface $em, $csv) {
         $output="";
         $row = 1;
         $nbCol = 4;
@@ -63,7 +63,7 @@ class CSVLoaderService
                     dump($e);
                     $output = $output.'import'.$v->getNom().'FAIL'. $e->getMessage();
                 }
-                //array_push($villes, $u);
+                //array_push($villes, $v);
                 $row++;
                 $v = new Ville();
             }
