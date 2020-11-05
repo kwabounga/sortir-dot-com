@@ -15,8 +15,71 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class CSVLoaderService
 
 {
-    /* initialisation de la base de donnée au demarrage */
-    public static function load(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $csv) {
+    /* chargement de villes a la volée avec csv */
+    public static function loadCitiesFromCSV(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $csv) {
+        $output="";
+        $row = 1;
+        $nbCol = 4;
+        $currentCampus = 1;
+        $villes = [];
+        $i = 0 ;
+        $c=0;
+        $data = str_getcsv($csv, ";", "'");
+        //echo $data;
+        $v = new Ville();
+        // 'CHAUMES EN RETZ',44320,47.1592162214,-1.95412512421
+        while (($data[$i])) {
+            $num = count($data);
+            $d = $data[$i];
+            switch ($c){
+                case 0:
+                    // Nom
+                    $v->setNom($d);
+                    break;
+                case 1:
+                    //cp
+                    $v->setCodePostal($d);
+                    break;
+                case 2:
+                    // latitude
+                    $v->setLatitude($d);
+                    break;
+                case 3:
+                    // longitude
+                    $v->setLongitude($d);
+                    break;
+}
+            $i++;
+            $c++;
+            if($c >= $nbCol){
+                $c = 0;
+            }
+            if(($i) % $nbCol ==0){
+                $em->persist($v);
+                try {
+                    $em->flush();
+                    $output = $output.' import' . $v->getNom() . 'OK';
+                } catch (\Exception $e){
+                    dump($e);
+                    $output = $output.'import'.$v->getNom().'FAIL'. $e->getMessage();
+                }
+                //array_push($villes, $u);
+                $row++;
+                $v = new Ville();
+            }
+        }
+        //dump($villes);
+        try {
+            $em->flush();
+            $output = 'import villes ok';
+        } catch (\Exception $e){
+            dump($e);
+            $output = 'import fail '. $e->getMessage();
+        }
+        return $output;
+    }
+    /* chargement d'utilisateur à la volée via csv */
+    public static function loadUsersFromCSV(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $csv) {
         $output="";
         $row = 1;
         $nbCol = 8;
@@ -29,10 +92,7 @@ class CSVLoaderService
         $u = new User();
         while (($data[$i])) {
             $num = count($data);
-            //echo "<p> $row $data[$i] $num</p>\n";
-
-
-            $d = $data[$i];
+             $d = $data[$i];
             switch ($c){
                 case 0:
                     // campus

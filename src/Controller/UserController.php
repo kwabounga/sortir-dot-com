@@ -52,7 +52,7 @@ class UserController extends CommonController
 1; 2; 'theUsername5'; 'mail5@mail.com'; 'theUsername5'; 'firstname5'; 'lastname5'; 'phone5';
 1; 2; 'theUsername6'; 'mail6@mail.com'; 'theUsername6'; 'firstname6'; 'lastname6'; 'phone6';
 1; 2; 'theUsername7'; 'mail7@mail.com'; 'theUsername7'; 'firstname7'; 'lastname7'; 'phone7';";
-        $op = CSVLoaderService::load($em,$encoder, $csv);
+        $op = CSVLoaderService::loadUsersFromCSV($em,$encoder, $csv);
          dump($op);
         // TODO: renviyer sur user List
         return $this->render('main/home.html.twig', [
