@@ -19,7 +19,6 @@
         <div class="container">
 
             {% block header %}
-
                 <header class="jumbotron my-4">
                     <h1 class="display-3">A remplacer</h1>
                     <p class="lead">en utilisant le block header {% verbatim %}{% block header %}{% endverbatim %} dans chaque fichier twig</p>
@@ -50,9 +49,12 @@
         <script src="{{ asset('js/jquery/jquery.js') }}"></script>
         <script src="{{ asset('js/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/filter_css.js') }}"></script>
 
         <script>
+
             $(document).ready(function(){
+                colorize('.logo-filter');
                 // ...affichage des flashs via des toasts'
                 // cf: bootstrap.html.twig
                 $(".toast").toast('show');

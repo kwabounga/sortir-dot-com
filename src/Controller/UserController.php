@@ -60,6 +60,7 @@ class UserController extends CommonController
                 if(!$user){
                     // si aucun user trouvé avec l'id
                     $this->addFlash(Msgr::TYPE_ERROR, Msgr::IMPOSSIBLE);
+                    $this->addFlash(Msgr::TYPE_INFOS, 'nouvel utilisateur');
                     $user = new User();
                 }
             } else{
