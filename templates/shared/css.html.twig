@@ -1,15 +1,16 @@
 <link rel="stylesheet" href="{{ asset('css/sortir.css') }}">
 <style type="text/css">
+    {# ici definition de toutes les couleurs #}
     :root {
         --main-bg-color-dark-alpha: rgba(0, 0, 0, 0);
         --main-bg-color-dark: rgba(0, 0, 0, 1);
         --second-bg-color-dark: #1d2124;
 
         --main-bg-color-light-alpha: rgba(100,100,100,0);
-        --main-bg-color-light: #FFFF00;
+        --main-bg-color-light: #EAFF05;
         --second-bg-color-light: white;
 
-        --text-primary-color: whtie;
+        --text-primary-color: white;
         --text-secondary-color: var(--main-bg-color-light);
         --text-tert-color: black;
 
@@ -27,7 +28,6 @@
     .bg {
         z-index: -1000;
         position: absolute;
-        color: #c82333;
         width: 100%;
         height: 100%;
 
@@ -94,15 +94,32 @@
         /*filter: invert(48%) sepia(46%) saturate(755%) hue-rotate(81deg) brightness(99%) contrast(86%);*/
     }
     .btn-success {
-        color: var(--text-primary-color);
+        color: var(--text-tert-color);
         background-color: var(--main-bg-color-light);
         border-color: var(--main-bg-color-light);
+    }
+    .btn-success:hover, .btn-success:active {
+        color: var(--text-tert-color);
+        background-color: var(--main-bg-color-light);
+        border-color: var(--main-bg-color-light);
+        filter: brightness(80%);
+    }
+    .btn-success.focus, .btn-success:focus {
+        color: var(--text-tert-color);
+        background-color: var(--main-bg-color-light);
+        border-color: var(--main-bg-color-light);
+        box-shadow: 0 0 0 0.2rem rgba(72,180,97,.5);
     }
     .bg-success {
         background-color: var(--main-bg-color-light)!important;
     }
     .text-success {
         color: var(--text-secondary-color)!important;
+    }
+    .btn-success:not(:disabled):not(.disabled).active, .btn-success:not(:disabled):not(.disabled):active, .show>.btn-success.dropdown-toggle {
+        color: var(--text-tert-color);
+        background-color: var(--main-bg-color-light);
+        border-color: var(--main-bg-color-light);
     }
     .navbar-dark .navbar-nav .nav-link {
         color: var(--main-bg-color-light)!important;
