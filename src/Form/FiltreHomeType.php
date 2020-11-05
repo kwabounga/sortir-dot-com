@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Campus;
-use FiltreHomeDTO;
+use App\Form\Model\FiltreHomeDTO;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -88,5 +88,6 @@ class FiltreHomeType extends AbstractType
         $resolver->setDefaults([
             'data_class' => FiltreHomeDTO::class
         ]);
+        $resolver->setRequired('user');
     }
 }

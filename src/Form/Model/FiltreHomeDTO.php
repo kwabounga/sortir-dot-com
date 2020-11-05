@@ -1,4 +1,5 @@
 <?php
+namespace App\Form\Model;
 
 use App\Entity\Campus;
 use App\Entity\User;

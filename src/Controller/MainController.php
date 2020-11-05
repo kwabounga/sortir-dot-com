@@ -2,17 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Sortie;
 use App\Entity\User;
+use App\Form\Model\FiltreHomeDTO;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use App\Form\FiltreHomeType;
-use App\Repository\CampusRepository;
 use App\Repository\SortieRepository;
 use DateTime;
-use FiltreHomeDTO;
 use App\Entity\Role;
 use App\Services\Msgr;
 use Doctrine\ORM\EntityManagerInterface;
@@ -59,10 +57,12 @@ class MainController extends CommonController {
             $this->addFlash(Msgr::TYPE_SUCCESS, Msgr::WELCOME.$this->getUser()->getUsername());
         }
 
-        $user = $em->getRepository(User::class)->findOneBy(['usename'=>$this->getUser()->getUsername()]);
+        $user = $em->getRepository(User::class)->findOneBy(['username'=>$this->getUser()->getUsername()]);
         $filtre = new FiltreHomeDTO($user);
 
-        $filtreForm = $this->createForm(FiltreHomeType::class, $filtre);
+        $filtreForm = $this->createForm(FiltreHomeType::class, $filtre,[
+            'user' => $user
+        ]);
         $filtreForm->handleRequest($request);
 
         if ($filtreForm->isSubmitted() && $filtreForm->isValid()) {
@@ -76,7 +76,7 @@ class MainController extends CommonController {
                 'filtreForm' => $filtreForm->createView(),
                 'listeSorties' => $listeSorties,
                 'routes' => $this->getAllRoutes(),
-                'title' => 'Home'
+                'title' => 'Home',
             ]);
     }
 }

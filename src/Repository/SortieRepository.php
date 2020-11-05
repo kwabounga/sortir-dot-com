@@ -4,9 +4,10 @@ namespace App\Repository;
 
 use App\Entity\Sortie;
 use App\Entity\User;
+use App\Form\Model\FiltreHomeDTO;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use FiltreHomeDTO;
+
 
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
