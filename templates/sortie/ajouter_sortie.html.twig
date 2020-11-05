@@ -2,7 +2,13 @@
 
 {% block title %} {{ parent() }} | Sortie {% endblock %}
 
+{% block header %}
+
+{% endblock %}
 
 {% block body %}
-    Ajouter sortie
+	{{ form_start(sortie_form) }}
+    {{ form_widget(sortie_form) }}
+    {{ form_end(sortie_form) }}
+<a href="{{ path('home') }}" role="button">Annuler</a>
 {% endblock %}

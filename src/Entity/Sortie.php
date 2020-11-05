@@ -6,6 +6,7 @@ use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SortieRepository::class)
@@ -26,21 +27,25 @@ class Sortie
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\GreaterThan("today")
      */
     private $debut;
 
     /**
      * @ORM\Column(type="time")
+     * @Assert\GreaterThanOrEqual("+1 hours")
      */
     private $duree;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\GreaterThan(propertyPath="debut")
      */
     private $limiteInscription;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\GreaterThan(1)
      */
     private $inscriptionMax;
 
@@ -108,14 +113,14 @@ class Sortie
         return $this;
     }
 
-    public function getDurée(): ?\DateTimeInterface
+    public function getDuree(): ?\DateTimeInterface
     {
-        return $this->durée;
+        return $this->duree;
     }
 
-    public function setDurée(\DateTimeInterface $durée): self
+    public function setDuree(\DateTimeInterface $duree): self
     {
-        $this->durée = $durée;
+        $this->duree = $duree;
 
         return $this;
     }
@@ -181,14 +186,14 @@ class Sortie
     }
 
     /**
-     * @return Collection|Participant[]
+     * @return Collection|User[]
      */
     public function getParticipants(): Collection
     {
         return $this->participants;
     }
 
-    public function addParticipant(Participant $participant): self
+    public function addParticipant(User $participant): self
     {
         if (!$this->participants->contains($participant)) {
             $this->participants[] = $participant;
@@ -197,19 +202,19 @@ class Sortie
         return $this;
     }
 
-    public function removeParticipant(Participant $participant): self
+    public function removeParticipant(User $participant): self
     {
         $this->participants->removeElement($participant);
 
         return $this;
     }
 
-    public function getOrganisateur(): ?Participant
+    public function getOrganisateur(): ?User
     {
         return $this->organisateur;
     }
 
-    public function setOrganisateur(?Participant $organisateur): self
+    public function setOrganisateur(?User $organisateur): self
     {
         $this->organisateur = $organisateur;
 
