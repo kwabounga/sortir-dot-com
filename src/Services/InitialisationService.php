@@ -47,14 +47,14 @@ class InitialisationService
             $em->persist($user);
             $em->flush();
         } catch (\Exception $e) {
-            dump($e);
+            // dump($e);
         }
 
     }
     // application du dump sql pour le jeu d'essai
     private static function initSQL(EntityManagerInterface $em,  $scriptDir){
         $script = $scriptDir;
-        dump($script);
+        // dump($script);
         $buffer = null;
         if (file_exists($script)) {
             if(false !== $handle = @fopen($script, 'r')) {
@@ -69,7 +69,7 @@ class InitialisationService
         } else {
             $buffer = ['nothing here'];
         }
-        dump($buffer);
+        // dump($buffer);
 
         $conn = $em->getConnection();
         $sql = join(" ", $buffer);

@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class MainController extends AbstractController {
+class MainController extends CommonController {
 
     /*
      * Route principale
@@ -45,6 +45,9 @@ class MainController extends AbstractController {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')){
             $this->addFlash(Msgr::TYPE_SUCCESS, Msgr::WELCOME.$this->getUser()->getUsername());
         }
-        return $this->render('main/home.html.twig');
+        return $this->render('main/home.html.twig',[
+            'routes' => $this->getAllRoutes(),
+            'title' => 'Home',
+        ]);
     }
 }

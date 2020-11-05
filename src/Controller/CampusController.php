@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * @Route("/website/campus")
  */
-class CampusController extends AbstractController {
+class CampusController extends CommonController {
 
     /**
      * @Route("/", name="campus_liste")
@@ -21,6 +21,10 @@ class CampusController extends AbstractController {
 
         // TODO - ajouter: Formulaire nouveau campus
 
-        return $this->render('campus/liste_campus.html.twig', compact("listeCampus"));
+        return $this->render('campus/liste_campus.html.twig', [
+
+            'routes' => $this->getAllRoutes(),
+            'title' => 'Campus',
+        ]);
     }
 }

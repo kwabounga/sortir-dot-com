@@ -1,7 +1,14 @@
 {% extends "base.html.twig" %}
 
-{% block title %} {{ parent() }} | Campus {% endblock %}
+{% block title %} {{ title }} {% endblock %}
 
+{% block header %}
+    <header class="jumbotron my-4">
+        <h1 class="display-3">{{ title }}</h1>
+        <p class="lead">Gestion des Campus</p>
+        {#<a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
+    </header>
+{% endblock %}
 
 {% block body %}
     Liste campus

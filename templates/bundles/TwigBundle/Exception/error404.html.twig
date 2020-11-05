@@ -1,14 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block header %}
+    <header class="jumbotron my-4">
+        <h1 class="display-3">Page non trouvé</h1>
+        <h3>{{ uri }} n'existe pas</h3>
+        <p class="lead">Votre demande n'as pas pu aboutir car l'url demandé n'existe pas.
+            Cependant vous pouvez </p>
+        <a href="{{ path('main_home') }}" class="btn btn-primary btn-lg">retourner à la page d'acceuil</a>
+    </header>
 {% endblock %}
 {% block body %}
-    <h1>Page non trouvé</h1>
+   {# <h1>Page non trouvé</h1>
     <h3>{{ uri }} n'existe pas</h3>
     <p>
         Votre demande n'as pas pu aboutir car l'url demandé n'existe pas.
         Cependant vous pouvez <a href="{{ path('main_home') }}">retourner à la page d'acceuil</a>.
-    </p>
+    </p>#}
     {#{% if is_granted('ROLE_ADMIN')%}#}
         <h3>Routes possibles: </h3>
         <p><div class="spacer"></div></p>

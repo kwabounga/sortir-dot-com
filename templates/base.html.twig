@@ -3,23 +3,27 @@
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="{{ asset("js/bootstrap/css/bootstrap.min.css") }}">
+        <link rel="shortcut icon" href="{{ asset('img/logo_mini_22x30_white.png') }}">
         {% include 'shared/css.html.twig' %}
         <title>{% block title %}Sortir{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        <div class="test img-fluid">
-        </div>
+        <div class="bg"></div>
         <header>
             {% include "shared/nav.html.twig" %}
         </header>
+        <div class="container-fluid">
+            <p class="title m-0 p-2 bg-success">{{ title }}</p>
+        </div>
         <div class="container">
 
             {% block header %}
+
                 <header class="jumbotron my-4">
                     <h1 class="display-3">A remplacer</h1>
                     <p class="lead">en utilisant le block header {% verbatim %}{% block header %}{% endverbatim %} dans chaque fichier twig</p>
-                    <a href="#" class="btn btn-primary btn-lg">bouton sample</a>
+                    <a href="#" class="btn btn-success btn-lg">bouton sample</a>
                 </header>
             {% endblock %}
 
@@ -33,11 +37,12 @@
         </div>
 
         {% block footer %}
-            <footer class="py-5 bg-dark fixed-bottom">
-                <div class="container">
-                    <p class="m-0 text-center text-white">Copyright &copy; Sortir.com {{ "now"|date("Y")  }}</p>
-                </div>
-            </footer>
+{#            <footer class="py-5 bg-dark fixed-bottom">#}
+{#                <div class="container">#}
+{#                    <p class="m-0 text-center text-white">Copyright &copy; Sortir.com {{ "now"|date("Y")  }}</p>#}
+{#                </div>#}
+{#            </footer>#}
+            {% include 'shared/footer.html.twig' %}
         {% endblock %}
 
         {% include 'shared/toasts.html.twig' %}
@@ -56,6 +61,7 @@
             });
         </script>
         {% block javascripts %}{% endblock %}
+
     </body>
 
 </html>

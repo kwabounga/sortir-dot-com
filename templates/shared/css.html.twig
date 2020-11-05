@@ -7,8 +7,77 @@
         font-family: "Roboto_Perso";
         src: url("{{ asset('fonts/Roboto-Thin.ttf') }}") format("truetype");
     }
-    body {
+    .bg {
+        z-index: -1000;
+        position: absolute;
 
+        width: 100%;
+        height: 100%;
+
+        padding-top: 10rem;
+        padding-bottom: calc(10rem - 3rem);
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%), url("{{ asset('img/party.jpg') }}");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-size: cover;
+        overflow-y: auto;
+    }
+    .title{
+        font-size: xx-large;
+        color: #000000;
+        text-decoration: underline;
+        text-decoration-style: solid;
+        font-style: normal;
+        font-weight: bold;
+        font-family: "Roboto_Perso", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+    body{
+        color: #ffffff;
+        background-color: #000000;
+        padding-bottom: 12em;
+    }
+    .bg-dark {
+        background-color: #000000!important;
+    }
+    .bg-dark2 {
+        background-color: #1d2124!important;
+    }
+    .dropdown-item:focus, .dropdown-item:hover {
+        color: black;
+        text-decoration: none;
+        background-color: #28a745;
+    }
+    .dropdown-item {
+        display: block;
+        width: 100%;
+        padding: .25rem 1.5rem;
+        clear: both;
+        font-weight: 400;
+        color: #28a745;
+        text-align: inherit;
+        white-space: nowrap;
+        background-color: transparent;
+        border: 0;
+    }
+    .container-fluid {
+        width: 100%;
+         padding-right: 0px;
+         padding-left: 0px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+    .jumbotron {
+        color: black;
+    }
+    .my-2 {
+        margin-bottom: 0px!important;
+    }
+    .logo-filter {
+        filter: invert(48%) sepia(46%) saturate(755%) hue-rotate(81deg) brightness(99%) contrast(86%);
+    }
+    .navbar-dark .navbar-nav .nav-link {
+        color: #28a745!important;
     }
     .floatr{
         float: right;
@@ -17,6 +86,9 @@
     }
     .spacer {
         height: 2em;
+    }
+    .routes-footer ul {
+        list-style: none;
     }
     /* messages flash & toasts */
 

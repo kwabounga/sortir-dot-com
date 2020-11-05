@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * @Route("/website/ville")
  */
-class VilleController extends AbstractController {
+class VilleController extends CommonController {
 
     /**
      * @Route("/", name="ville_liste")
@@ -21,7 +21,11 @@ class VilleController extends AbstractController {
 
         // TODO - ajouter: Formulaire nouvelle ville
 
-        return $this->render('ville/liste_ville.html.twig', compact("listeVille"));
+        return $this->render('ville/liste_ville.html.twig',[
+
+            'routes' => $this->getAllRoutes(),
+            'title' => 'Villes',
+        ]);
     }
 
 

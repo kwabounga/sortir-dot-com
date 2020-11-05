@@ -14,14 +14,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserController extends AbstractController
+class UserController extends CommonController
 {
     /*
      * Route spéciale pour initialiser / mettre à jour la base de donnée
      * (parametre d'environement app.admin_login et app.admin_password pour initialiser le mot de passe admin)
      */
     /**
-     * @Route("/update/bdd/{force}", name="update_bdd")
+     * @Route("/admin/update/bdd/{force}", name="update_bdd")
      */
     public function updateBdd(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $force = null)
     {
@@ -94,6 +94,8 @@ class UserController extends AbstractController
                 'page_name' => 'Register',
                 'register_form' => $registerForm->createView(),
                 'user' => $user,
+                'routes' => $this->getAllRoutes(),
+                'title' => 'Nouvel Utilisateur',
             ]);
 
         } else {
@@ -117,9 +119,9 @@ class UserController extends AbstractController
     public function login(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder){
         $user = $this->getUser();
         return $this->render("user/login.html.twig", [
-            'page_name' => 'Login',
             "user" => $user,
-
+            'title' => 'Login',
+            'routes' => $this->getAllRoutes(),
         ]);
     }
     /**
@@ -150,9 +152,10 @@ class UserController extends AbstractController
             return $this->redirectToRoute('profile');
         }
         return $this->render("user/profile.html.twig", [
-            'page_name' => 'profile',
             'user' => $user,
-            'register_form'=> $userForm->createView()
+            'register_form'=> $userForm->createView(),
+            'title' => 'Profile',
+            'routes' => $this->getAllRoutes(),
         ]);
     }
     /*
