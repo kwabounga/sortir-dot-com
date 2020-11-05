@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Sortie;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use FiltreHomeDTO;
 
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +19,57 @@ class SortieRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Sortie::class);
+    }
+
+    public function findSortieFiltre(FiltreHomeDTO $filtre, int $idUser) {
+        $qb = $this->createQueryBuilder('s');
+        $qb->andWhere('s.campus = :campusId')
+            ->setParameter('campusId', $filtre->campusSearch->getId());
+
+        if (isset($filtre->dateDebutSearch)) {
+            $qb->andWhere(':dateDebut <= s.debut')
+                ->setParameter('dateDebut', $filtre->dateDebutSearch->format('Y-m-d 00:00:00'));
+        }
+
+        if (isset($filtre->dateFinSearch)) {
+            $qb->andWhere(':dateFin >= s.debut')
+                ->setParameter('dateFin', $filtre->dateFinSearch->format('Y-m-d 23:59:59'));
+        }
+
+        if ($filtre->sortieOrgaSearch) {
+            $qb->andWhere('s.organisateur = :idOrga')
+                ->setParameter('idOrga', $idUser);
+        }
+
+        if ($filtre->sortieInscritSearch && !$filtre->sortiePasInscritSearch) {
+            var_dump('test sortieInscritSearch');
+            $qb->innerJoin('s.participants', 'p')
+                ->andWhere('p.id = :idIns')
+                ->setParameter('idIns', $idUser);
+        }
+
+        if ($filtre->sortiePasInscritSearch && !$filtre->sortieInscritSearch) {
+            var_dump('test sortiePasInscritSearch');
+            $subQuery = $this->_em->createQueryBuilder()
+                ->select('u.id')->from(User::class, 'u')
+                ->innerJoin('u.sorties', 'su')
+                ->andWhere('s.id = su.id');
+
+            $qb->andWhere($qb->expr()->notIn(':idPasIns', $subQuery->getDQL()))
+                ->setParameter('idPasIns', $idUser);
+        }
+
+        if ($filtre->sortiePasseeSearch) {
+            $qb->andWhere(':dateNow >= s.debut')
+                ->setParameter('dateNow', date('Y-m-d 00:00:00'));
+        } else {
+            $qb->andWhere(':dateNow <= s.debut')
+                ->setParameter('dateNow', date('Y-m-d 23:59:59'));
+        }
+
+        $query = $qb->getQuery();
+        $result = $query->getResult();
+        return $result;
     }
 
     // /**

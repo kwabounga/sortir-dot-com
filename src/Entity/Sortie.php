@@ -108,14 +108,14 @@ class Sortie
         return $this;
     }
 
-    public function getDurée(): ?\DateTimeInterface
+    public function getDuree(): ?\DateTimeInterface
     {
-        return $this->durée;
+        return $this->durï¿½e;
     }
 
-    public function setDurée(\DateTimeInterface $durée): self
+    public function setDuree(\DateTimeInterface $durï¿½e): self
     {
-        $this->durée = $durée;
+        $this->durï¿½e = $durï¿½e;
 
         return $this;
     }
@@ -181,14 +181,14 @@ class Sortie
     }
 
     /**
-     * @return Collection|Participant[]
+     * @return Collection|User[]
      */
     public function getParticipants(): Collection
     {
         return $this->participants;
     }
 
-    public function addParticipant(Participant $participant): self
+    public function addParticipant(User $participant): self
     {
         if (!$this->participants->contains($participant)) {
             $this->participants[] = $participant;
@@ -197,19 +197,19 @@ class Sortie
         return $this;
     }
 
-    public function removeParticipant(Participant $participant): self
+    public function removeParticipant(User $participant): self
     {
         $this->participants->removeElement($participant);
 
         return $this;
     }
 
-    public function getOrganisateur(): ?Participant
+    public function getOrganisateur(): ?User
     {
         return $this->organisateur;
     }
 
-    public function setOrganisateur(?Participant $organisateur): self
+    public function setOrganisateur(?User $organisateur): self
     {
         $this->organisateur = $organisateur;
 
