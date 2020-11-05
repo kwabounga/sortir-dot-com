@@ -24,7 +24,7 @@ class SortieController extends CommonController {
         return $this->render('sortie/detail_sortie.html.twig', [
             'sortie' => $sortie,
             'routes' => $this->getAllRoutes(),
-            'title' => 'Sortie '. $sortie->getNom(),
+            'title' => 'Détail '. $sortie->getNom(),
         ]);
     }
 
@@ -49,7 +49,10 @@ class SortieController extends CommonController {
             return $this->render('sortie/ajouter_sortie.html.twig', [
                 'page_name' => 'Création d\'une sortie',
                 'sortie_form' => $sortieForm->createView(),
-                'user' => $this->getUser() ]);
+                'user' => $this->getUser(),
+                    'title' => 'Détail Sortie',
+                    'routes' => $this->getAllRoutes()   ]
+            );
         }
         
         

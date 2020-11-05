@@ -32,6 +32,7 @@ class MainController extends CommonController {
         $roles = $em->getRepository(Role::class)->findAll();
         if(count($roles) === 0 ){
             // si oui initialisation de la bdd
+
             return $this->redirectToRoute('update_bdd');
         }
         // si non go page d'acceuil

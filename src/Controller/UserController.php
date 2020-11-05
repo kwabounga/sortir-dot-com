@@ -23,10 +23,11 @@ class UserController extends CommonController
      * (parametre d'environement app.admin_login et app.admin_password pour initialiser le mot de passe admin)
      */
     /**
-     * @Route("/admin/update/bdd/{force}", name="update_bdd")
+     * @Route("/update/bdd/{force}", name="update_bdd")
      */
     public function updateBdd(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $force = null)
     {
+        $force= 'force';
         $roles = $em->getRepository(Role::class)->findAll();
         if(count($roles) === 0 ){
             InitialisationService::firstInitBdd($em, $encoder,$this->getParameter('app.admin_login'),$this->getParameter('app.admin_password'),(($force == 'force')?__DIR__.'/script.sql':null));
