@@ -2,11 +2,23 @@
 
 namespace App\Controller;
 
+use App\Entity\Sortie;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use App\Form\FiltreHomeType;
+use App\Repository\CampusRepository;
+use App\Repository\SortieRepository;
+use DateTime;
+use FiltreHomeDTO;
 use App\Entity\Role;
 use App\Services\Msgr;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class MainController extends AbstractController {
 
@@ -34,17 +46,30 @@ class MainController extends AbstractController {
     /**
      * @Route("/website", name="main_home")
      */
-    public function home() {
+    public function home(SortieRepository $sortieRepo, Request $request) {
         /* error examples */
-//        $this->addFlash(Msgr::TYPE_INFOS, '$this->addFlash(\'infos\', \'une information\');');
-//        $this->addFlash(Msgr::TYPE_SUCCESS, '$this->addFlash(\'success\', \'une reussite\');');
-//        $this->addFlash(Msgr::TYPE_WARNING, '$this->addFlash(\'warning\', \'un avertissement\');');
-//        $this->addFlash(Msgr::TYPE_ERROR, '$this->addFlash(\'error\', \'une erreure qui reste\');');
+        //        $this->addFlash(Msgr::TYPE_INFOS, '$this->addFlash(\'infos\', \'une information\');');
+        //        $this->addFlash(Msgr::TYPE_SUCCESS, '$this->addFlash(\'success\', \'une reussite\');');
+        //        $this->addFlash(Msgr::TYPE_WARNING, '$this->addFlash(\'warning\', \'un avertissement\');');
+        //        $this->addFlash(Msgr::TYPE_ERROR, '$this->addFlash(\'error\', \'une erreure qui reste\');');
 
         // si authentifié bienvenue
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')){
             $this->addFlash(Msgr::TYPE_SUCCESS, Msgr::WELCOME.$this->getUser()->getUsername());
         }
-        return $this->render('main/home.html.twig');
+
+        $user = $this->getUser();
+        $filtre = new FiltreHomeDTO($user);
+
+        $filtreForm = $this->createForm(FiltreHomeType::class, $filtre);
+        $filtreForm->handleRequest($request);
+
+        if ($filtreForm->isSubmitted() && $filtreForm->isValid()) {
+            $filtre = $filtreForm->getData();
+        }
+
+        $listeSorties = $sortieRepo->findSortieFiltre($filtre, $user->getId());
+
+        return $this->render('main/home.html.twig', ['filtreForm' => $filtreForm->createView(), 'listeSorties' => $listeSorties]);
     }
 }
