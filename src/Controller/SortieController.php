@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use src\Form\SortieType;
 
 /**
  * @Route("/website/sortie")
@@ -28,10 +29,26 @@ class SortieController extends AbstractController {
      */
     public function ajouterSortie(EntityManagerInterface $em, Request $request) {
         $sortie = new Sortie();
-
-        // // TODO - ajouter: Formulaire nouvelle sortie
-
-        return $this->render('sortie/ajouter_sortie.html.twig');
+        $sortieForm = $this->createForm(SortieType::class,$sortie, [
+            'user' => $this->getUser(),
+        ]);
+        $sortieForm->handleRequest($request);
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+            if ($sortieForm->get('save')->isClicked()) {
+                dump('save');
+            }
+            if ($sortieForm->get('publish')->isClicked()) {
+                dump('publish');
+            }
+                    
+        } else {
+            return $this->render('sortie/ajouter_sortie.html.twig', [
+                'page_name' => 'Création d\'une sortie',
+                'sortie_form' => $sortieForm->createView(),
+                'user' => $this->getUser() ]);
+        }
+        
+        
     }
 
     /**

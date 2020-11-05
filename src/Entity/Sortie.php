@@ -6,6 +6,7 @@ use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SortieRepository::class)
@@ -26,21 +27,25 @@ class Sortie
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\GreaterThan("today")
      */
     private $debut;
 
     /**
      * @ORM\Column(type="time")
+     * @Assert\GreaterThanOrEqual("+1 hours")
      */
     private $duree;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\GreaterThan(propertyPath="debut")
      */
     private $limiteInscription;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\GreaterThan(1)
      */
     private $inscriptionMax;
 
@@ -110,13 +115,12 @@ class Sortie
 
     public function getDuree(): ?\DateTimeInterface
     {
-        return $this->dur�e;
+        return $this->duree;
     }
 
-    public function setDuree(\DateTimeInterface $dur�e): self
-    {
-        $this->dur�e = $dur�e;
-
+    public function setDuree(\DateTimeInterface $duree): self {
+        $this->duree = $duree;
+    
         return $this;
     }
 
