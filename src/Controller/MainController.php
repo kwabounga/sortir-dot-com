@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Sortie;
+use App\Entity\User;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -46,7 +47,7 @@ class MainController extends CommonController {
     /**
      * @Route("/website", name="main_home")
      */
-    public function home(SortieRepository $sortieRepo, Request $request) {
+    public function home(SortieRepository $sortieRepo, Request $request,EntityManagerInterface  $em) {
         /* error examples */
         //        $this->addFlash(Msgr::TYPE_INFOS, '$this->addFlash(\'infos\', \'une information\');');
         //        $this->addFlash(Msgr::TYPE_SUCCESS, '$this->addFlash(\'success\', \'une reussite\');');
@@ -58,7 +59,7 @@ class MainController extends CommonController {
             $this->addFlash(Msgr::TYPE_SUCCESS, Msgr::WELCOME.$this->getUser()->getUsername());
         }
 
-        $user = $this->getUser();
+        $user = $em->getRepository(User::class)->findOneBy(['usename'=>$this->getUser()->getUsername()]);
         $filtre = new FiltreHomeDTO($user);
 
         $filtreForm = $this->createForm(FiltreHomeType::class, $filtre);
