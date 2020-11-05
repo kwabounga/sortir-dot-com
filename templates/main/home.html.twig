@@ -2,7 +2,137 @@
 
 {% block title %} {{ parent() }} | Home {% endblock %}
 
+{% block stylesheets %}
+    {# Fichier pour les datatables #}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+{% endblock %}
+
 {% block body %}
-    <h1>Home !!! </h1>
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eum minus eaque at quae eligendi dignissimos modi, voluptates sint iste iure corrupti, quas, fugiat distinctio soluta aliquid nam commodi laboriosam quisquam?</p>
+    {# ================================================
+                            Filtres
+    ================================================= #}
+    <h4 class="col-12">Filtrer les sorties</h4>
+        {{ form_start(filtreForm, { 'attr' : { 'id': 'formFiltreSortie', 'class': 'row mx-1'} }) }}
+            {# Campus et date #}
+            <div class="col-12 col-md-7">
+                {# Recherche pour un campus #}
+                {{ form_row(filtreForm.campusSearch) }}
+
+                {# Recherche par date #}
+                <div class="form-row">
+                    {{ form_row(filtreForm.dateDebutSearch) }}
+                    {{ form_row(filtreForm.dateFinSearch) }}
+                </div>
+            </div>
+
+            {# Case à cochés #}
+            <div class="col-md-5 col-xl-4 form-row">
+                <div class="form-check w-100">
+                    {{ form_widget(filtreForm.sortieOrgaSearch) }}{{ form_label(filtreForm.sortieOrgaSearch) }}
+                </div>
+
+                <div class="form-check w-100">
+                    {{ form_widget(filtreForm.sortieInscritSearch) }}{{ form_label(filtreForm.sortieInscritSearch) }}
+                </div>
+
+                <div class="form-check w-100">
+                    {{ form_widget(filtreForm.sortiePasInscritSearch) }}{{ form_label(filtreForm.sortiePasInscritSearch) }}
+                </div>
+
+                <div class="form-check w-100">
+                    {{ form_widget(filtreForm.sortiePasseeSearch) }}{{ form_label(filtreForm.sortiePasseeSearch) }}
+                </div>
+            </div>
+
+            {# Bouton rechercher #}
+            <button id="btnFiltre" type="submit" class="btn btn-dark col-12 col-xl-1 mt-2">Rechercher</button>
+        {{ form_end(filtreForm) }}
+
+    {# ================================================
+                            Tableau
+    ================================================= #}
+    <div class="mx-3 mt-3">
+    <table id="table_sortie" class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nom</th>
+                <th>Date</th>
+                <th>Clôture</th>
+                <th>Inscrits/places</th>
+                <th>Etat</th>
+                <th>Inscrit</th>
+                <th>Organisateur</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sortie in listeSorties %}
+                <tr>
+                    <td>{{ sortie.nom }}</td>
+                    <td>{{ sortie.debut|date('d/m/Y') }}</td>
+                    <td>{{ sortie.limiteInscription|date('d/m/Y') }}</td>
+                    <td>{{ sortie.participants|length }}/{{ sortie.inscriptionMax }}</td>
+                    <td>{{ sortie.etat.libelle }}</td>
+                    <td>
+                    {% if app.user in sortie.participants %}
+                        v
+                    {% else %}
+                        x
+                    {% endif %}
+                    </td>
+                    <td>{{ sortie.organisateur.username }}</td>
+                    {# <td>{% if sortie.organisateur != null %}{{ sortie.organisateur.username }}{% endif %}</td> #}
+                    <td></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    {# ================================================
+                        Bouton ajouter
+    ================================================= #}
+    {# <button type="button"></button> #}
+    <a href="{{ path("sortie_ajouter") }}" class="btn btn-dark mx-3 mt-2">Ajouter une sortie</a>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    $(document).ready(() => {
+        $('#table_sortie thead tr').clone(true).appendTo('#table_sortie thead'); 
+        $('#table_sortie thead tr:eq(1) th').each(function(i) {
+            var title = $(this).text();
+
+            if (['Nom', 'Etat', 'Organisateur'].includes(title)) {
+                $(this).html('<input type="text" placeholder="rechercher" class="form-control">');
+            } else {
+                $(this).html('');
+            }
+
+            $('input', this).on('keyup change', function() {
+                if (table.column(i).search() !== this.value) {
+                    table.column(i)
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+
+        // Datatable
+        var table = $('#table_sortie').DataTable({
+            "dom": 'rtp',
+            "pageLength": 15,
+            "orderCellsTop": true,
+            "fixedHeader": true,
+            "oLanguage": {
+                "oPaginate": {
+                    "sNext": "Suivant",
+                    "sPrevious": "Précédent"
+                }
+            },
+        });
+
+    });
+</script>
 {% endblock %}
