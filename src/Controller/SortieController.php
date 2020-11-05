@@ -13,7 +13,7 @@ use App\Form\SortieType;
 /**
  * @Route("/website/sortie")
  */
-class SortieController extends AbstractController {
+class SortieController extends CommonController {
 
     /**
      * @Route("/{id}", name="sortie_detail", requirements={"id": "\d+"})
@@ -21,7 +21,11 @@ class SortieController extends AbstractController {
     public function detailSortie(SortieRepository $sortieRepo, $id) {
         $sortie = $sortieRepo->find($id);
 
-        return $this->render('sortie/detail_sortie.html.twig', compact("sortie"));
+        return $this->render('sortie/detail_sortie.html.twig', [
+            'sortie' => $sortie,
+            'routes' => $this->getAllRoutes(),
+            'title' => 'Sortie '. $sortie->getNom(),
+        ]);
     }
 
     /**
@@ -57,7 +61,11 @@ class SortieController extends AbstractController {
     public function modifierSortie(SortieRepository $sortieRepo, $id) {
         $sortie = $sortieRepo->find($id);
 
-        return $this->render('sortie/modifier_sortie.html.twig', compact("sortie"));
+        return $this->render('sortie/modifier_sortie.html.twig', [
+            'sortie' => $sortie,
+            'routes' => $this->getAllRoutes(),
+            'title' => 'Sortie '. $sortie->getNom(),
+        ]);
     }
 
     /**
@@ -66,6 +74,10 @@ class SortieController extends AbstractController {
     public function annulerSortie(SortieRepository $sortieRepo, $id) {
         $sortie = $sortieRepo->find($id);
 
-        return $this->render('sortie/annuler_sortie.html.twig', compact("sortie"));
+        return $this->render('sortie/annuler_sortie.html.twig', [
+            'sortie' => $sortie,
+            'routes' => $this->getAllRoutes(),
+            'title' => 'Sortie '. $sortie->getNom(),
+        ]);
     }
 }

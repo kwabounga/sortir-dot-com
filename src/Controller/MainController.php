@@ -58,7 +58,7 @@ class MainController extends CommonController {
         }
 
         $user = $em->getRepository(User::class)->findOneBy(['username'=>$this->getUser()->getUsername()]);
-        $filtre = new FiltreHomeDTO($user);
+        $filtre = new FiltreHomeDTO($this->getUser()->getCampus());
 
         $filtreForm = $this->createForm(FiltreHomeType::class, $filtre,[
             'user' => $user

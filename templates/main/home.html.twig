@@ -8,6 +8,7 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 {% endblock %}
 
+{% block header %}{% endblock %}
 {% block body %}
     {# ================================================
                             Filtres
@@ -46,7 +47,7 @@
             </div>
 
             {# Bouton rechercher #}
-            <button id="btnFiltre" type="submit" class="btn btn-dark col-12 col-xl-1 mt-2">Rechercher</button>
+            <button id="btnFiltre" type="submit" class="btn btn-dark col-12 col-xl-1 mt-2"><i class="fas fa-search" style="font-size: 1.2em;"></i></button>
         {{ form_end(filtreForm) }}
 
     {# ================================================
@@ -83,7 +84,13 @@
                     </td>
                     <td>{{ sortie.organisateur.username }}</td>
                     {# <td>{% if sortie.organisateur != null %}{{ sortie.organisateur.username }}{% endif %}</td> #}
-                    <td></td>
+                    <td>
+                    {% if app.user.id == sortie.organisateur.id %}
+                        <a href="{{ path('sortie_modifier', {'id': sortie.id}) }}">modifer</a>
+                    {% else %}
+                        <a href="{{ path('sortie_detail', {'id': sortie.id}) }}">afficher</a>
+                    {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
