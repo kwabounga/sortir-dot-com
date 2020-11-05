@@ -7,17 +7,76 @@ namespace App\Services;
 use App\Entity\Campus;
 use App\Entity\Etat;
 use App\Entity\Role;
+use App\Entity\User;
 use App\Entity\Ville;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class InitialisationService
+
 {
-    public static function firstInitBdd(EntityManagerInterface $em) {
+    /* initialisation de la base de donnée au demarrage */
+    public static function firstInitBdd(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $aLogin, $aPassword,$scriptDir = null) {
         InitialisationService::initRoles($em);
         InitialisationService::initCampus($em);
         InitialisationService::initVilles($em);
         InitialisationService::initEtats($em);
+        InitialisationService::initAdmin($em, $encoder, $aLogin, $aPassword);
+        if ($scriptDir !== null) {
+            InitialisationService::initSQL($em,  $scriptDir);
+        }
     }
+
+    // creation du compte admin
+    private static function initAdmin(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $aLogin, $aPassword){
+        $login = $aLogin;
+        $passw = $aPassword;
+        try {
+            $user = new User();
+            $user->setDateCreated(new \DateTime());
+            $user->setUsername($login);
+            $user->setCampus($em->getRepository(Campus::class)->find(1));
+            $user->setRole($em->getRepository(Role::class)->find(1));
+            $user->setMail('admin@admin.fr');
+            $user->setPhone('0240252525');
+            $user->setFirstname('administrateur');
+            $user->setLastname('de l\'eni');
+
+            $hash = $encoder->encodePassword($user, $passw);
+            $user->setPassword($hash);
+            $em->persist($user);
+            $em->flush();
+        } catch (\Exception $e) {
+            dump($e);
+        }
+
+    }
+    // application du dump sql pour le jeu d'essai
+    private static function initSQL(EntityManagerInterface $em,  $scriptDir){
+        $script = $scriptDir;
+        dump($script);
+        $buffer = null;
+        if (file_exists($script)) {
+            if(false !== $handle = @fopen($script, 'r')) {
+                $buffer = [];
+                while (($word = fgets($handle)) !== false) {
+                    $buffer[] = $word;
+                }
+                fclose($handle);
+            } else {
+                // erreur
+            }
+        } else {
+            $buffer = ['nothing here'];
+        }
+        dump($buffer);
+
+        $conn = $em->getConnection();
+        $sql = join(" ", $buffer);
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+    }
+    //initialisation des role en bdd
     private static function initRoles(EntityManagerInterface $em) {
         $roles = $em->getRepository(Role::class)->findAll();
         if(count($roles) === 0 ){
@@ -32,6 +91,7 @@ class InitialisationService
             // roles deja initialisés
         }
     }
+    // initialisation des Campus en bdd
     private static function initCampus(EntityManagerInterface $em) {
         $campus = $em->getRepository(Campus::class)->findAll();
         if(count($campus) === 0 ){
@@ -46,6 +106,7 @@ class InitialisationService
             // Campus deja initialisés
         }
     }
+    //initialisation des villes de base en bdd
     private static function initVilles(EntityManagerInterface $em) {
         $villes = $em->getRepository(Ville::class)->findAll();
         if(count($villes) === 0 ){
@@ -125,6 +186,8 @@ class InitialisationService
             // villes deja initialisés
         }
     }
+
+    // initialisation de etats en bdd
     private static function initEtats(EntityManagerInterface $em) {
         $states = $em->getRepository(Etat::class)->findAll();
         if(count($states) === 0 ){

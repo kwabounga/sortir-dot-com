@@ -6,6 +6,7 @@ use App\Entity\Role;
 use App\Entity\User;
 use App\Form\RegisterType;
 use App\Services\InitialisationService;
+use App\Services\Msgr;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,64 +16,97 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
-    /**
-     * @Route("/update/bdd", name="update_bdd")
+    /*
+     * Route spéciale pour initialiser / mettre à jour la base de donnée
+     * (parametre d'environement app.admin_login et app.admin_password pour initialiser le mot de passe admin)
      */
-    public function updateBdd(EntityManagerInterface $em)
+    /**
+     * @Route("/update/bdd/{force}", name="update_bdd")
+     */
+    public function updateBdd(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $force = null)
     {
-        InitialisationService::firstInitBdd($em);
-        $this->addFlash('info', 'BDD Mise a jour');
+        $roles = $em->getRepository(Role::class)->findAll();
+        if(count($roles) === 0 ){
+            InitialisationService::firstInitBdd($em, $encoder,$this->getParameter('app.admin_login'),$this->getParameter('app.admin_password'),(($force == 'force')?__DIR__.'/script.sql':null));
+            $this->addFlash('infos', 'Premiere initialisation');
+        }
         return $this->redirectToRoute('main_home');
     }
+
+    /*
+     * Creation d'utilisateurs
+     * seul un role admin peut le faire
+     * (ou) si il ni a aucun utilisateur:  la creation du compte admin est possible
+     */
     /**
      * @Route("/register/{id}", name="register")
      */
     public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $id = null)
     {
+        /* aide memoire
+        // reconnection si ca vient d'un remember me
+        // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // connection possible d'un remember me
+        // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        */
 
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
+        // verification de la presence de user en bdd
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        // check si admin ou si il ni a aucun user
         if($this->isGranted('ROLE_ADMIN') || count($users) === 0){
+            // si admin et id fourni : recuperation du user by id
             if ($id){
                 $user = $this->getDoctrine()->getRepository(User::class)->find($id);
                 if(!$user){
-                    $this->addFlash('error', 'pas possible de faire ca ');
+                    // si aucun user trouvé avec l'id
+                    $this->addFlash(Msgr::TYPE_ERROR, Msgr::IMPOSSIBLE);
                     $user = new User();
                 }
             } else{
+                // si co et pas d'id : nouvel user
                 $user = new User();
             }
 
+            // récupération du formulaire et traitement
             $registerForm = $this->createForm(RegisterType::class,$user);
             $registerForm->handleRequest($request);
+
             if($registerForm->isSubmitted() && $registerForm->isValid()){
-                if(count($users) === 0){
-                    // ici premiere initialisation de la bdd lors de l'enregistrement
-                    InitialisationService::firstInitBdd($em);
-                }
+
                 $user->setDateCreated(new \DateTime());
                 $hash = $encoder->encodePassword($user, $user->getPassword());
                 $user->setPassword($hash);
                 $em->persist($user);
                 $em->flush();
+
+                if(count($users) === 0){
+                    // ici premiere initialisation de la bdd lors de l'enregistrement
+                    InitialisationService::firstInitBdd($em, $encoder,$this->getParameter('app.admin_login'),$this->getParameter('app.admin_password'),__DIR__.'/script.sql');
+                }
                 return $this->redirectToRoute('home');
+
             } else if(count($users) === 0){
-                $this->addFlash('info', 'premiere connection : configuration du compte administrateur');
+
+                $this->addFlash(Msgr::TYPE_INFOS, Msgr::FIRST_CONNEXION);
+
             }
             return $this->render('user/register.html.twig', [
                 'page_name' => 'Register',
                 'register_form' => $registerForm->createView(),
                 'user' => $user,
-
             ]);
+
         } else {
-            $this->addFlash('error', 'vous devez etre admin pour venir ici');
+            $this->addFlash(Msgr::TYPE_ERROR, Msgr::MUST_BE_ADMIN);
             return $this->redirectToRoute('login');
         }
 
     }
 
+
+    /*
+     *  cf security.yaml security: firewalls: main: form_login / logout params & provider
+     */
     /**
      * @Route("/login", name="login")
      * @param Request $request
@@ -94,10 +128,15 @@ class UserController extends AbstractController
     public function logout(){
 
     }
+
+    // gestion des profils utilisateurs lambda (role user)
     /**
      * @Route("/profile", name="profile")
      */
     public function profile(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder){
+        if($this->isGranted('ROLE_ADMIN')){
+            $this->addFlash(Msgr::TYPE_WARNING, 'en admin aller sur register pour avoir plus de modification');
+        }
         $user = $this->getUser();
         $userForm = $this->createForm(RegisterType::class, $user);
         $registerForm = $this->createForm(RegisterType::class,$user);
@@ -116,19 +155,32 @@ class UserController extends AbstractController
             'register_form'=> $userForm->createView()
         ]);
     }
-//    /**
-//     * @Route("/delete", name="delete")
-//     */
-//    public function delete(EntityManagerInterface $em , Request $request){
-//        if($this->isGranted('ROLE_ADMIN')){
-//            $user = $this->getUser();
-//            //$eUser = $em->getRepository(User::class)->findOneBy(['username'=> $user->getUsername()]);
-//            $em->remove($user);
-//            $em->flush();
-//            $this->get('security.token_storage')->setToken(null);
-//            $request->getSession()->invalidate();
-//
-//        }
-//        return $this->redirectToRoute('home');
-//    }
+    /*
+     * suppression de compte   attention faire en sorte de gérér une desactivation de base et de forcer si on veux la suppression
+     */
+
+    /**
+     * @Route("/admin/delete/{id}", name="delete")
+     * @Route("/admin/delete/{id}/{force}", name="delete_force")
+     */
+    public function delete(EntityManagerInterface $em , Request $request, $id =null, $force = null){
+        if($this->isGranted('ROLE_ADMIN')){
+            $user = $em->getRepository(User::class)->find($id);
+            $username = $user->getLastname().' '.$user->getFirstname();
+            if($force == 'force'){
+                $em->remove($user);
+                $em->flush();
+
+                $this->addFlash(Msgr::TYPE_WARNING, 'utilisateur '.$username.' supprimé');
+            } else {
+                $user->setActif(false);
+                $em->flush();
+
+                $this->addFlash(Msgr::TYPE_INFOS, 'utilisateur '.$username.' désactivé');
+            }
+
+        }
+
+        return $this->redirectToRoute('home');
+    }
 }
