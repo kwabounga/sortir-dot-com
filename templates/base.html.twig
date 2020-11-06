@@ -54,7 +54,8 @@
                 colorize('.logo-filter');
                 // ...affichage des flashs via des toasts'
                 // cf: bootstrap.html.twig
-                $(".toast").toast('show');
+                $(".toast-php").toast('show');
+                $(".toast-js").toast('hide');
                 // initialise l'auto refresh ds un try catch pour les page ou ca nexiste pas
                 console.log('toast(init)')
             });

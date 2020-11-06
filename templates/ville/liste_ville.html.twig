@@ -121,7 +121,8 @@
         }
         function onRequestComplete(evt) {
             console.log(xhr.response);
-            // window.location = "{{ path('ville_liste') }}";
+
+            window.location = "{{ path('ville_liste') }}";
         }function onUploadComplete(evt) {
             console.log('OK Upload Completed');
         }function onUploadProgress(evt) {
@@ -156,7 +157,12 @@
                 if(jsonRep.response){
                     // ok
                     console.log(jsonRep.response)
-                    window.location = "{{ path('ville_liste') }}";
+                    $('#jsToast > .toast-body').html(jsonRep.response);
+                    $(".toast-js").toast('show');
+                    setTimeout(function(){
+                        //window.location = "{{ path('ville_liste') }}";
+                    },1000);
+
                 } else {
                     // ko
                     console.log(jsonRep.error)
