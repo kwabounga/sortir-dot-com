@@ -4,8 +4,11 @@
 
 {% block stylesheets %}
     {# Fichier pour les datatables #}
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+    {#<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">#}
+    {#<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>#}
+    {# liens locaux #}
+    <link rel="stylesheet" type="text/css" href="{{ asset('js/jquery/jquery.dataTables.min.css') }}">
+    <script type="text/javascript" src="{{ asset('js/jquery/jquery.dataTables.min.js') }}"></script>
 {% endblock %}
 
 {% block header %}{% endblock %}
@@ -24,6 +27,7 @@
                 <div class="form-row">
                     {{ form_row(filtreForm.dateDebutSearch) }}
                     {{ form_row(filtreForm.dateFinSearch) }}
+                    <span class="btn btn-sm btn-warning floatr p-1" style="max-height: 3em;" onclick="clearField();">c</span>
                 </div>
             </div>
 
@@ -141,5 +145,9 @@
         });
 
     });
+    function clearField(){
+        $('#filtre_home_dateDebutSearch').val('');
+        $('#filtre_home_dateFinSearch').val('');
+    }
 </script>
 {% endblock %}
