@@ -58,24 +58,24 @@ class CSVLoaderService
                 $em->persist($v);
                 try {
                     $em->flush();
-                    $output = $output.' import' . $v->getNom() . 'OK';
+                    $output = $output.' import' . $v->getNom() . "OK\n";
                 } catch (\Exception $e){
                     dump($e);
                     $output = $output.'import'.$v->getNom().'FAIL'. $e->getMessage();
                 }
-                //array_push($villes, $v);
+                array_push($villes, $v);
                 $row++;
                 $v = new Ville();
             }
         }
-        //dump($villes);
-        try {
-            $em->flush();
-            $output = 'import villes ok';
-        } catch (\Exception $e){
-            dump($e);
-            $output = 'import fail '. $e->getMessage();
-        }
+        dump($villes);
+//        try {
+//            $em->flush();
+//            $output = 'import villes ok';
+//        } catch (\Exception $e){
+//            dump($e);
+//            $output = 'import fail '. $e->getMessage();
+//        }
         return $output;
     }
     /* chargement d'utilisateur à la volée via csv */
