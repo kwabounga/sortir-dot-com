@@ -27,7 +27,7 @@
                 <div class="form-row">
                     {{ form_row(filtreForm.dateDebutSearch) }}
                     {{ form_row(filtreForm.dateFinSearch) }}
-                    <span class="btn btn-sm btn-warning floatr p-1" style="max-height: 3em;" onclick="clearField();">c</span>
+                    <span class="btn btn-sm btn-success floatr p-1" style="max-height: 3em;" onclick="clearField();">c</span>
                 </div>
             </div>
 
@@ -81,9 +81,9 @@
                     <td>{{ sortie.etat.libelle }}</td>
                     <td>
                     {% if app.user in sortie.participants %}
-                        v
+                        ✅
                     {% else %}
-                        x
+                        ❌
                     {% endif %}
                     </td>
                     <td>{{ sortie.organisateur.username }}</td>
