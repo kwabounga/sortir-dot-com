@@ -24,32 +24,35 @@ class SortieRepository extends ServiceEntityRepository
 
     public function findSortieFiltre(FiltreHomeDTO $filtre, int $idUser) {
         $qb = $this->createQueryBuilder('s');
-        $qb->andWhere('s.campus = :campusId')
-            ->setParameter('campusId', $filtre->campusSearch->getId());
 
-        if (isset($filtre->dateDebutSearch)) {
+        if ($filtre->getCampusSearch() !== null) {
+            $qb->andWhere('s.campus = :campusId')
+                ->setParameter('campusId', $filtre->getCampusSearch()->getId());
+        }
+
+        if ($filtre->getDateDebutSearch() !== null) {
             $qb->andWhere(':dateDebut <= s.debut')
-                ->setParameter('dateDebut', $filtre->dateDebutSearch->format('Y-m-d 00:00:00'));
+                ->setParameter('dateDebut', $filtre->getDateDebutSearch()->format('Y-m-d 00:00:00'));
         }
 
-        if (isset($filtre->dateFinSearch)) {
+        if ($filtre->getDateFinSearch() !== null) {
             $qb->andWhere(':dateFin >= s.debut')
-                ->setParameter('dateFin', $filtre->dateFinSearch->format('Y-m-d 23:59:59'));
+                ->setParameter('dateFin', $filtre->getDateFinSearch()->format('Y-m-d 23:59:59'));
         }
 
-        if ($filtre->sortieOrgaSearch) {
+        if ($filtre->getSortieOrgaSearch()) {
             $qb->andWhere('s.organisateur = :idOrga')
                 ->setParameter('idOrga', $idUser);
         }
 
-        if ($filtre->sortieInscritSearch && !$filtre->sortiePasInscritSearch) {
+        if ($filtre->getSortieInscritSearch() && !$filtre->getSortiePasInscritSearch()) {
             var_dump('test sortieInscritSearch');
             $qb->innerJoin('s.participants', 'p')
                 ->andWhere('p.id = :idIns')
                 ->setParameter('idIns', $idUser);
         }
 
-        if ($filtre->sortiePasInscritSearch && !$filtre->sortieInscritSearch) {
+        if ($filtre->getSortiePasInscritSearch() && !$filtre->getSortieInscritSearch()) {
             var_dump('test sortiePasInscritSearch');
             $subQuery = $this->_em->createQueryBuilder()
                 ->select('u.id')->from(User::class, 'u')
@@ -60,7 +63,7 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('idPasIns', $idUser);
         }
 
-        if ($filtre->sortiePasseeSearch) {
+        if ($filtre->getSortiePasseeSearch()) {
             $qb->andWhere(':dateNow >= s.debut')
                 ->setParameter('dateNow', date('Y-m-d 00:00:00'));
         } else {

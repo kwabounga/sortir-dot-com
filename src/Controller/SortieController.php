@@ -22,7 +22,11 @@ class SortieController extends CommonController {
     public function detailSortie(SortieRepository $sortieRepo, $id) {
         $sortie = $sortieRepo->find($id);
 
-        return $this->render('sortie/detail_sortie.html.twig', compact("sortie"));
+        return $this->render('sortie/detail_sortie.html.twig', [
+            'sortie' => $sortie,
+            'routes' => $this->getAllRoutes(),
+            'title' => 'Détail '. $sortie->getNom(),
+        ]);
     }
 
     /**
@@ -56,6 +60,7 @@ class SortieController extends CommonController {
                 'page_name' => 'Création d\'une sortie',
                 'sortie_form' => $sortieForm->createView(),
                 'user' => $this->getUser(),
+
                 'title' => 'Ajout de Sortie',
                 'routes' => $this->getAllRoutes()
             ]);
@@ -70,7 +75,11 @@ class SortieController extends CommonController {
     public function modifierSortie(SortieRepository $sortieRepo, $id) {
         $sortie = $sortieRepo->find($id);
 
-        return $this->render('sortie/modifier_sortie.html.twig', compact("sortie"));
+        return $this->render('sortie/modifier_sortie.html.twig', [
+            'sortie' => $sortie,
+            'routes' => $this->getAllRoutes(),
+            'title' => 'Sortie '. $sortie->getNom(),
+        ]);
     }
 
     /**
@@ -79,6 +88,10 @@ class SortieController extends CommonController {
     public function annulerSortie(SortieRepository $sortieRepo, $id) {
         $sortie = $sortieRepo->find($id);
 
-        return $this->render('sortie/annuler_sortie.html.twig', compact("sortie"));
+        return $this->render('sortie/annuler_sortie.html.twig', [
+            'sortie' => $sortie,
+            'routes' => $this->getAllRoutes(),
+            'title' => 'Sortie '. $sortie->getNom(),
+        ]);
     }
 }

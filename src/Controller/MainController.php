@@ -32,6 +32,7 @@ class MainController extends CommonController {
         $roles = $em->getRepository(Role::class)->findAll();
         if(count($roles) === 0 ){
             // si oui initialisation de la bdd
+
             return $this->redirectToRoute('update_bdd');
         }
         // si non go page d'acceuil
@@ -58,7 +59,7 @@ class MainController extends CommonController {
         }
 
         $user = $em->getRepository(User::class)->findOneBy(['username'=>$this->getUser()->getUsername()]);
-        $filtre = new FiltreHomeDTO($user);
+        $filtre = new FiltreHomeDTO($this->getUser()->getCampus());
 
         $filtreForm = $this->createForm(FiltreHomeType::class, $filtre,[
             'user' => $user
@@ -76,7 +77,7 @@ class MainController extends CommonController {
                 'filtreForm' => $filtreForm->createView(),
                 'listeSorties' => $listeSorties,
                 'routes' => $this->getAllRoutes(),
-                'title' => 'Home',
+                'title' => 'Sorties',
             ]);
     }
 }

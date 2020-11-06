@@ -2,7 +2,12 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <script src="{{ asset('js/jquery/jquery.js') }}"></script>
         <link rel="stylesheet" href="{{ asset("js/bootstrap/css/bootstrap.min.css") }}">
+        <script src="{{ asset('js/bootstrap/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <link rel="stylesheet" href="{{ asset('js/fontawesome/css/all.css') }}">
+        <script src="{{ asset('js/filter_css.js') }}"></script>
         <link rel="shortcut icon" href="{{ asset('img/logo_mini_22x30_white.png') }}">
         {% include 'shared/css.html.twig' %}
         <title>{% block title %}Sortir{% endblock %}</title>
@@ -13,7 +18,7 @@
         <header>
             {% include "shared/nav.html.twig" %}
         </header>
-        <div class="container-fluid">
+        <div class="container-fluid mb-3">
             <p class="title m-0 p-2 pl-3 bg-success">{{ title }}</p>
         </div>
         <div class="container">
@@ -27,11 +32,9 @@
             {% endblock %}
 
 
-            <div class="row text-center">
-                {% block body %}
+            {% block body %}
 
-                {% endblock %}
-            </div>
+            {% endblock %}
 
         </div>
 
@@ -46,13 +49,7 @@
 
         {% include 'shared/toasts.html.twig' %}
         <!-- Bootstrap core JavaScript -->
-        <script src="{{ asset('js/jquery/jquery.js') }}"></script>
-        <script src="{{ asset('js/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('js/bootstrap/js/bootstrap.min.js') }}"></script>
-        <script src="{{ asset('js/filter_css.js') }}"></script>
-
         <script>
-
             $(document).ready(function(){
                 colorize('.logo-filter');
                 // ...affichage des flashs via des toasts'
@@ -63,7 +60,37 @@
             });
         </script>
         {% block javascripts %}{% endblock %}
-
+        <script>function ajaxPost (url, data, callback, isJson = true) {
+                var req = new XMLHttpRequest()
+                req.open('POST', url)
+                req.addEventListener('load', function () {
+                    if (req.status >= 200 && req.status < 400) {
+                        // Appelle la fonction callback en lui passant la réponse de la requête
+                        callback(req.responseText)
+                    } else {
+                        console.error(req.status + ' ' + req.statusText + ' ' + url)
+                    }
+                })
+                req.addEventListener('error', function () {
+                    console.error('Erreur réseau avec l\'URL ' + url)
+                })
+                if (isJson) {
+                    // Définit le contenu de la requête comme étant du JSON
+                    req.setRequestHeader('Content-Type', 'application/json')
+                    // Transforme la donnée du format JSON vers le format texte avant l'envoi
+                    data = JSON.stringify(data)
+                }
+                req.send(data)
+            }
+            function padZeros ($num, $nbZeros) {
+                var $numSize = $num.toString().length;
+                var $result = '';
+                for (var i = 0; i < ($nbZeros - $numSize); i++) {
+                    $result += '0';
+                }
+                $result += $num.toString();
+                return $result;
+            }</script>
     </body>
 
 </html>
