@@ -120,7 +120,8 @@
             xhr.send(formData);
         }
         function onRequestComplete(evt) {
-            console.log('Ok Request completed', xhr.response);
+            console.log(xhr.response);
+            // window.location = "{{ path('ville_liste') }}";
         }function onUploadComplete(evt) {
             console.log('OK Upload Completed');
         }function onUploadProgress(evt) {

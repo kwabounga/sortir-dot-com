@@ -8,6 +8,7 @@ use App\Repository\VilleRepository;
 use App\Services\CSVLoaderService;
 use App\Services\Msgr;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -60,8 +61,9 @@ class VilleController extends CommonController {
         $csv = $csvFile['file']->openFile('r')->fread($csvFile['file']->getSize());
     }
         dump($csv);
-     $output = CSVLoaderService::loadCitiesFromCSV($em, $csv);
-        return $this->json($output);
+        /** @var JsonResponse $output */
+        $output = CSVLoaderService::loadCitiesFromCSV($em, $csv);
+        return $output;
     }
     /**
      * @Route("/delete/{id}", name="ville_delete_one", methods={"POST"}, requirements={"id": "\d+"})

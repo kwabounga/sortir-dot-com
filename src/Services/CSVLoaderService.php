@@ -10,6 +10,7 @@ use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\Ville;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class CSVLoaderService
@@ -22,6 +23,7 @@ class CSVLoaderService
         $nbCol = 4;
         $currentCampus = 1;
         $villes = [];
+        $villeNames = [];
         $i = 0 ;
         $c=0;
         $data = str_getcsv($csv, ";", "'");
@@ -58,10 +60,13 @@ class CSVLoaderService
                 $em->persist($v);
                 try {
                     $em->flush();
-                    $output = $output.' import' . $v->getNom() . "OK\n";
+                    $villeNames[] = [$v->getNom() => 'ok'];
+                    // $output = $output.' import' . $v->getNom() . "OK\n";
+
                 } catch (\Exception $e){
                     dump($e);
-                    $output = $output.'import'.$v->getNom().'FAIL'. $e->getMessage();
+//                    $output = $output.'import'.$v->getNom().'FAIL'. $e->getMessage();
+                    $villeNames[] = [$v->getNom() => 'error'];
                 }
                 array_push($villes, $v);
                 $row++;
@@ -76,7 +81,7 @@ class CSVLoaderService
 //            dump($e);
 //            $output = 'import fail '. $e->getMessage();
 //        }
-        return $output;
+        return new JsonResponse($villeNames);
     }
     /* chargement d'utilisateur à la volée via csv */
     public static function loadUsersFromCSV(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $csv) {

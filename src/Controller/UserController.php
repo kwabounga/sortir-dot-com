@@ -162,7 +162,7 @@ class UserController extends CommonController
 
     // gestion des profils utilisateurs lambda (role user)
     /**
-     * @Route("/profile", name="profile")
+     * @Route("/profil", name="profil")
      */
     public function profile(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder){
         if($this->isGranted('ROLE_ADMIN')){
@@ -178,12 +178,12 @@ class UserController extends CommonController
             $user->setPassword($hash);
             $em->persist($user);
             $em->flush();
-            return $this->redirectToRoute('profile');
+            return $this->redirectToRoute('profil');
         }
         return $this->render("user/profile.html.twig", [
             'user' => $user,
             'register_form'=> $userForm->createView(),
-            'title' => 'Profile',
+            'title' => 'Profil',
             'routes' => $this->getAllRoutes(),
         ]);
     }
