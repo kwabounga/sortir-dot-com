@@ -16,8 +16,11 @@ class ErrorController extends CommonController
      * Surcharge de la page d'erreur
      * TODO: voir comment récuperer le code d'erreur
      */
-    public function show(Request $request): Response
+    public function show(string $garbage, Request $request): Response
     {
+        dump($garbage);
+        dump($this->getUser());
+
         return $this->render('bundles/TwigBundle/Exception/error404.html.twig', [
             'title' => 'ErrorController',
             'uri' => $request->getUri(),

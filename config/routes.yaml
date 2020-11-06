@@ -1,3 +1,13 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+
+#route spéciale qui attrappe les erreurs 404 pour Jean-Yves mais c'est un peu dégueulasse
+#doit absolument être à la fin !!!
+pageNotFound:
+  path:  /{garbage}
+  controller: App\Controller\ErrorController::show
+  defaults: {garbage: '' }
+  requirements:
+    garbage: .*
