@@ -29,18 +29,23 @@
             </table>
             {{form_end(ville_form)}}
         </form>
-        <label for="pagination">Afficher <input id="pagination" type="number" value="25" min="25" step="25" max="200"> Villes </label>
+
         <form id="upload-form">
             <label for="file">File</label> <input id="file" type="file" name="file">
-            <input type="submit">
+            <input type="submit"  class="btn btn-success btn-sm text-dark">
             <span>Progress: <span id="progress-value"></span>% <span id="upload-complete"></span> <span id="errors"></span></span>
         </form>
-
-
-
+        <span>format csv:</span>
+        <pre>
+            <code>
+nom; codepostal; 'latitude'; 'longitude';
+nom; codepostal; 'latitude'; 'longitude';
+nom; codepostal; 'latitude'; 'longitude';
+            </code>
+        </pre>
         {#<a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
+    <label for="pagination">Afficher <input id="pagination" type="number" value="25" min="25" step="25" max="200"> Villes </label>
     </header>
-
 {% endblock %}
 {% block body %}
 
@@ -128,9 +133,7 @@
         }function onUploadProgress(evt) {
             document.getElementById('progress-value').innerHTML = evt.loaded * 100 / evt.total  ;
         }
-        function importVilleCSV() {
-            console.log(document.getElementById('file').value)
-        }
+
         function setPagination(){
             if(table){
                 table.destroy();
@@ -160,7 +163,7 @@
                     $('#jsToast > .toast-body').html(jsonRep.response);
                     $(".toast-js").toast('show');
                     setTimeout(function(){
-                        //window.location = "{{ path('ville_liste') }}";
+                        window.location = "{{ path('ville_liste') }}";
                     },1000);
 
                 } else {

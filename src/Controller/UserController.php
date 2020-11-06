@@ -11,6 +11,8 @@ use App\Services\InitialisationService;
 use App\Services\Msgr;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,25 +43,36 @@ class UserController extends CommonController
      * avec un csv
      */
     /**
-     * @Route("/register/csv", name="register_csv")
+     * @Route("/register/csv", name="register_csv", methods={"POST"})
      */
     public function registerByCSV(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $id = null)
     {
         // TODO: verrouiller pour admin
-        $csv = "1; 2; 'theUsername1'; 'mail1@mail.com'; 'theUsername1'; 'firstname1'; 'lastname1'; 'phone1';
-1; 2; 'theUsername2'; 'mail2@mail.com'; 'theUsername2'; 'firstname2'; 'lastname2'; 'phone2';
-1; 2; 'theUsername3'; 'mail3@mail.com'; 'theUsername3'; 'firstname3'; 'lastname3'; 'phone3';
-1; 2; 'theUsername4'; 'mail4@mail.com'; 'theUsername4'; 'firstname4'; 'lastname4'; 'phone4';
-1; 2; 'theUsername5'; 'mail5@mail.com'; 'theUsername5'; 'firstname5'; 'lastname5'; 'phone5';
-1; 2; 'theUsername6'; 'mail6@mail.com'; 'theUsername6'; 'firstname6'; 'lastname6'; 'phone6';
-1; 2; 'theUsername7'; 'mail7@mail.com'; 'theUsername7'; 'firstname7'; 'lastname7'; 'phone7';";
-        $op = CSVLoaderService::loadUsersFromCSV($em,$encoder, $csv);
-         dump($op);
-        // TODO: renviyer sur user List
-        return $this->render('main/home.html.twig', [
-            'routes' => $this->getAllRoutes(),
-            'title' => 'Home',
-        ]);
+//        $csv = "1; 2; 'theUsername1'; 'mail1@mail.com'; 'theUsername1'; 'firstname1'; 'lastname1'; 'phone1';
+//1; 2; 'theUsername2'; 'mail2@mail.com'; 'theUsername2'; 'firstname2'; 'lastname2'; 'phone2';
+//1; 2; 'theUsername3'; 'mail3@mail.com'; 'theUsername3'; 'firstname3'; 'lastname3'; 'phone3';
+//1; 2; 'theUsername4'; 'mail4@mail.com'; 'theUsername4'; 'firstname4'; 'lastname4'; 'phone4';
+//1; 2; 'theUsername5'; 'mail5@mail.com'; 'theUsername5'; 'firstname5'; 'lastname5'; 'phone5';
+//1; 2; 'theUsername6'; 'mail6@mail.com'; 'theUsername6'; 'firstname6'; 'lastname6'; 'phone6';
+//1; 2; 'theUsername7'; 'mail7@mail.com'; 'theUsername7'; 'firstname7'; 'lastname7'; 'phone7';";
+//        $op = CSVLoaderService::loadUsersFromCSV($em,$encoder, $csv);
+//         dump($op);
+//        // TODO: renviyer sur user List
+//        return $this->render('main/home.html.twig', [
+//            'routes' => $this->getAllRoutes(),
+//            'title' => 'Home',
+//        ]);
+        /** @var UploadedFile $csvFile */
+        $csvFile = $request->files->get('upload');
+        $csv = '';
+        dump($csvFile);
+        if($csvFile['file']){
+            $csv = $csvFile['file']->openFile('r')->fread($csvFile['file']->getSize());
+        }
+        dump($csv);
+        /** @var JsonResponse $output */
+        $output = CSVLoaderService::loadUsersFromCSV($em,$encoder, $csv);;
+        return $output;
     }
     /*
      * Creation d'utilisateurs

@@ -22,7 +22,7 @@ class ErrorController extends CommonController
         dump($this->getUser());
 
         return $this->render('bundles/TwigBundle/Exception/error404.html.twig', [
-            'title' => 'ErrorController',
+            'title' => 'Oups, Quelque Chose c\'est mal passé...',
             'uri' => $request->getUri(),
             'routes' => $this->getAllRoutes(),
         ]);

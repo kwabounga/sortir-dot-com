@@ -142,21 +142,23 @@ class CSVLoaderService
             if(($i) % $nbCol ==0){
                 $u->setDateCreated(new \DateTime());
                 $u->setActif(true);
-                $em->persist($u);
+
                 //array_push($users, $u);
+                try {
+                    $em->persist($u);
+                    $em->flush();
+                    $users[] = [$u->getUsername() =>'added'];
+                } catch (\Exception $e){
+                    dump($e);
+                    $users[] = [$u->getUsername() =>$e->getMessage()];
+                }
                 $row++;
                 $u = new User();
             }
         }
         //dump($users);
-        try {
-            $em->flush();
-            $output = 'import user ok';
-        } catch (\Exception $e){
-            dump($e);
-            $output = 'import fail '. $e->getMessage();
-        }
-        return $output;
+
+        return new JsonResponse($users);
     }
 
 

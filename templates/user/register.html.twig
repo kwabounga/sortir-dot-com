@@ -1,10 +1,72 @@
 {% extends 'base.html.twig' %}
 
 {% block title %} Register {% endblock %}
+{% block header %}
+    <header class="jumbotron my-4">
+        {% if user and (user.id == '') %}
+        <h1 class="display-3">Nouvel Utilisateur</h1>
+        <p class="lead">Definir ci-dessous un nouvel utilisateur <br> ou préférer l'import massif via csv</p>
+{#        <a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
+        <form id="upload-form">
+            <label for="file">File</label> <input id="file" type="file" name="file">
+            <input type="submit"  class="btn btn-success btn-sm text-dark">
+            <span>Progress: <span id="progress-value"></span>% <span id="upload-complete"></span> <span id="errors"></span></span>
+        </form>
+            <span>format csv:</span>
+            <pre>
+                <code>
+campus_id; role_id; 'username'; 'mail@mail.com'; 'password'; 'firstname'; 'lastname'; 'phone';
+campus_id; role_id; 'username'; 'mail@mail.com'; 'password'; 'firstname'; 'lastname'; 'phone';
+campus_id; role_id; 'username'; 'mail@mail.com'; 'password'; 'firstname'; 'lastname'; 'phone';
+                </code>
+            </pre>
+        {% else %}
+            <h1 class="display-3">Modification du profil administrateur</h1>
+            <p class="lead">Modifier mon profil admin, Attention a mon role_admin</p>
+        {% endif %}
+    </header>
+{% endblock %}
 {% block body  %}
     {{ form_start(register_form) }}
     {{ form_widget(register_form) }}
     <button class="btn btn-success btn-lg btn-block" type="submit">Register</button>
     {{ form_end(register_form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var xhr = new XMLHttpRequest();
+        $(document).ready(() => {
+
+            document.getElementById('upload-form').addEventListener('submit', onSubmit);
+        });
+        function onSubmit(event) {
+            event.preventDefault();
+
+            var formData = new FormData();
+            formData.append("upload[file]", document.getElementById("file").files[0]);
+            xhr = new XMLHttpRequest();
+            xhr.open("POST", "{{ path('register_csv') }}");
+            xhr.addEventListener('load', onRequestComplete, false);
+            xhr.upload.addEventListener("load", onUploadComplete, false);
+            xhr.upload.addEventListener("progress", onUploadProgress, false);
+            xhr.send(formData);
+        }
+        function onRequestComplete(evt) {
+            console.log(xhr.response);
+            $('#jsToast > .toast-body').html(jsonRep.response);
+            $(".toast-js").toast('show');
+            setTimeout(function(){
+
+                //window.location = "{{ path('register') }}";
+            },1000);
+            {#window.location = "{{ path('register') }}";#}
+        }function onUploadComplete(evt) {
+            console.log('OK Upload Completed');
+        }function onUploadProgress(evt) {
+            document.getElementById('progress-value').innerHTML = evt.loaded * 100 / evt.total  ;
+        }
+    </script>
 {% endblock %}
 

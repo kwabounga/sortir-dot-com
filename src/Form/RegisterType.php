@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
 use App\Entity\Role;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -33,6 +34,11 @@ class RegisterType extends AbstractType
             ->add('role', EntityType::class, [
                 'class' => Role::class,
                 'choice_label' => 'value',
+                'choice_value' => 'id'
+            ])
+            ->add('campus', EntityType::class, [
+                'class' => Campus::class,
+                'choice_label' => 'nom',
                 'choice_value' => 'id'
             ])
         ;
