@@ -64,6 +64,9 @@ $this->addFlash(Msgr::TYPE_XXX, Msgr::MESSAGE);
 ````
 types disponibles: `'infos'`, `'warning'`, `'error'`, `'success'`  
 
+
+
+
 ***RAZ*** 
 
 mysql  `DROP TABLE sortir`  
