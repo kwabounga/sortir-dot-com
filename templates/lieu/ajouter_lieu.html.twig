@@ -1,0 +1,77 @@
+{% extends "base.html.twig" %}
+
+{% block title %} {{ parent() }} | lieu {% endblock %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block body %}
+	{{ form_start(lieu_form) }}
+	
+	
+	<div class="row" id="">
+    		<div class="col-sm-3">
+    			{{ form_label(lieu_form.nom) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_widget(lieu_form.nom) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_errors(lieu_form.nom) }}
+        	</div>
+	</div>
+	<div class="row">
+    		<div class="col-sm-3">
+    			{{ form_label(lieu_form.rue) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_widget(lieu_form.rue) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_errors(lieu_form.rue) }}
+        	</div>
+	</div>
+	<div class="row">
+    		<div class="col-sm-3">
+    			{{ form_label(lieu_form.ville) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_widget(lieu_form.ville) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_errors(lieu_form.ville) }}
+        	</div>
+	</div>
+	<div class="row">
+    		<div class="col-sm-3">
+    			{{ form_label(lieu_form.latitude) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_widget(lieu_form.latitude) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_errors(lieu_form.latitude) }}
+        	</div>
+	</div>
+	<div class="row">
+    		<div class="col-sm-3">
+    			{{ form_label(lieu_form.longitude) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_widget(lieu_form.longitude) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_errors(lieu_form.longitude) }}
+        	</div>
+	</div>
+	<div class="row">
+    		<div class="col-sm-2">
+    			{{ form_row(lieu_form.save) }}
+        	</div>
+        	<div class="col-sm-2">
+    			<input type="button" onclick="location.href='{{ path('sortie_ajouter') }}';" value="Annuler" />
+        	</div>
+	</div>
+	{{ form_end(lieu_form) }}
+{% endblock %}

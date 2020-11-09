@@ -8,7 +8,125 @@
 
 {% block body %}
 	{{ form_start(sortie_form) }}
-    {{ form_widget(sortie_form) }}
+	
+	
+	<div class="row" id="">
+    		<div class="col-sm-3">
+    			{{ form_label(sortie_form.nom) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_widget(sortie_form.nom) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_errors(sortie_form.nom) }}
+        	</div>
+	</div>
+	<div class="row">
+    		<div class="col-sm-3">
+    			{{ form_label(sortie_form.debut) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_widget(sortie_form.debut) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_errors(sortie_form.debut) }}
+        	</div>
+	</div>
+	<div class="row">
+    		<div class="col-sm-3">
+    			{{ form_label(sortie_form.duree) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_widget(sortie_form.duree) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_errors(sortie_form.duree) }}
+        	</div>
+	</div>
+	<div class="row">
+    		<div class="col-sm-3">
+    			{{ form_label(sortie_form.limiteInscription) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_widget(sortie_form.limiteInscription) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_errors(sortie_form.limiteInscription) }}
+        	</div>
+	</div>
+	<div class="row">
+    		<div class="col-sm-3">
+    			{{ form_label(sortie_form.inscriptionMax) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_widget(sortie_form.inscriptionMax) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_errors(sortie_form.inscriptionMax) }}
+        	</div>
+	</div>
+	<div class="row">
+    		<div class="col-sm-3">
+    			{{ form_label(sortie_form.campus) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_widget(sortie_form.campus) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_errors(sortie_form.campus) }}
+        	</div>
+	</div>
+	<div class="row">
+    		<div class="col-sm-3">
+    			{{ form_label(sortie_form.lieu) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_widget(sortie_form.lieu) }}
+    			<button type="button" 
+    					onclick="location.href='{{ path('lieu_ajouter',
+    					    {
+    					        'nom': sortie_form.nom.vars.value,
+    					        'debut': sortie_form.debut.vars.value,
+    					        'duree': sortie_form.duree.vars.value,
+    					        'limiteInscription': sortie_form.limiteInscription.vars.value,
+    					        'inscriptionMax': sortie_form.inscriptionMax.vars.value,
+    					        'infos': sortie_form.infos.vars.value,
+    					        
+    					    }
+					    )}}';">
+    				<i class="fas fa-plus-circle"></i>
+    			</button>
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_errors(sortie_form.lieu) }}
+        	</div>
+	</div>
+	<div class="row">
+    		<div class="col-sm-3">
+    			{{ form_label(sortie_form.infos) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_widget(sortie_form.infos) }}
+        	</div>
+        	<div class="col-sm-3">
+    			{{ form_errors(sortie_form.infos) }}
+        	</div>
+	</div>
+	<div class="row">
+    		<div class="col-sm-2">
+    			{{ form_row(sortie_form.save) }}
+        	</div>
+        	<div class="col-sm-2">
+    			{{ form_row(sortie_form.publish) }}
+        	</div>
+        	<div class="col-sm-2">
+    			<input type="button" onclick="location.href='{{ path('home') }}';" value="Annuler" />
+        	</div>
+	</div>
     {{ form_end(sortie_form) }}
-<a href="{{ path('home') }}" role="button">Annuler</a>
+
+
+
+
 {% endblock %}
+
