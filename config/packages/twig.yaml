@@ -3,3 +3,6 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     exception_controller: null
+    globals:
+        # get all route : used for footer 'map' and admin helper with errors 404 page
+        ctAccessor: '@App\Services\CommonTwigAccessor'

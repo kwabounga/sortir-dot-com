@@ -10,22 +10,17 @@
     </header>
 {% endblock %}
 {% block body %}
-   {# <h1>Page non trouvé</h1>
-    <h3>{{ uri }} n'existe pas</h3>
-    <p>
-        Votre demande n'as pas pu aboutir car l'url demandé n'existe pas.
-        Cependant vous pouvez <a href="{{ path('main_home') }}">retourner à la page d'acceuil</a>.
-    </p>#}
-    {#{% if is_granted('ROLE_ADMIN')%}#}
+
+    {% if is_granted('ROLE_ADMIN')%}
         <h3>Routes possibles: </h3>
         <p><div class="spacer"></div></p>
         <div class="list-group text-left">
-            {% for route in routes %}
+            {% for route in ctAccessor.allroutes %}
                 <a href="{{ path('home') }}{{ route.path[1:]|replace({'{id}': '','{force}': '',})  }}" class="list-group-item">{{ route.name }} ({{ route.methode }})<span class=" badge badge-light badge-pill floatr"><code>{{ route.path }}</code></span></a>
 
             {% endfor %}
         </div>
-    {#{% endif %}#}
+    {% endif %}
 
 
 {% endblock %}

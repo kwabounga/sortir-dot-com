@@ -76,8 +76,8 @@ class MainController extends CommonController {
             [
                 'filtreForm' => $filtreForm->createView(),
                 'listeSorties' => $listeSorties,
-                'routes' => $this->getAllRoutes(),
-                'title' => 'Home',
+                // 'routes' => $this->getAllRoutes(),
+                'title' => 'Sorties',
             ]);
     }
 }

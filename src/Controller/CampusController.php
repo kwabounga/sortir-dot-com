@@ -23,7 +23,7 @@ class CampusController extends CommonController {
 
         return $this->render('campus/liste_campus.html.twig', [
 
-            'routes' => $this->getAllRoutes(),
+            // 'routes' => $this->getAllRoutes(),
             'title' => 'Campus',
         ]);
     }

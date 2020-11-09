@@ -27,25 +27,25 @@ class Sortie
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\GreaterThan("today")
+     * @Assert\GreaterThan(value="today", message="Le début de la soirée ne peut pas être dans le passé.")
      */
     private $debut;
 
     /**
      * @ORM\Column(type="time")
-     * @Assert\GreaterThanOrEqual("+1 hours")
      */
     private $duree;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\GreaterThan(propertyPath="debut")
+     * @Assert\LessThan(propertyPath="debut", message="La limite d'incription doit se situer avant le début.")
+     * @Assert\GreaterThan(value="today", message="La limite d'inscription ne peut pas être dans le passé.")
      */
     private $limiteInscription;
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\GreaterThan(1)
+     * @Assert\GreaterThan(value=1, message="Une soirée ne peut pas s'effectuer tout seul.")
      */
     private $inscriptionMax;
 

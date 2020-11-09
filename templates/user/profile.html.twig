@@ -1,6 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block title %} Profil {% endblock %}
+
+{% block header %}
+    <header class="jumbotron my-4">
+        <h1 class="display-3">{{  title }}</h1>
+        <p class="lead">Modification de votre profil</p>
+{#        <a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
+    </header>
+{% endblock %}
+
 {% block body  %}
 <form method="post" class="form text-center">
     <div class="form-group row">
@@ -26,10 +35,6 @@
         {{ form_label(register_form.phone) }}
         {{ form_widget(register_form.phone) }}
     </div>
-
-
-
-
 
     <button class="btn btn-sm btn-success" type="submit">Register</button>
     <a href="{{ path('home') }}" class="btn btn-sm btn-warning">Annuler</a>

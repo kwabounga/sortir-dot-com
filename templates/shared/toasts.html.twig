@@ -2,7 +2,7 @@
     <div  style="position: fixed; top: 1em; right: 1em; z-index: 10000">
         {% for label, messages in app.flashes %}
             {% for message in messages %}
-                <div class="toast fade show {{ label }}-toast" data-autohide="{{ label == 'error' ? 'false': 'true' }}" data-delay="2500">
+                <div class="toast  toast-php fade show {{ label }}-toast" data-autohide="{{ label == 'error' ? 'false': 'true' }}" data-delay="2500">
                     <div class="toast-header">
                         <img src="{{ asset('img/logo_mini_22x30.png') }}" class="rounded mr-2 {{ label }}-filter" style="width: 1.5em; height: auto" alt="...">
                         <strong class="mr-auto">{{ label|capitalize }}</strong>
@@ -17,8 +17,22 @@
                 </div>
             {% endfor %}
         {% endfor %}
+        <div id="jsToast" class="toast toast-js fade show info-toast" data-autohide="true" data-delay="2500">
+            <div class="toast-header">
+                <img src="{{ asset('img/logo_mini_22x30.png') }}" class="rounded mr-2 info-filter" style="width: 1.5em; height: auto" alt="...">
+                <strong class="mr-auto">Info</strong>
+                <small>!!!</small>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="toast-body">
+
+            </div>
+        </div>
     </div>
 </div>
+
 
 
 

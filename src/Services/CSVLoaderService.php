@@ -10,6 +10,7 @@ use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\Ville;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class CSVLoaderService
@@ -22,6 +23,7 @@ class CSVLoaderService
         $nbCol = 4;
         $currentCampus = 1;
         $villes = [];
+        $villeNames = [];
         $i = 0 ;
         $c=0;
         $data = str_getcsv($csv, ";", "'");
@@ -58,32 +60,34 @@ class CSVLoaderService
                 $em->persist($v);
                 try {
                     $em->flush();
-                    $output = $output.' import' . $v->getNom() . 'OK';
+                    $villeNames[] = [$v->getNom() => 'added'];
+                    // $output = $output.' import' . $v->getNom() . "OK\n";
+
                 } catch (\Exception $e){
                     dump($e);
-                    $output = $output.'import'.$v->getNom().'FAIL'. $e->getMessage();
+//                    $output = $output.'import'.$v->getNom().'FAIL'. $e->getMessage();
+                    $villeNames[] = [$v->getNom() => 'error'];
                 }
-                //array_push($villes, $v);
+                array_push($villes, $v);
                 $row++;
                 $v = new Ville();
             }
         }
-        //dump($villes);
-        try {
-            $em->flush();
-            $output = 'import villes ok';
-        } catch (\Exception $e){
-            dump($e);
-            $output = 'import fail '. $e->getMessage();
-        }
-        return $output;
+        dump($villes);
+//        try {
+//            $em->flush();
+//            $output = 'import villes ok';
+//        } catch (\Exception $e){
+//            dump($e);
+//            $output = 'import fail '. $e->getMessage();
+//        }
+        return new JsonResponse($villeNames);
     }
     /* chargement d'utilisateur à la volée via csv */
     public static function loadUsersFromCSV(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $csv) {
         $output="";
         $row = 1;
         $nbCol = 8;
-        $currentCampus = 1;
         $users = [];
         $i = 0 ;
         $c=0;
@@ -127,7 +131,6 @@ class CSVLoaderService
                     // phone
                     $u->setPhone($d);
                     break;
-
             }
             $i++;
             $c++;
@@ -137,21 +140,23 @@ class CSVLoaderService
             if(($i) % $nbCol ==0){
                 $u->setDateCreated(new \DateTime());
                 $u->setActif(true);
-                $em->persist($u);
+
                 //array_push($users, $u);
+                try {
+                    $em->persist($u);
+                    $em->flush();
+                    $users[] = [$u->getUsername() =>'added'];
+                } catch (\Exception $e){
+                    dump($e);
+                    $users[] = [$u->getUsername() => 'error'];
+                }
                 $row++;
                 $u = new User();
             }
         }
         //dump($users);
-        try {
-            $em->flush();
-            $output = 'import user ok';
-        } catch (\Exception $e){
-            dump($e);
-            $output = 'import fail '. $e->getMessage();
-        }
-        return $output;
+
+        return new JsonResponse($users);
     }
 
 

@@ -1,8 +1,200 @@
 {% extends "base.html.twig" %}
 
 {% block title %} {{ parent() }} | Villes {% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('js/jquery/jquery.dataTables.min.css') }}">
+    <script type="text/javascript" src="{{ asset('js/jquery/jquery.dataTables.min.js') }}"></script>
+{% endblock %}
 
+{% block header %}
+    <header class="jumbotron my-4">
+        <h1 class="display-3">{{ title }}</h1>
+        <p class="lead">Gestion des Villes</p>
 
+        <h4 class="display">Ajouter une ville</h4>
+        <form name="ville" method="post">
+            <table id="table_add_sortie" class="table table-light">
+                <tbody>
+                <tr>
+                    <td>{{form_row(ville_form.nom)}}</td>
+                    <td>{{form_row(ville_form.codePostal)}}</td>
+                    <td>{{form_row(ville_form.latitude)}}</td>
+                    <td>{{form_row(ville_form.longitude)}}</td>
+                    <td>
+{#                        <a class="btn btn-sm btn-outline-dark" href="javascript:void(0)" onclick="addVille()">Ajouter</a>#}
+                        <button class="btn btn-sm btn-light" type="submit" >Ajouter</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            {{form_end(ville_form)}}
+        </form>
+
+        <form id="upload-form">
+            <label for="file">File</label> <input id="file" type="file" name="file">
+            <input type="submit"  class="btn btn-success btn-sm text-dark">
+            <span>Progress: <span id="progress-value"></span>% <span id="upload-complete"></span> <span id="errors"></span></span>
+        </form>
+        <span>format csv:</span>
+        <pre>
+            <code>
+nom; codepostal; 'latitude'; 'longitude';
+nom; codepostal; 'latitude'; 'longitude';
+nom; codepostal; 'latitude'; 'longitude';
+            </code>
+        </pre>
+        {#<a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
+    <label for="pagination">Afficher <input id="pagination" type="number" value="25" min="25" step="25" max="200"> Villes </label>
+    </header>
+{% endblock %}
 {% block body %}
-    Liste villes
+
+    {#{% for ville in villes %}
+            {{ ville.nom }}
+    {% endfor %}#}
+    <div class="mx-3 mt-3">
+        <table id="table_sortie" class="table table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th>Nom</th>
+                <th>Code Postal</th>
+                <th>latitude</th>
+                <th>longitude</th>
+                <th>supprimer</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ville in villes %}
+                <tr>
+                    <td>{{ ville.nom }}</td>
+                    <td>{{ ville.codePostal }}</td>
+                    <td>{{ ville.latitude }}</td>
+                    <td>{{ ville.longitude }}</td>
+                    <td>
+                        <a class="btn btn-sm btn-light" href="javascript:void(0)" onclick="deleteVille('{{ ville.id }}')">x</a>
+
+
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}
+{% block javascripts %}
+
+    <script>
+        var table;
+        var xhr = new XMLHttpRequest();
+        $(document).ready(() => {
+
+            $('#table_sortie thead tr').clone(true).appendTo('#table_sortie thead');
+            $('#table_sortie thead tr:eq(1) th').each(function(i) {
+                var title = $(this).text();
+
+                if (['Nom', 'Etat', 'Organisateur'].includes(title)) {
+                    $(this).html('<input type="text" placeholder="rechercher" class="form-control">');
+                } else {
+                    $(this).html('');
+                }
+
+                $('input', this).on('keyup change', function() {
+                    if (table.column(i).search() !== this.value) {
+                        table.column(i)
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+            setPagination();
+            document.getElementById('pagination').addEventListener('change',setPagination)
+            document.getElementById('upload-form').addEventListener('submit', onSubmit);
+        });
+        function onSubmit(event) {
+            event.preventDefault();
+
+            var formData = new FormData();
+            formData.append("upload[file]", document.getElementById("file").files[0]);
+
+            ajaxPost("{{ path('ville_upload_csv') }}",formData, function(data,err){
+                if(err){
+                    console.log(err);
+                    $('#jsToast > .toast-body').html(err);
+                }
+                let jsonRep = JSON.parse(data);
+                if(jsonRep){
+                    // ok
+                    console.log(jsonRep)
+                    $('#jsToast > .toast-body').html(jsonRep.toString());
+                    // $(".toast-js").toast('show');
+                    setTimeout(function(){
+                        window.location = "{{ path('ville_liste') }}";
+                    },1000);
+
+                } else {
+                    // ko
+                    $('#jsToast > .toast-body').html('erreur inconnue');
+                }
+                $(".toast-js").toast('show');
+            })
+            xhr = new XMLHttpRequest();
+            xhr.open("POST", "{{ path('ville_upload_csv') }}");
+            xhr.addEventListener('load', onRequestComplete, false);
+            xhr.upload.addEventListener("load", onUploadComplete, false);
+            xhr.upload.addEventListener("progress", onUploadProgress, false);
+            xhr.send(formData);
+        }
+        function onRequestComplete(evt) {
+            console.log(xhr.response);
+
+            window.location = "{{ path('ville_liste') }}";
+        }function onUploadComplete(evt) {
+            console.log('OK Upload Completed');
+        }function onUploadProgress(evt) {
+            document.getElementById('progress-value').innerHTML = evt.loaded * 100 / evt.total  ;
+        }
+
+        function setPagination(){
+            if(table){
+                table.destroy();
+            }
+            // Datatable
+            table = $('#table_sortie').DataTable({
+                "dom": 'rtp',
+                "pageLength": document.getElementById('pagination').value,
+                "orderCellsTop": true,
+                "fixedHeader": true,
+                "oLanguage": {
+                    "oPaginate": {
+                        "sNext": "Suivant",
+                        "sPrevious": "Précédent"
+                    }
+                },
+            });
+        }
+
+        function deleteVille(id) {
+            console.log('TODO: delete ville ' + id);
+            ajaxPost("{{ path('ville_delete_one') }}/"+id, null , function(data){
+                jsonRep = JSON.parse(data)
+                if(jsonRep.response){
+                    // ok
+                    console.log(jsonRep.response)
+                    $('#jsToast > .toast-body').html(jsonRep.response);
+                    $(".toast-js").toast('show');
+                    setTimeout(function(){
+                        window.location = "{{ path('ville_liste') }}";
+                    },1000);
+
+                } else {
+                    // ko
+                    console.log(jsonRep.error)
+                    console.log(jsonRep.message)
+
+                }
+            })
+        }
+    </script>
 {% endblock %}
