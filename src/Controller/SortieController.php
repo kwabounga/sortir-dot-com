@@ -25,7 +25,7 @@ class SortieController extends CommonController {
         return $this->render('sortie/detail_sortie.html.twig', [
             'sortie' => $sortie,
             // 'routes' => $this->getAllRoutes(),
-            'title' => 'Détail '. $sortie->getNom(),
+            'title' => $sortie->getNom(),
         ]);
     }
 

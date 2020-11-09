@@ -7,9 +7,8 @@
     <script type="text/javascript" src="{{ asset('js/jquery/jquery.dataTables.min.js') }}"></script>
 {% endblock %}
 
-{% block header %}{% endblock %}
-
-{% block body %}
+{% block header %}
+    {# Détail de la sortie #}
     <div class="jumbotron">
         <div class="row">
             <div class="col-12 col-lg-6">
@@ -47,24 +46,21 @@
                     <div class="col-6"><b>Code Postal : </b></div>
                     <div class="col-6">{{ sortie.lieu.ville.codePostal }}</div>
                 </div>
-                <div class="row">
-                    <div class="col-6"><b>Latitude : </b></div>
-                    <div class="col-6">{{ sortie.lieu.latitude }}</div>
-                </div>
-                <div class="row">
-                    <div class="col-6"><b>Longitude : </b></div>
-                    <div class="col-6">{{ sortie.lieu.longitude }}</div>
-                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-12"><b>Description : </b></div>
-            <div class="col-12">{{ sortie.infos }}</div>
+            <p class="col-12">{{ sortie.infos }}</p>
         </div>
-    </div>
 
+        <a href="{{ path('sortie_modifier', {'id': sortie.id}) }}" class="btn btn-dark float-right">Modifier</a>
+    </div>
+{% endblock %}
+
+{% block body %}
     <div class="row">
-        <div class="col-6">
+        {# Participants #}
+        <div class="col-12 col-xl-6 mb-3">
             <table id="table_participants" class="table table-bordered text-center">
                 <thead class="thead-dark">
                     <tr>
@@ -82,9 +78,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <div id='map-static' style='width: 400px; height: 300px;'></div>
+        {# Carte #}
+        <div class="col-12 col-xl-6">
+            <div id='map-static' style='width: 100%; height: 300px;'></div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -119,8 +118,7 @@
             });
 
         });
-    </script>
-    <script>
+
         /* displayer MapBox part begin */
 
         mapboxgl.accessToken = '{{ ctAccessor.MAPBOXTOKEN }}';

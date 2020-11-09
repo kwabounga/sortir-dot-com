@@ -57,3 +57,22 @@ function actionSortie(url, idSortie, method) {
         } 
     });
 }
+
+function annulerSortie(url, idSortie) {
+    var conf = confirm('Voulez-vous vraiment annuler cette sortie')
+    if (conf) {
+        $.ajax({
+            type: 'PUT',
+            url: url,
+            data: {
+                'id': idSortie
+            },
+            success: function(data) {
+                window.location.reload();
+            },
+            error: function(err) {
+                console.log('erreur', err);
+            } 
+        });   
+    }
+}
