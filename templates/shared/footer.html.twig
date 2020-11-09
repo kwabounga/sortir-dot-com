@@ -4,14 +4,14 @@
     </div>
     <div class="container">
         <div class="row">
-            {% set nbRoutes = routes|length %}
+            {% set nbRoutes = ctAccessor.allroutes|length %}
             {% set id = 1 %}
             <div class="routes-footer col-xs-6 col-sm-6 col-md-3">
                 <ul>
             {% for i in 0..nbRoutes-1 %}
                     {# test si route admin ou si route avec value: on affiche pas  #}
-                    {% if not ('admin' in routes[i].path) and not ('{' in routes[i].path)  %}
-                    <li><a class="text-success" href="{{ path(routes[i].name)}}">{{ routes[i].name|capitalize}}</a></li>
+                    {% if not ('admin' in ctAccessor.allroutes[i].path) and not ('{' in ctAccessor.allroutes[i].path)  %}
+                    <li><a class="text-success" href="{{ path(ctAccessor.allroutes[i].name)}}">{{ ctAccessor.allroutes[i].name|capitalize}}</a></li>
                     {# si PAS admin path #}
                         {% if (id % 3) == 0 %}
                                 </ul>

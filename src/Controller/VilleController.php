@@ -43,7 +43,7 @@ class VilleController extends CommonController {
         $cities = $em->getRepository(Ville::class)->findAll();
         return $this->render('ville/liste_ville.html.twig',[
 
-            'routes' => $this->getAllRoutes(),
+            // 'routes' => $this->getAllRoutes(),
             'title' => 'Villes',
             'villes' => $cities,
             'ville_form' => $villeForm->createView()

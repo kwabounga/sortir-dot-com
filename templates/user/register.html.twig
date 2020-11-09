@@ -12,14 +12,10 @@
             <input type="submit"  class="btn btn-success btn-sm text-dark">
             <span>Progress: <span id="progress-value"></span>% <span id="upload-complete"></span> <span id="errors"></span></span>
         </form>
-            <span>format csv:</span>
-            <pre>
-                <code>
+            <span id="preview-title">format csv:</span>
+            <pre><code id="preview-csv">campus_id; role_id; 'username'; 'mail@mail.com'; 'password'; 'firstname'; 'lastname'; 'phone';
 campus_id; role_id; 'username'; 'mail@mail.com'; 'password'; 'firstname'; 'lastname'; 'phone';
-campus_id; role_id; 'username'; 'mail@mail.com'; 'password'; 'firstname'; 'lastname'; 'phone';
-campus_id; role_id; 'username'; 'mail@mail.com'; 'password'; 'firstname'; 'lastname'; 'phone';
-                </code>
-            </pre>
+campus_id; role_id; 'username'; 'mail@mail.com'; 'password'; 'firstname'; 'lastname'; 'phone';</code></pre>
         {% else %}
             <h1 class="display-3">Modification du profil administrateur</h1>
             <p class="lead">Modifier mon profil admin, Attention a mon role_admin</p>
@@ -39,8 +35,29 @@ campus_id; role_id; 'username'; 'mail@mail.com'; 'password'; 'firstname'; 'lastn
         var xhr = new XMLHttpRequest();
         $(document).ready(() => {
 
+            document.getElementById('upload-form').addEventListener('change', onChange);
             document.getElementById('upload-form').addEventListener('submit', onSubmit);
         });
+        function onChange(event) {
+            document.getElementById("file").files[0].text().then(function(data){
+                let prevSize = 3;
+                console.log(data);
+                document.getElementById('preview-csv').innerText = '';
+                document.getElementById('preview-title').innerText = 'Apercu du csv:';
+                console.log(data.split("\n").length);
+                let dataAr = data.split("\n")
+                for (i=0;i<(dataAr.length<prevSize?dataAr.length:prevSize);i++){
+                    document.getElementById('preview-csv').append(dataAr[i]+"\n");
+                }
+                document.getElementById('preview-csv').append("... cliquer sur Envoyer pour importer");
+            }).catch(function(){
+                alert('probleme avec le fichier')
+                document.getElementById('preview-title').innerText = 'format csv:';
+                document.getElementById('preview-csv').innerText = 'campus_id; role_id; \'username\'; \'mail@mail.com\'; \'password\'; \'firstname\'; \'lastname\'; \'phone\';\n' +
+                    'campus_id; role_id; \'username\'; \'mail@mail.com\'; \'password\'; \'firstname\'; \'lastname\'; \'phone\';\n' +
+                    'campus_id; role_id; \'username\'; \'mail@mail.com\'; \'password\'; \'firstname\'; \'lastname\'; \'phone\';';
+            })
+        }
         function onSubmit(event) {
             event.preventDefault();
 
@@ -55,11 +72,10 @@ campus_id; role_id; 'username'; 'mail@mail.com'; 'password'; 'firstname'; 'lastn
         }
         function onRequestComplete(evt) {
             console.log(xhr.response);
-            $('#jsToast > .toast-body').html(jsonRep.response);
+            $('#jsToast > .toast-body').html(xhr.response);
             $(".toast-js").toast('show');
             setTimeout(function(){
-
-                //window.location = "{{ path('register') }}";
+                window.location = "{{ path('register') }}";
             },1000);
             {#window.location = "{{ path('register') }}";#}
         }function onUploadComplete(evt) {

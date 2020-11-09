@@ -24,7 +24,7 @@ class SortieController extends CommonController {
 
         return $this->render('sortie/detail_sortie.html.twig', [
             'sortie' => $sortie,
-            'routes' => $this->getAllRoutes(),
+            // 'routes' => $this->getAllRoutes(),
             'title' => 'Détail '. $sortie->getNom(),
         ]);
     }
@@ -77,7 +77,7 @@ class SortieController extends CommonController {
 
         return $this->render('sortie/modifier_sortie.html.twig', [
             'sortie' => $sortie,
-            'routes' => $this->getAllRoutes(),
+            // 'routes' => $this->getAllRoutes(),
             'title' => 'Sortie '. $sortie->getNom(),
         ]);
     }
@@ -90,7 +90,7 @@ class SortieController extends CommonController {
 
         return $this->render('sortie/annuler_sortie.html.twig', [
             'sortie' => $sortie,
-            'routes' => $this->getAllRoutes(),
+            // 'routes' => $this->getAllRoutes(),
             'title' => 'Sortie '. $sortie->getNom(),
         ]);
     }

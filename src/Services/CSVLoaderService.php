@@ -60,7 +60,7 @@ class CSVLoaderService
                 $em->persist($v);
                 try {
                     $em->flush();
-                    $villeNames[] = [$v->getNom() => 'ok'];
+                    $villeNames[] = [$v->getNom() => 'added'];
                     // $output = $output.' import' . $v->getNom() . "OK\n";
 
                 } catch (\Exception $e){
@@ -88,7 +88,6 @@ class CSVLoaderService
         $output="";
         $row = 1;
         $nbCol = 8;
-        $currentCampus = 1;
         $users = [];
         $i = 0 ;
         $c=0;
@@ -132,7 +131,6 @@ class CSVLoaderService
                     // phone
                     $u->setPhone($d);
                     break;
-
             }
             $i++;
             $c++;
@@ -150,7 +148,7 @@ class CSVLoaderService
                     $users[] = [$u->getUsername() =>'added'];
                 } catch (\Exception $e){
                     dump($e);
-                    $users[] = [$u->getUsername() =>$e->getMessage()];
+                    $users[] = [$u->getUsername() => 'error'];
                 }
                 $row++;
                 $u = new User();

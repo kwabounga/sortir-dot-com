@@ -117,6 +117,28 @@ nom; codepostal; 'latitude'; 'longitude';
 
             var formData = new FormData();
             formData.append("upload[file]", document.getElementById("file").files[0]);
+
+            ajaxPost("{{ path('ville_upload_csv') }}",formData, function(data,err){
+                if(err){
+                    console.log(err);
+                    $('#jsToast > .toast-body').html(err);
+                }
+                let jsonRep = JSON.parse(data);
+                if(jsonRep){
+                    // ok
+                    console.log(jsonRep)
+                    $('#jsToast > .toast-body').html(jsonRep.toString());
+                    // $(".toast-js").toast('show');
+                    setTimeout(function(){
+                        window.location = "{{ path('ville_liste') }}";
+                    },1000);
+
+                } else {
+                    // ko
+                    $('#jsToast > .toast-body').html('erreur inconnue');
+                }
+                $(".toast-js").toast('show');
+            })
             xhr = new XMLHttpRequest();
             xhr.open("POST", "{{ path('ville_upload_csv') }}");
             xhr.addEventListener('load', onRequestComplete, false);

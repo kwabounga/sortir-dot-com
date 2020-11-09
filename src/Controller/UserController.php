@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Campus;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Form\RegisterType;
@@ -10,7 +9,6 @@ use App\Services\CSVLoaderService;
 use App\Services\InitialisationService;
 use App\Services\Msgr;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +27,7 @@ class UserController extends CommonController
      */
     public function updateBdd(EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $force = null)
     {
+        // TODO: enlever le force mode pour ne pas injecter de données moisies
         $force= 'force';
         $roles = $em->getRepository(Role::class)->findAll();
         if(count($roles) === 0 ){
@@ -45,23 +44,10 @@ class UserController extends CommonController
     /**
      * @Route("/register/csv", name="register_csv", methods={"POST"})
      */
-    public function registerByCSV(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $id = null)
+    public function registerByCSV(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder)
     {
         // TODO: verrouiller pour admin
-//        $csv = "1; 2; 'theUsername1'; 'mail1@mail.com'; 'theUsername1'; 'firstname1'; 'lastname1'; 'phone1';
-//1; 2; 'theUsername2'; 'mail2@mail.com'; 'theUsername2'; 'firstname2'; 'lastname2'; 'phone2';
-//1; 2; 'theUsername3'; 'mail3@mail.com'; 'theUsername3'; 'firstname3'; 'lastname3'; 'phone3';
-//1; 2; 'theUsername4'; 'mail4@mail.com'; 'theUsername4'; 'firstname4'; 'lastname4'; 'phone4';
-//1; 2; 'theUsername5'; 'mail5@mail.com'; 'theUsername5'; 'firstname5'; 'lastname5'; 'phone5';
-//1; 2; 'theUsername6'; 'mail6@mail.com'; 'theUsername6'; 'firstname6'; 'lastname6'; 'phone6';
-//1; 2; 'theUsername7'; 'mail7@mail.com'; 'theUsername7'; 'firstname7'; 'lastname7'; 'phone7';";
-//        $op = CSVLoaderService::loadUsersFromCSV($em,$encoder, $csv);
-//         dump($op);
-//        // TODO: renviyer sur user List
-//        return $this->render('main/home.html.twig', [
-//            'routes' => $this->getAllRoutes(),
-//            'title' => 'Home',
-//        ]);
+
         /** @var UploadedFile $csvFile */
         $csvFile = $request->files->get('upload');
         $csv = '';
@@ -84,11 +70,13 @@ class UserController extends CommonController
      */
     public function register(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, $id = null)
     {
+        // TODO: verrouiller pour admin
+
         /* aide memoire
-        // reconnection si ca vient d'un remember me
-        // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        // connection possible d'un remember me
-        // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+            // reconnection si ca vient d'un remember me
+            // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+            // connection possible d'un remember me
+            // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         */
 
         // verification de la presence de user en bdd
@@ -136,8 +124,8 @@ class UserController extends CommonController
                 'page_name' => 'Register',
                 'register_form' => $registerForm->createView(),
                 'user' => $user,
-                'routes' => $this->getAllRoutes(),
-                'title' => 'Nouvel Utilisateur',
+                // 'routes' => $this->getAllRoutes(),
+                'title' => (($this->isGranted('ROLE_ADMIN')&&$user->getId()!=null)?'Modification Admin':'Nouvel Utilisateur'),
             ]);
 
         } else {
@@ -163,7 +151,7 @@ class UserController extends CommonController
         return $this->render("user/login.html.twig", [
             "user" => $user,
             'title' => 'Login',
-            'routes' => $this->getAllRoutes(),
+            // 'routes' => $this->getAllRoutes(),
         ]);
     }
     /**
@@ -197,11 +185,11 @@ class UserController extends CommonController
             'user' => $user,
             'register_form'=> $userForm->createView(),
             'title' => 'Profil',
-            'routes' => $this->getAllRoutes(),
+            // 'routes' => $this->getAllRoutes(),
         ]);
     }
     /*
-     * suppression de compte   attention faire en sorte de gérér une desactivation de base et de forcer si on veux la suppression
+     * suppression de compte attention faire en sorte de gérér une desactivation de base et de forcer si on veux la suppression
      */
 
     /**
