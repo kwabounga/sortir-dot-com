@@ -75,3 +75,14 @@ cmdr   `php bin/console doctrine:schema:update --force`
 navigateur 'http://localhost/sortir-dot-com/public/'  
 connexion avec [``admin``:``admin``]   
 -------------------------------  
+
+**Import massif csv** 
+
+pour tester l'import de Villes ou d'utilisateurs  
+cliquer sur 'Choisir un fichier' et naviger vers ``[root]/public/csv/``  
+choisir import_user.csv ou import_villes.csv en fonction   
+
+et faire Envoyer.   
+si tout ce passe bien les villes ou users devraient bien etre ajouté  
+
+-------------------------------  
