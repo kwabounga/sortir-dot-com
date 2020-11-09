@@ -40,14 +40,14 @@ class VilleController extends CommonController {
                 $em->persist($v);
                 $em->flush();
                 if($vv){
-                    $this->addFlash(Msgr::TYPE_SUCCESS, 'la ville'.$v->getNom().' a bien été Modifié');
+                    $this->addFlash(Msgr::TYPE_SUCCESS, 'la ville '.$v->getNom().' a bien été Modifié');
                 }else {
-                    $this->addFlash(Msgr::TYPE_SUCCESS, 'la ville'.$v->getNom().' a bien été ajouté en base');
+                    $this->addFlash(Msgr::TYPE_SUCCESS, 'la ville '.$v->getNom().' a bien été ajouté en base');
                 }
 
             } catch (\Exception $e){
                 dump($e);
-                $this->addFlash(Msgr::TYPE_WARNING, 'la ville'.$v->getNom().' n\'a pas pu etre ajouté');
+                $this->addFlash(Msgr::TYPE_WARNING, 'la ville '.$v->getNom().' n\'a pas pu etre ajouté');
             }
             // vidage recreation de l'ancien form
             $villeForm = $this->createForm(VilleType::class);

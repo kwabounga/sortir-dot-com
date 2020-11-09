@@ -86,7 +86,11 @@ class Lieu
 
     public function getLatitude(): ?float
     {
-        return $this->latitude;
+        $lat = $this->latitude;
+        if(!$lat){
+            $lat = $this->getVille()->getLatitude();
+        }
+        return $lat;
     }
 
     public function setLatitude(?float $latitude): self
@@ -98,7 +102,11 @@ class Lieu
 
     public function getLongitude(): ?float
     {
-        return $this->longitude;
+        $lng = $this->longitude;
+        if(!$lng){
+            $lng = $this->getVille()->getLongitude();
+        }
+        return $lng;
     }
 
     public function setLongitude(?float $longitude): self

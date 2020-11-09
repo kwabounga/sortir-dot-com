@@ -4,5 +4,26 @@
 
 
 {% block body %}
-    Detail sortie
+        <div id='map-static' style='width: 400px; height: 300px;'></div>
+        <script>
+            /* displayer MapBox part begin */
+
+            mapboxgl.accessToken = '{{ ctAccessor.MAPBOXTOKEN }}';
+            let coord = {lat:'{{ sortie.lieu.latitude }}',lng:'{{ sortie.lieu.longitude }}'}
+            let map = new mapboxgl.Map({
+                container: 'map-static',
+                style: 'mapbox://styles/mapbox/dark-v10', // stylesheet location
+                center: [coord.lng, coord.lat], // starting position [lng, lat]
+                zoom: 12, // starting zoom
+                // interactive: false
+            });
+            let marker = new mapboxgl.Marker()
+                .setLngLat([coord.lng, coord.lat])
+                .addTo(map);
+            map.dragRotate.disable();
+
+            // disable map rotation using touch rotation gesture
+            map.touchZoomRotate.disableRotation();
+            /* displayer MapBox part end */
+        </script>
 {% endblock %}
