@@ -46,7 +46,8 @@ class VilleController extends CommonController {
             // 'routes' => $this->getAllRoutes(),
             'title' => 'Villes',
             'villes' => $cities,
-            'ville_form' => $villeForm->createView()
+            'ville_form' => $villeForm->createView(),
+            'user'=> $this->getUser()
         ]);
     }
     /**

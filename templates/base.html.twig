@@ -9,6 +9,11 @@
         <link rel="stylesheet" href="{{ asset('js/fontawesome/css/all.css') }}">
         <script src="{{ asset('js/filter_css.js') }}"></script>
         <link rel="shortcut icon" href="{{ asset('img/logo_mini_22x30_white.png') }}">
+
+        {#mapbox#}
+        <script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
+        <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+
         {% include 'shared/css.html.twig' %}
         <title>{% block title %}Sortir{% endblock %}</title>
         {% block stylesheets %}{% endblock %}

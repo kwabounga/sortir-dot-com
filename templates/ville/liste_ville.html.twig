@@ -7,11 +7,21 @@
 {% endblock %}
 
 {% block header %}
-    <header class="jumbotron my-4">
-        <h1 class="display-3">{{ title }}</h1>
-        <p class="lead">Gestion des Villes</p>
 
-        <h4 class="display">Ajouter une ville</h4>
+
+    <header class="jumbotron my-4">
+        <div class="row">
+
+            <div class="col-6">
+                <h1 class="display-3">{{ title }}</h1>
+                <p class="lead">Gestion des Villes</p>
+                <h4 class="display">Ajouter une ville</h4>
+            </div>
+            <div class="col-6">
+                <div id='map' style='width: 400px; height: 300px;'></div>
+            </div>
+        </div>
+
         <form name="ville" method="post">
             <table id="table_add_sortie" class="table table-light">
                 <tbody>
@@ -22,7 +32,8 @@
                     <td>{{form_row(ville_form.longitude)}}</td>
                     <td>
 {#                        <a class="btn btn-sm btn-outline-dark" href="javascript:void(0)" onclick="addVille()">Ajouter</a>#}
-                        <button class="btn btn-sm btn-light" type="submit" >Ajouter</button>
+                        <a class="btn btn-sm btn-info" id="viewInMapBox" onclick="viewInMapBox()">view</a>
+                        <button class="btn btn-sm btn-success" type="submit" >Ajouter</button>
                     </td>
                 </tr>
                 </tbody>
@@ -35,14 +46,10 @@
             <input type="submit"  class="btn btn-success btn-sm text-dark">
             <span>Progress: <span id="progress-value"></span>% <span id="upload-complete"></span> <span id="errors"></span></span>
         </form>
-        <span>format csv:</span>
-        <pre>
-            <code>
+        <span id="preview-title">format csv:</span>
+        <pre><code id="preview-csv">nom; codepostal; 'latitude'; 'longitude';
 nom; codepostal; 'latitude'; 'longitude';
-nom; codepostal; 'latitude'; 'longitude';
-nom; codepostal; 'latitude'; 'longitude';
-            </code>
-        </pre>
+nom; codepostal; 'latitude'; 'longitude';</code></pre>
         {#<a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
     <label for="pagination">Afficher <input id="pagination" type="number" value="25" min="25" step="25" max="200"> Villes </label>
     </header>
@@ -85,7 +92,32 @@ nom; codepostal; 'latitude'; 'longitude';
 {% endblock %}
 {% block javascripts %}
 
+    <div id='map-static' style='width: 400px; height: 300px;'></div>
+{# TODO: AFFICHAGE DE LA MINI MAP POUR UNE SORTIE Dans l'affichage du detail d'une Sortie  #}
+{#    <script>#}
+{#        /* displayer MapBox part begin */#}
+
+{#        mapboxgl.accessToken = '{{ ctAccessor.MAPBOXTOKEN }}';#}
+{#        let coord = {lat:'{{ sortie.lieu.latitude }}',lng:'{{ sortie.lieu.longitude }}'}#}
+{#        let map = new mapboxgl.Map({#}
+{#            container: 'map-static',#}
+{#            style: 'mapbox://styles/mapbox/dark-v10', // stylesheet location#}
+{#            center: [coord.lng, coord.lat], // starting position [lng, lat]#}
+{#            zoom: 12, // starting zoom#}
+{#            // interactive: false#}
+{#        });#}
+{#        let marker = new mapboxgl.Marker()#}
+{#            .setLngLat([coord.lng, coord.lat])#}
+{#            .addTo(map);#}
+{#        map.dragRotate.disable();#}
+
+{#        // disable map rotation using touch rotation gesture#}
+{#        map.touchZoomRotate.disableRotation();#}
+{#        /* displayer MapBox part end */#}
+{#    </script>#}
     <script>
+        var marker;
+        var map;
         var table;
         var xhr = new XMLHttpRequest();
         $(document).ready(() => {
@@ -110,8 +142,106 @@ nom; codepostal; 'latitude'; 'longitude';
             });
             setPagination();
             document.getElementById('pagination').addEventListener('change',setPagination)
+            document.getElementById('upload-form').addEventListener('change', onChange);
             document.getElementById('upload-form').addEventListener('submit', onSubmit);
+
+            document.getElementById('ville_nom').value = '{{ ctAccessor.getVilleFromCampus.nom }}';
+            document.getElementById('ville_codePostal').value = Number('{{ ctAccessor.getVilleFromCampus.codePostal }}');
+            document.getElementById('ville_latitude').value = '{{ ctAccessor.getVilleFromCampus.latitude }}';
+            document.getElementById('ville_longitude').value = '{{ ctAccessor.getVilleFromCampus.longitude }}';
+
+
+
+
+
+            /* MapBox part begin */
+            // TO MAKE THE MAP APPEAR YOU MUST
+            // ADD YOUR ACCESS TOKEN FROM
+            // https://account.mapbox.com
+            mapboxgl.accessToken = '{{ ctAccessor.MAPBOXTOKEN }}';
+            if (!mapboxgl.supported()) {
+                document.getElementById('map').innerText = ' votre navigateur ne supporte pas MapGL'
+            } else {
+                coord = {lat:'{{ ctAccessor.getVilleFromCampus.latitude }}',lng:'{{ ctAccessor.getVilleFromCampus.longitude }}'}
+                map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/dark-v10', // stylesheet location
+                    //nantes = lat: 47.182687043024174
+                    //  lng: -1.5621916011102712
+                    //https://api.mapbox.com/geocoding/v5/mapbox.places/-1.5621916011102712,47.182687043024174.json?access_token=pk.eyJ1Ijoia3dhYm91bmdhIiwiYSI6ImNraGFkMXphODBhczUycHJzazV5YnJmNWIifQ.nrM7GeKszzHKJZr8IWIW7w
+                    center: [coord.lng, coord.lat], // starting position [lng, lat]
+                    zoom: 9 // starting zoom
+                });
+                marker = new mapboxgl.Marker()
+                    .setLngLat([coord.lng, coord.lat])
+                    .addTo(map);
+                // disable map rotation using right click + drag
+                map.dragRotate.disable();
+
+                // disable map rotation using touch rotation gesture
+                map.touchZoomRotate.disableRotation();
+                map.on('mousemove', function (e) {
+                    // console.log(e.lngLat.wrap());
+
+                });
+                map.on('click', function (e) {
+                    console.log(map);
+                    //
+                    updateFieldWithMap(e.lngLat.lng, e.lngLat.lat);
+
+                });
+            }
+            /* MapBox part end */
         });
+
+        function viewInMapBox(event) {
+            let lat = document.getElementById('ville_latitude').value;
+            let lng = document.getElementById('ville_longitude').value;
+            marker.remove();
+            marker = new mapboxgl.Marker()
+                .setLngLat([lng, lat])
+                .addTo(map);
+            map.flyTo({
+                center: [
+                    lng,
+                    lat
+                ],
+                essential: true // this animation is considered essential with respect to prefers-reduced-motion
+            });
+
+        }
+        function updateFieldWithMap(lng, lat) {
+            document.getElementById('ville_nom').value = '';
+            document.getElementById('ville_codePostal').value = '';
+            document.getElementById('ville_latitude').value = lat;
+            document.getElementById('ville_longitude').value = lng;
+            document.getElementById('ville_nom').focus();
+            // console.log(lng,lat)
+            // console.log(map)
+            viewInMapBox();
+
+        }
+        function onChange(event) {
+            document.getElementById("file").files[0].text().then(function(data){
+                let prevSize = 3;
+                console.log(data);
+                document.getElementById('preview-csv').innerText = '';
+                document.getElementById('preview-title').innerText = 'Apercu du csv:';
+                console.log(data.split("\n").length);
+                let dataAr = data.split("\n")
+                for (i=0;i<(dataAr.length<prevSize?dataAr.length:prevSize);i++){
+                    document.getElementById('preview-csv').append(dataAr[i]+"\n");
+                }
+                document.getElementById('preview-csv').append("... cliquer sur Envoyer pour importer");
+            }).catch(function(err){
+                console.log(err)
+                alert('probleme avec le fichier')
+                document.getElementById('preview-title').innerText = 'format csv:';
+                document.getElementById('preview-csv').innerText = '1; 2; \'theUsername1\'; \'mail1@mail.com\'; \'theUsername1\'; \'firstname1\'; \'lastname1\'; \'phone1\';\n' +
+                    '1; 2; \'theUsername2\'; \'mail2@mail.com\'; \'theUsername2\'; \'firstname2\'; \'lastname2\'; \'phone2\';\n' +
+                    '1; 2; \'theUsername3\'; \'mail3@mail.com\'; \'theUsername3\'; \'firstname3\'; \'lastname3\'; \'phone3\';';
+            })
+        }
         function onSubmit(event) {
             event.preventDefault();
 

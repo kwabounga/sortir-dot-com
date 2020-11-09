@@ -95,7 +95,7 @@ class InitialisationService
     private static function initCampus(EntityManagerInterface $em) {
         $campus = $em->getRepository(Campus::class)->findAll();
         if(count($campus) === 0 ){
-            $cp = ['Nantes', 'Renne', 'Niord'];
+            $cp = ['Nantes', 'Rennes', 'Niort'];
             for ($i = 0 ; $i<count($cp); $i++){
                 $c = new Campus();
                 $c->setNom($cp[$i]);
@@ -111,6 +111,9 @@ class InitialisationService
         $villes = $em->getRepository(Ville::class)->findAll();
         if(count($villes) === 0 ){
             $vs = [
+                ['NANTES',44000,47.2316356767,-1.54831008605],
+                ['RENNES',35000,48.11049938977831,-1.6792778491255547],
+                ['NIORT',79000,46.3167,-0.4667],
                 ['CHAUMES EN RETZ',44320,47.1592162214,-1.95412512421],
                 ['AVESSAC',44460,47.635436304,-1.97050871505],
                 ['BESNE',44160,47.3800629578,-2.07409913989],
@@ -130,7 +133,6 @@ class InitialisationService
                 ['MACHECOUL ST MEME',44270,46.9910784513,-1.82345670327],
                 ['MALVILLE',44260,47.3431404212,-1.85411536756],
                 ['LES MOUTIERS EN RETZ',44760,47.0616219129,-1.99001867615],
-                ['NANTES',44000,47.2316356767,-1.54831008605],
                 ['NOZAY',44170,47.5728858483,-1.60097664616],
                 ['PAULX',44270,46.95778792,-1.77844057969],
                 ['LE PELLERIN',44640,47.2229017049,-1.8250130027],
