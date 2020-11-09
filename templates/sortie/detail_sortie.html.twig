@@ -2,28 +2,141 @@
 
 {% block title %} {{ parent() }} | Sortie {% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('js/jquery/jquery.dataTables.min.css') }}">
+    <script type="text/javascript" src="{{ asset('js/jquery/jquery.dataTables.min.js') }}"></script>
+{% endblock %}
+
+{% block header %}
+    {# Détail de la sortie #}
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="row">
+                    <div class="col-6"><b>Date et heure : </b></div>
+                    <div class="col-6">{{ sortie.debut|date('d/m/Y à H:i') }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><b>Date limite d'incription : </b></div>
+                    <div class="col-6">{{ sortie.limiteInscription|date('d/m/Y à H:i') }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><b>Nombre de places : </b></div>
+                    <div class="col-6">{{ sortie.inscriptionMax }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><b>durée : </b></div>
+                    <div class="col-6">{{ sortie.duree|date('H:i') }}</div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="row">
+                    <div class="col-6"><b>Campus : </b></div>
+                    <div class="col-6">{{ sortie.campus.nom }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><b>Lieu : </b></div>
+                    <div class="col-6">{{ sortie.lieu.nom }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><b>Rue : </b></div>
+                    <div class="col-6">{{ sortie.lieu.rue }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6"><b>Code Postal : </b></div>
+                    <div class="col-6">{{ sortie.lieu.ville.codePostal }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12"><b>Description : </b></div>
+            <p class="col-12">{{ sortie.infos }}</p>
+        </div>
+
+        <a href="{{ path('sortie_modifier', {'id': sortie.id}) }}" class="btn btn-dark float-right">Modifier</a>
+    </div>
+{% endblock %}
 
 {% block body %}
-        <div id='map-static' style='width: 400px; height: 300px;'></div>
-        <script>
-            /* displayer MapBox part begin */
+    <div class="row">
+        {# Participants #}
+        <div class="col-12 col-xl-6 mb-3">
+            <table id="table_participants" class="table table-bordered text-center">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Nom</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for particip in sortie.participants %}
+                        <tr>
+                            <td>{{ particip.username }}</td>
+                            <td>{{ particip.firstname|capitalize }} {{ particip.lastname|lower }}</td>
+                        </tr> 
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-            mapboxgl.accessToken = '{{ ctAccessor.MAPBOXTOKEN }}';
-            let coord = {lat:'{{ sortie.lieu.latitude }}',lng:'{{ sortie.lieu.longitude }}'}
-            let map = new mapboxgl.Map({
-                container: 'map-static',
-                style: 'mapbox://styles/mapbox/dark-v10', // stylesheet location
-                center: [coord.lng, coord.lat], // starting position [lng, lat]
-                zoom: 12, // starting zoom
-                // interactive: false
+        {# Carte #}
+        <div class="col-12 col-xl-6">
+            <div id='map-static' style='width: 100%; height: 300px;'></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(() => {
+            $('#table_participants thead tr').clone(true).appendTo('#table_participants thead'); 
+            $('#table_participants thead tr:eq(1) th').each(function(i) {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="rechercher" class="form-control">');
+
+                $('input', this).on('keyup change', function() {
+                    if (table.column(i).search() !== this.value) {
+                        table.column(i)
+                            .search(this.value)
+                            .draw();
+                    }
+                });
             });
-            let marker = new mapboxgl.Marker()
-                .setLngLat([coord.lng, coord.lat])
-                .addTo(map);
-            map.dragRotate.disable();
 
-            // disable map rotation using touch rotation gesture
-            map.touchZoomRotate.disableRotation();
-            /* displayer MapBox part end */
-        </script>
+            // Datatable
+            var table = $('#table_participants').DataTable({
+                "dom": 'rtp',
+                "pageLength": 10,
+                "orderCellsTop": true,
+                "fixedHeader": true,
+                "oLanguage": {
+                    "oPaginate": {
+                        "sNext": "Suivant",
+                        "sPrevious": "Précédent"
+                    }
+                },
+            });
+
+        });
+
+        /* displayer MapBox part begin */
+
+        mapboxgl.accessToken = '{{ ctAccessor.MAPBOXTOKEN }}';
+        let coord = {lat:'{{ sortie.lieu.latitude }}',lng:'{{ sortie.lieu.longitude }}'}
+        let map = new mapboxgl.Map({
+            container: 'map-static',
+            style: 'mapbox://styles/mapbox/dark-v10', // stylesheet location
+            center: [coord.lng, coord.lat], // starting position [lng, lat]
+            zoom: 12, // starting zoom
+                // interactive: false
+        });
+        let marker = new mapboxgl.Marker()
+            .setLngLat([coord.lng, coord.lat])
+            .addTo(map);
+        map.dragRotate.disable();
+
+        // disable map rotation using touch rotation gesture
+        map.touchZoomRotate.disableRotation();
+        /* displayer MapBox part end */
+    </script>
 {% endblock %}

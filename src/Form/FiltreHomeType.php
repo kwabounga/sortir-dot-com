@@ -34,7 +34,7 @@ class FiltreHomeType extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
                 'attr' => ['class' => 'col-12 col-md-9 form-control'],
-                'label' => 'Après le :',
+                'label' => 'Après :',
                 'label_attr' => ['class' => 'col-12 col-md-3'],
                 
                 'required' => false
@@ -46,7 +46,7 @@ class FiltreHomeType extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
                 'attr' => ['class' => 'col-12 col-md-9 form-control'],
-                'label' => 'Avant le :',
+                'label' => 'Avant :',
                 'label_attr' => ['class' => 'col-12 col-md-3'],
                 'required' => false
             ])

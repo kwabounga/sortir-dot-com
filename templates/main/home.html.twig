@@ -10,12 +10,12 @@
     <script type="text/javascript" src="{{ asset('js/jquery/jquery.dataTables.min.js') }}"></script>
 {% endblock %}
 
-{% block header %}{% endblock %}
-{% block body %}
-    {# ================================================
-                            Filtres
-    ================================================= #}
-    <h4 class="col-12">Filtrer les sorties</h4>
+{% block header %}
+    <div class="jumbotron jumbotron-fluid">
+        {# ================================================
+                                Filtres
+        ================================================= #}
+        <h4 class="col-12">Filtrer les sorties</h4>
         {{ form_start(filtreForm, { 'attr' : { 'id': 'formFiltreSortie', 'class': 'row mx-1'} }) }}
             {# Campus et date #}
             <div class="col-12 col-md-7">
@@ -50,8 +50,13 @@
             </div>
 
             {# Bouton rechercher #}
-            <button id="btnFiltre" type="submit" class="btn btn-dark col-12 col-xl-1 mt-2"><i class="fas fa-search" style="font-size: 1.2em;"></i></button>
+            <button id="btnFiltre" type="submit" class="btn btn-dark col-12 col-xl-1 mt-2">
+                <i class="fas fa-search" style="font-size: 1.2em;"></i>
+            </button>
         {{ form_end(filtreForm) }}
+    </div>
+{% endblock %}
+{% block body %}
 
     {# ================================================
                             Tableau
@@ -100,7 +105,7 @@
                                     </button>
                                 {% elseif sortie.etat.libelle in ['ouverte', 'clôturée'] %}
                                     <button type="button" class="btn btn-light"
-                                            onClick="actionSortie('{{ path('sortie_api_annuler') }}', {{ sortie.id }}, 'PUT')">
+                                            onClick="annulerSortie('{{ path('sortie_api_annuler') }}', {{ sortie.id }}, 'PUT')">
                                         Annuler
                                     </button>
                                 {% endif %}
@@ -138,5 +143,5 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('js/script/home/home.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/script/home/home.js') }}"></script>
 {% endblock %}
