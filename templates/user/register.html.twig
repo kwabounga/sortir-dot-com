@@ -50,6 +50,8 @@ campus_id; role_id; 'username'; 'mail@mail.com'; 'password'; 'firstname'; 'lastn
                     document.getElementById('preview-csv').append(dataAr[i]+"\n");
                 }
                 document.getElementById('preview-csv').append("... cliquer sur Envoyer pour importer");
+                showFlash('Fichier pret pour etre importé');
+
             }).catch(function(){
                 alert('probleme avec le fichier')
                 document.getElementById('preview-title').innerText = 'format csv:';
@@ -63,12 +65,36 @@ campus_id; role_id; 'username'; 'mail@mail.com'; 'password'; 'firstname'; 'lastn
 
             var formData = new FormData();
             formData.append("upload[file]", document.getElementById("file").files[0]);
-            xhr = new XMLHttpRequest();
-            xhr.open("POST", "{{ path('register_csv') }}");
-            xhr.addEventListener('load', onRequestComplete, false);
+            {#xhr = new XMLHttpRequest();#}
+            {#xhr.open("POST", "{{ path('register_csv') }}");#}
+            {#xhr.addEventListener('load', onRequestComplete, false);#}
+            {#xhr.upload.addEventListener("load", onUploadComplete, false);#}
+            {#xhr.upload.addEventListener("progress", onUploadProgress, false);#}
+            {#xhr.send(formData);#}
+            xhr = ajaxPost("{{ path('register_csv') }}",formData, function(data,err){
+                let msg;
+                if(err !== null){
+                    console.log(err);
+                    msg = err;
+                }
+                let jsonRep = JSON.parse(data);
+                if(jsonRep){
+                    // ok
+                    console.log(jsonRep)
+                    msg = jsonRep.toString();
+                    setTimeout(function(){
+                        window.location = "{{ path('register') }}";
+                    },1000);
+
+                } else {
+                    // ko
+                    msg = 'erreur inconnue';
+                }
+                showFlash(msg);
+            },false);
+
             xhr.upload.addEventListener("load", onUploadComplete, false);
             xhr.upload.addEventListener("progress", onUploadProgress, false);
-            xhr.send(formData);
         }
         function onRequestComplete(evt) {
             console.log(xhr.response);
@@ -79,7 +105,7 @@ campus_id; role_id; 'username'; 'mail@mail.com'; 'password'; 'firstname'; 'lastn
             },1000);
             {#window.location = "{{ path('register') }}";#}
         }function onUploadComplete(evt) {
-            console.log('OK Upload Completed');
+            showFlash('OK Upload Completed');
         }function onUploadProgress(evt) {
             document.getElementById('progress-value').innerHTML = evt.loaded * 100 / evt.total  ;
         }

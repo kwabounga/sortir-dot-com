@@ -92,30 +92,6 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
 {% endblock %}
 {% block javascripts %}
 
-
-{# TODO: AFFICHAGE DE LA MINI MAP POUR UNE SORTIE Dans l'affichage du detail d'une Sortie  #}
-{#    <div id='map-static' style='width: 400px; height: 300px;'></div>#}
-{#    <script>#}
-{#        /* displayer MapBox part begin */#}
-
-{#        mapboxgl.accessToken = '{{ ctAccessor.MAPBOXTOKEN }}';#}
-{#        let coord = {lat:'{{ sortie.lieu.latitude }}',lng:'{{ sortie.lieu.longitude }}'}#}
-{#        let map = new mapboxgl.Map({#}
-{#            container: 'map-static',#}
-{#            style: 'mapbox://styles/mapbox/dark-v10', // stylesheet location#}
-{#            center: [coord.lng, coord.lat], // starting position [lng, lat]#}
-{#            zoom: 12, // starting zoom#}
-{#            // interactive: false#}
-{#        });#}
-{#        let marker = new mapboxgl.Marker()#}
-{#            .setLngLat([coord.lng, coord.lat])#}
-{#            .addTo(map);#}
-{#        map.dragRotate.disable();#}
-
-{#        // disable map rotation using touch rotation gesture#}
-{#        map.touchZoomRotate.disableRotation();#}
-{#        /* displayer MapBox part end */#}
-{#    </script>#}
     <script>
         var marker;
         var map;
@@ -260,17 +236,17 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
             var formData = new FormData();
             formData.append("upload[file]", document.getElementById("file").files[0]);
 
-            ajaxPost("{{ path('ville_upload_csv') }}",formData, function(data,err){
+            xhr = ajaxPost("{{ path('ville_upload_csv') }}",formData, function(data,err){
                 let msg;
                 if(err){
                     console.log(err);
-                    msg = err.message;
+                    msg = err;
                 }
                 let jsonRep = JSON.parse(data);
                 if(jsonRep){
                     // ok
                     console.log(jsonRep)
-                    msg = jsonRep.toString();
+                    msg = jsonRep;
                     setTimeout(function(){
                         window.location = "{{ path('ville_liste') }}";
                     },1000);
@@ -280,21 +256,17 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
                     msg = 'erreur inconnue';
                 }
                 showFlash(msg);
-            })
-            xhr = new XMLHttpRequest();
-            xhr.open("POST", "{{ path('ville_upload_csv') }}");
-            xhr.addEventListener('load', onRequestComplete, false);
+            },false);
+
             xhr.upload.addEventListener("load", onUploadComplete, false);
             xhr.upload.addEventListener("progress", onUploadProgress, false);
-            xhr.send(formData);
-        }
-        function onRequestComplete(evt) {
-            console.log(xhr.response);
 
-            window.location = "{{ path('ville_liste') }}";
-        }function onUploadComplete(evt) {
-            console.log('OK Upload Completed');
-        }function onUploadProgress(evt) {
+        }
+
+        function onUploadComplete(evt) {
+            showFlash('OK Upload Completed');
+        }
+        function onUploadProgress(evt) {
             document.getElementById('progress-value').innerHTML = evt.loaded * 100 / evt.total  ;
         }
 

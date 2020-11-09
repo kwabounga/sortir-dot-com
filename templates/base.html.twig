@@ -2,22 +2,32 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        {#jquery#}
         <script src="{{ asset('js/jquery/jquery.js') }}"></script>
+        {#bootstrap#}
         <link rel="stylesheet" href="{{ asset("js/bootstrap/css/bootstrap.min.css") }}">
         <script src="{{ asset('js/bootstrap/js/bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        {#fontawesome#}
         <link rel="stylesheet" href="{{ asset('js/fontawesome/css/all.css') }}">
+        {#filtresdynamiquecss#}
         <script src="{{ asset('js/filter_css.js') }}"></script>
-        <link rel="shortcut icon" href="{{ asset('img/logo_mini_22x30_white.png') }}">
 
         {#mapbox#}
         <script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
         <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
 
+        <link rel="shortcut icon" href="{{ asset('img/logo_mini_22x30_white.png') }}">
+
+        {#css commun#}
         {% include 'shared/css.html.twig' %}
-        <title>{% block title %}Sortir{% endblock %}</title>
+
+        {#css in twig#}
         {% block stylesheets %}{% endblock %}
+
+        <title>{% block title %}Sortir{% endblock %}</title>
     </head>
+
     <body>
         <div class="bg"></div>
         <header>
@@ -44,29 +54,31 @@
         </div>
 
         {% block footer %}
-
             {% include 'shared/footer.html.twig' %}
         {% endblock %}
 
         {% include 'shared/toasts.html.twig' %}
-        <!-- Bootstrap core JavaScript -->
+
+        {% block javascripts %}{% endblock %}
         <script>
+            {#hidding js toast#}
             $(".toast-js").toast('hide');
+
+            {#entry point on ready#}
             $(document).ready(function(){
+                // applique la bonne couleur au logo
                 colorize('.logo-filter');
+
                 // ...affichage des flashs via des toasts'
                 // cf: bootstrap.html.twig
                 $(".toast-php").toast('show');
-
-                console.log('toast(init)')
             });
-        </script>
-        {% block javascripts %}{% endblock %}
-        <script>
+            // affiche les messages toast JS
             function showFlash (msg) {
                 $('#jsToast > .toast-body').html(msg);
                 $(".toast-js").toast('show');
             }
+            // Effectue une requette ajax Post
             function ajaxPost (url, data, callback, isJson = true) {
                 var req = new XMLHttpRequest()
                 req.open('POST', url)
@@ -89,7 +101,10 @@
                     data = JSON.stringify(data);
                 }
                 req.send(data);
+                return req;
             }
+            // outils pour d'affichage de nombre avec des 0 devant
+            // padZeros(3, 3) // return '003'
             function padZeros ($num, $nbZeros) {
                 var $numSize = $num.toString().length;
                 var $result = '';
@@ -98,7 +113,8 @@
                 }
                 $result += $num.toString();
                 return $result;
-            }</script>
+            }
+        </script>
     </body>
 
 </html>
