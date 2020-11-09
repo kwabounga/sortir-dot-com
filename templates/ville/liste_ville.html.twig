@@ -33,7 +33,7 @@
                     <td>
 {#                        <a class="btn btn-sm btn-outline-dark" href="javascript:void(0)" onclick="addVille()">Ajouter</a>#}
                         <a class="btn btn-sm btn-info" id="viewInMapBox" onclick="viewInMapBox()">view</a>
-                        <button class="btn btn-sm btn-success" type="submit" >Ajouter</button>
+                        <button class="btn btn-sm btn-success" type="submit" >Ajouter/Modifier</button>
                     </td>
                 </tr>
                 </tbody>
@@ -73,7 +73,7 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
             <tbody>
             {% for ville in villes %}
                 <tr>
-                    <td>{{ ville.nom }}</td>
+                    <td><a class="btn btn-sm btn-light" href="javascript:void(0)" onclick="updateFieldWithList('{{ ville.nom }}',{{ ville.codePostal }},{{ ville.latitude }},{{ ville.longitude }})">{{ ville.nom }}</a></td>
                     <td>{{ ville.codePostal }}</td>
                     <td>{{ ville.latitude }}</td>
                     <td>{{ ville.longitude }}</td>
@@ -92,8 +92,9 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
 {% endblock %}
 {% block javascripts %}
 
-    <div id='map-static' style='width: 400px; height: 300px;'></div>
+
 {# TODO: AFFICHAGE DE LA MINI MAP POUR UNE SORTIE Dans l'affichage du detail d'une Sortie  #}
+{#    <div id='map-static' style='width: 400px; height: 300px;'></div>#}
 {#    <script>#}
 {#        /* displayer MapBox part begin */#}
 
@@ -210,9 +211,18 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
             });
 
         }
+        function updateFieldWithList(name, cityCode, lat, lng) {
+            // console.log(name, cityCode, lat, lng);
+            document.getElementById('ville_nom').value = name;
+            document.getElementById('ville_codePostal').value = cityCode;
+            document.getElementById('ville_latitude').value = lat;
+            document.getElementById('ville_longitude').value = lng;
+            showFlash('Modification ' + name);
+            viewInMapBox();
+        }
         function updateFieldWithMap(lng, lat) {
-            document.getElementById('ville_nom').value = '';
-            document.getElementById('ville_codePostal').value = '';
+            // document.getElementById('ville_nom').value = '';
+            // document.getElementById('ville_codePostal').value = '';
             document.getElementById('ville_latitude').value = lat;
             document.getElementById('ville_longitude').value = lng;
             document.getElementById('ville_nom').focus();
@@ -234,6 +244,7 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
                     document.getElementById('preview-csv').append(dataAr[i]+"\n");
                 }
                 document.getElementById('preview-csv').append("... cliquer sur Envoyer pour importer");
+                showFlash('Fichier pret pour etre importé');
             }).catch(function(err){
                 console.log(err)
                 alert('probleme avec le fichier')
@@ -253,15 +264,12 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
                 let msg;
                 if(err){
                     console.log(err);
-                    // $('#jsToast > .toast-body').html(err);
                     msg = err.message;
                 }
                 let jsonRep = JSON.parse(data);
                 if(jsonRep){
                     // ok
                     console.log(jsonRep)
-                    // $('#jsToast > .toast-body').html(jsonRep.toString());
-                    // $(".toast-js").toast('show');
                     msg = jsonRep.toString();
                     setTimeout(function(){
                         window.location = "{{ path('ville_liste') }}";
@@ -269,7 +277,6 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
 
                 } else {
                     // ko
-                    // $('#jsToast > .toast-body').html('erreur inconnue');
                     msg = 'erreur inconnue';
                 }
                 showFlash(msg);

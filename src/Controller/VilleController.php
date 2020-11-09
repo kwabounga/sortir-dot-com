@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 USE Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * @Route("/website/ville")
@@ -21,29 +20,42 @@ class VilleController extends CommonController {
     /**
      * @Route("/", name="ville_liste")
      */
-    public function listeVille(VilleRepository $villeRepo, EntityManagerInterface $em, Request $request) {
+    public function listeVille(EntityManagerInterface $em, Request $request) {
+        //mode Création
         $v = new Ville();
         $villeForm = $this->createForm(VilleType::class,$v);
         $villeForm->handleRequest($request);
-        dump($villeForm);
+
+        // tentative de recuperation de l'existant si existant
+        $vv = $em->getRepository(Ville::class)->findOneBy(['nom' => $v->getNom()]);
+        if($vv){
+            // passage en mode Mode modification
+            $v = $vv;
+            $villeForm = $this->createForm(VilleType::class,$v);
+            $villeForm->handleRequest($request);
+        }
+
+        //dump($villeForm);
         if ($villeForm->isSubmitted() && $villeForm->isValid()) {
             try {
                 $em->persist($v);
                 $em->flush();
-                $this->addFlash(Msgr::TYPE_SUCCESS, 'la ville'.$v->getNom().' a bien été ajouté en base');
+                if($vv){
+                    $this->addFlash(Msgr::TYPE_SUCCESS, 'la ville '.$v->getNom().' a bien été Modifié');
+                }else {
+                    $this->addFlash(Msgr::TYPE_SUCCESS, 'la ville '.$v->getNom().' a bien été ajouté en base');
+                }
+
             } catch (\Exception $e){
                 dump($e);
-                $this->addFlash(Msgr::TYPE_WARNING, 'la ville'.$v->getNom().' n\'a pas pu etre ajouté');
+                $this->addFlash(Msgr::TYPE_WARNING, 'la ville '.$v->getNom().' n\'a pas pu etre ajouté');
             }
-            // vidage recreation de l'ancien form
+            // vidage &  re-création d'un form tou neuf
             $villeForm = $this->createForm(VilleType::class);
         }
-        $listeVille = $villeRepo->findAll();
-
         $cities = $em->getRepository(Ville::class)->findAll();
         return $this->render('ville/liste_ville.html.twig',[
 
-            // 'routes' => $this->getAllRoutes(),
             'title' => 'Villes',
             'villes' => $cities,
             'ville_form' => $villeForm->createView(),

@@ -21,7 +21,7 @@ class SortieController extends CommonController {
      */
     public function detailSortie(SortieRepository $sortieRepo, $id) {
         $sortie = $sortieRepo->find($id);
-
+        dump($sortie);
         return $this->render('sortie/detail_sortie.html.twig', [
             'sortie' => $sortie,
             // 'routes' => $this->getAllRoutes(),
