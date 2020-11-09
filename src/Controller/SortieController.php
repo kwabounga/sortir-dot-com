@@ -50,9 +50,9 @@ class SortieController extends CommonController {
                 'page_name' => 'Création d\'une sortie',
                 'sortie_form' => $sortieForm->createView(),
                 'user' => $this->getUser(),
-                    'title' => 'Détail Sortie',
-                    'routes' => $this->getAllRoutes()   ]
-            );
+                'title' => 'Détail Sortie',
+                'routes' => $this->getAllRoutes()  
+            ]);
         }
         
         

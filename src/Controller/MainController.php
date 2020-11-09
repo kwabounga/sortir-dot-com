@@ -46,7 +46,7 @@ class MainController extends CommonController {
     /**
      * @Route("/website", name="main_home")
      */
-    public function home(SortieRepository $sortieRepo, Request $request,EntityManagerInterface  $em) {
+    public function home(SortieRepository $sortieRepo, Request $request, EntityManagerInterface  $em) {
         /* error examples */
         //        $this->addFlash(Msgr::TYPE_INFOS, '$this->addFlash(\'infos\', \'une information\');');
         //        $this->addFlash(Msgr::TYPE_SUCCESS, '$this->addFlash(\'success\', \'une reussite\');');
@@ -54,9 +54,9 @@ class MainController extends CommonController {
         //        $this->addFlash(Msgr::TYPE_ERROR, '$this->addFlash(\'error\', \'une erreure qui reste\');');
 
         // si authentifié bienvenue
-        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')){
-            $this->addFlash(Msgr::TYPE_SUCCESS, Msgr::WELCOME.$this->getUser()->getUsername());
-        }
+        // if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+        //     $this->addFlash(Msgr::TYPE_SUCCESS, Msgr::WELCOME.$this->getUser()->getUsername());
+        // }
 
         $user = $em->getRepository(User::class)->findOneBy(['username'=>$this->getUser()->getUsername()]);
         $filtre = new FiltreHomeDTO($this->getUser()->getCampus());
