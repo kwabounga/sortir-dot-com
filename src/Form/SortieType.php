@@ -60,12 +60,12 @@ class SortieType extends AbstractType
             ])
             ->add('save', SubmitType::class, [
                 'attr' => ['class' => 'save'],
+                'label' => 'Enregistrer',
             ])
             ->add('publish', SubmitType::class, [
                 'attr' => ['class' => 'publish'],
+                'label' => 'Publier',
             ]);
-            
-            
             
        
     }
