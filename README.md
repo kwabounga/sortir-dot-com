@@ -64,7 +64,13 @@ $this->addFlash(Msgr::TYPE_XXX, Msgr::MESSAGE);
 ````
 types disponibles: `'infos'`, `'warning'`, `'error'`, `'success'`  
 
-
+***messages flash JS***  
+ds un script js:
+Ajout d'un fonction js accessible de partout pour les messages provennant du js
+une seul type : info
+````js 
+showFlash('votre message');
+````
 
 
 ***RAZ*** 

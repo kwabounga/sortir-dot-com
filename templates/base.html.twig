@@ -51,17 +51,23 @@
         {% include 'shared/toasts.html.twig' %}
         <!-- Bootstrap core JavaScript -->
         <script>
+            $(".toast-js").toast('hide');
             $(document).ready(function(){
                 colorize('.logo-filter');
                 // ...affichage des flashs via des toasts'
                 // cf: bootstrap.html.twig
                 $(".toast-php").toast('show');
-                $(".toast-js").toast('hide',);
+
                 console.log('toast(init)')
             });
         </script>
         {% block javascripts %}{% endblock %}
-        <script>function ajaxPost (url, data, callback, isJson = true) {
+        <script>
+            function showFlash (msg) {
+                $('#jsToast > .toast-body').html(msg);
+                $(".toast-js").toast('show');
+            }
+            function ajaxPost (url, data, callback, isJson = true) {
                 var req = new XMLHttpRequest()
                 req.open('POST', url)
                 req.addEventListener('load', function () {

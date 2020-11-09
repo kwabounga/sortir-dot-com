@@ -216,6 +216,7 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
             document.getElementById('ville_latitude').value = lat;
             document.getElementById('ville_longitude').value = lng;
             document.getElementById('ville_nom').focus();
+            showFlash('Coordonnées mises à jour');
             // console.log(lng,lat)
             // console.log(map)
             viewInMapBox();
@@ -249,25 +250,29 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
             formData.append("upload[file]", document.getElementById("file").files[0]);
 
             ajaxPost("{{ path('ville_upload_csv') }}",formData, function(data,err){
+                let msg;
                 if(err){
                     console.log(err);
-                    $('#jsToast > .toast-body').html(err);
+                    // $('#jsToast > .toast-body').html(err);
+                    msg = err.message;
                 }
                 let jsonRep = JSON.parse(data);
                 if(jsonRep){
                     // ok
                     console.log(jsonRep)
-                    $('#jsToast > .toast-body').html(jsonRep.toString());
+                    // $('#jsToast > .toast-body').html(jsonRep.toString());
                     // $(".toast-js").toast('show');
+                    msg = jsonRep.toString();
                     setTimeout(function(){
                         window.location = "{{ path('ville_liste') }}";
                     },1000);
 
                 } else {
                     // ko
-                    $('#jsToast > .toast-body').html('erreur inconnue');
+                    // $('#jsToast > .toast-body').html('erreur inconnue');
+                    msg = 'erreur inconnue';
                 }
-                $(".toast-js").toast('show');
+                showFlash(msg);
             })
             xhr = new XMLHttpRequest();
             xhr.open("POST", "{{ path('ville_upload_csv') }}");
