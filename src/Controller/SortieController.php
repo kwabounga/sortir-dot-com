@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,10 +31,13 @@ class SortieController extends CommonController {
     }
 
     /**
-     * @Route("/ajouter", name="sortie_ajouter")
+     * @Route("/ajouter/{lieu}", name="sortie_ajouter")
      */
-    public function ajouterSortie(EntityManagerInterface $em, Request $request) {
+    public function ajouterSortie(EntityManagerInterface $em, Request $request, $lieu = null) {
         $sortie = new Sortie();
+        if($lieu){
+            $sortie->setLieu( $em->getRepository(Lieu::class)->find($lieu));
+        }
         $sortieForm = $this->createForm(SortieType::class, $sortie, [
             'user' => $this->getUser(),
         ]);

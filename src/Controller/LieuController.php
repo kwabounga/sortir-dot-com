@@ -26,7 +26,7 @@ class LieuController extends CommonController
         if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
             $em->persist($lieu);
             $em->flush();
-            return $this->redirectToRoute('sortie_ajouter');
+            return $this->redirectToRoute('sortie_ajouter',['lieu'=>$lieu->getId()]);
         } else {
             return $this->render('lieu/ajouter_lieu.html.twig', [
                 'page_name' => 'Création d\'un lieu',
