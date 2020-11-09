@@ -36,6 +36,11 @@ $(document).ready(() => {
 
 });
 
+function clearField(){
+    $('#filtre_home_dateDebutSearch').val('');
+    $('#filtre_home_dateFinSearch').val('');
+}
+
 function actionSortie(url, idSortie, method) {
     $.ajax({
         type: method,
@@ -45,59 +50,6 @@ function actionSortie(url, idSortie, method) {
         },
         success: function(data) {
             // console.log('success');
-            window.location.reload();
-        },
-        error: function(err) {
-            console.log('erreur', err);
-        } 
-    });
-}
-
-// Publier une sortie
-function publierSortie(url, idSortie) {
-    console.log('url : ', url);
-    console.log('id sortie : ', idSortie);
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: {
-            'id': idSortie
-        },
-        success: function(data) {
-            // window.location.reload();
-        },
-        error: function(err) {
-            console.log('erreur', err);
-        } 
-    });
-}
-
-// Annuler une sortie
-function annulerSortie() {
-    console.log('Annuler');
-}
-
-// S'inscrire à une sortie
-function inscriptionSortie(url) {
-    $.ajax({
-        type: "POST",
-        url: url,
-        success: function(data) {
-            console.log('success');
-            window.location.reload();
-        },
-        error: function(err) {
-            console.log('erreur', err);
-        } 
-    });
-}
-
-// Se déinscrire d'une sortie
-function desinscriptionSortie(url) {
-    $.ajax({
-        type: "POST",
-        url: url,
-        success: function(data) {
             window.location.reload();
         },
         error: function(err) {
