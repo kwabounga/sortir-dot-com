@@ -19,6 +19,15 @@ class Msgr
     const FIRST_CONNEXION = 'premiere connection : configuration du compte administrateur';
     const MUST_BE_ADMIN = 'vous devez etre admin pour venir ici';
     const WELCOME = 'Ravi de vous revoir sur notre site ';
+    const DEFAULTERROR = 'Une erreur est survenue';
+
+    /* messages inscription */
+    const INSCRIPTION = 'Inscription réussi';
+    const DEINSCRIPTION = 'Séinscription réussi';
+
+    /* Gestion sortie */
+    const PUBLICATION = 'Publication réussi';
+    const ANNULATION = 'Annulation réussi';
 
 
 }

@@ -23,8 +23,10 @@ class FiltreHomeType extends AbstractType
                 'label' => 'Campus :',
                 'label_attr' => ['class' => 'col-12 col-md-3'],
                 'class' => Campus::class,
-                'choice_label' => 'nom']
-            )
+                'choice_label' => 'nom',
+                'required' => false,
+                'placeholder' => 'Tous'
+            ])
 
             // Recherche: date de début
             ->add('dateDebutSearch', DateType::class, [

@@ -14,7 +14,7 @@ class FiltreHomeDTO {
     private $sortiePasInscritSearch;
     private $sortiePasseeSearch;
 
-    public function __construct(Campus $campus, ?DateTime $dateDebut = null, ?DateTime $dateFin = null, bool $sortieOrga = false,
+    public function __construct(?Campus $campus, ?DateTime $dateDebut = null, ?DateTime $dateFin = null, bool $sortieOrga = false,
         bool $SortieInscrit = false, bool $sortiePasInscrit = false, bool $sortiePassee = false) {
         $this->campusSearch = $campus;
         $this->dateDebutSearch = $dateDebut;
@@ -31,7 +31,7 @@ class FiltreHomeDTO {
         return $this->campusSearch;
     }
 
-    public function setCampusSearch(Campus $value): void
+    public function setCampusSearch(?Campus $value): void
     {
         $this->campusSearch = $value;
     }

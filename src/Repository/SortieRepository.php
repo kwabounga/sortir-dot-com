@@ -22,6 +22,9 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
+    /**
+     * Filtre les sorties
+     */
     public function findSortieFiltre(FiltreHomeDTO $filtre, int $idUser) {
         $qb = $this->createQueryBuilder('s');
 
@@ -74,6 +77,34 @@ class SortieRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
         $result = $query->getResult();
         return $result;
+    }
+
+    /**
+     * Inscrit un utilisateur à une sortie
+     */
+    public function inscriptionSortie(int $idSortie, int $idUser): void {
+        $sql = 'INSERT INTO sortie_user (sortie_id, user_id) VALUES (:idSortie, :idUser)';
+
+        $conn = $this->getEntityManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('idSortie', $idSortie);
+        $stmt->bindValue('idUser', $idUser);
+
+        $stmt->execute();
+    }
+
+    /**
+     * Déinscrit un utilisateur à une sortie
+     */
+    public function deInscriptionSortie(int $idSortie, int $idUser): void {
+        $sql = 'DELETE FROM sortie_user WHERE sortie_id = :idSortie AND user_id = :idUser';
+
+        $conn = $this->getEntityManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('idSortie', $idSortie);
+        $stmt->bindValue('idUser', $idUser);
+
+        $stmt->execute();
     }
 
     // /**

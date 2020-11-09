@@ -154,6 +154,19 @@ class UserController extends CommonController
             // 'routes' => $this->getAllRoutes(),
         ]);
     }
+
+    /**
+     * @Route("/login/connexion", name="after_login")
+     */
+    public function afterLogin() {
+        // si authentifié bienvenue
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+            $this->addFlash(Msgr::TYPE_SUCCESS, Msgr::WELCOME.$this->getUser()->getUsername());
+        }
+
+        return $this->redirectToRoute('main_home');
+    }
+
     /**
      * @Route("/logout", name="logout")
      */

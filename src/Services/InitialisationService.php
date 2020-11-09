@@ -193,7 +193,7 @@ class InitialisationService
     private static function initEtats(EntityManagerInterface $em) {
         $states = $em->getRepository(Etat::class)->findAll();
         if(count($states) === 0 ){
-            $as = ['en creation', 'ouverte', 'clôturée', 'en cours', 'terminée', 'historisée'];
+            $as = ['en creation', 'ouverte', 'clôturée', 'en cours', 'annulée', 'terminée', 'historisée'];
             for ($i = 0 ; $i<count($as); $i++){
                 $r = new Etat();
                 $r->setLibelle($as[$i]);
