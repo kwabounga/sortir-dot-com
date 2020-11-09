@@ -10,7 +10,8 @@
                 <ul>
             {% for i in 0..nbRoutes-1 %}
                     {# test si route admin ou si route avec value: on affiche pas  #}
-                    {% if not ('admin' in ctAccessor.allroutes[i].path) and not ('{' in ctAccessor.allroutes[i].path)  %}
+                    {% if not ('admin' in ctAccessor.allroutes[i].path) and not ('{' in ctAccessor.allroutes[i].path)and not ('api' in ctAccessor.allroutes[i].name)  %}
+
                     <li><a class="text-success" href="{{ path(ctAccessor.allroutes[i].name)}}">{{ ctAccessor.allroutes[i].name|capitalize}}</a></li>
                     {# si PAS admin path #}
                         {% if (id % 3) == 0 %}

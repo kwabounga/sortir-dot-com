@@ -20,7 +20,8 @@ class VilleController extends CommonController {
     /**
      * @Route("/", name="ville_liste")
      */
-    public function listeVille(VilleRepository $villeRepo, EntityManagerInterface $em, Request $request) {
+    public function listeVille(EntityManagerInterface $em, Request $request) {
+        //mode Création
         $v = new Ville();
         $villeForm = $this->createForm(VilleType::class,$v);
         $villeForm->handleRequest($request);
@@ -28,6 +29,7 @@ class VilleController extends CommonController {
         // tentative de recuperation de l'existant si existant
         $vv = $em->getRepository(Ville::class)->findOneBy(['nom' => $v->getNom()]);
         if($vv){
+            // passage en mode Mode modification
             $v = $vv;
             $villeForm = $this->createForm(VilleType::class,$v);
             $villeForm->handleRequest($request);
@@ -35,7 +37,6 @@ class VilleController extends CommonController {
 
         //dump($villeForm);
         if ($villeForm->isSubmitted() && $villeForm->isValid()) {
-
             try {
                 $em->persist($v);
                 $em->flush();
@@ -49,15 +50,12 @@ class VilleController extends CommonController {
                 dump($e);
                 $this->addFlash(Msgr::TYPE_WARNING, 'la ville '.$v->getNom().' n\'a pas pu etre ajouté');
             }
-            // vidage recreation de l'ancien form
+            // vidage &  re-création d'un form tou neuf
             $villeForm = $this->createForm(VilleType::class);
         }
-        $listeVille = $villeRepo->findAll();
-
         $cities = $em->getRepository(Ville::class)->findAll();
         return $this->render('ville/liste_ville.html.twig',[
 
-            // 'routes' => $this->getAllRoutes(),
             'title' => 'Villes',
             'villes' => $cities,
             'ville_form' => $villeForm->createView(),
