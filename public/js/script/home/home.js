@@ -36,9 +36,12 @@ $(document).ready(() => {
 
 });
 
-function clearField(){
-    $('#filtre_home_dateDebutSearch').val('');
-    $('#filtre_home_dateFinSearch').val('');
+function clearDateDebut() {
+    $('#filtre_home_dateDebutSearch').val(null);
+}
+
+function clearDateFin() {
+    $('#filtre_home_dateFinSearch').val(null);
 }
 
 function actionSortie(url, idSortie, method) {

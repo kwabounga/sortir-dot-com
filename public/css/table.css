@@ -1,0 +1,25 @@
+@media (max-width: 900px){
+    .table {
+        width: 100% !important;
+        border: none;
+    }
+
+    .table thead {
+        display: none;
+    }
+
+    .table tr{
+        display: block;
+        margin-bottom: 20px;
+    }
+    .table td {
+        display: block;
+        text-align: right;
+    }
+
+    .table td:before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+    }
+}

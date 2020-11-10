@@ -21,7 +21,7 @@ class FiltreHomeType extends AbstractType
                 'row_attr' => ['class' => 'form-group form-row align-items-center'],
                 'attr' => ['class' => 'col-12 col-md-9 form-control'],
                 'label' => 'Campus :',
-                'label_attr' => ['class' => 'col-12 col-md-3'],
+                'label_attr' => ['class' => 'col-12 col-md-3 pt-2'],
                 'class' => Campus::class,
                 'choice_label' => 'nom',
                 'required' => false,
@@ -30,24 +30,23 @@ class FiltreHomeType extends AbstractType
 
             // Recherche: date de début
             ->add('dateDebutSearch', DateType::class, [
-                'row_attr' => ['class' => 'form-group col-12 col-xl-6 form-row align-items-center'],
+                // 'row_attr' => ['class' => 'form-group col-12 col-xl-6 form-row align-items-center'],
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
                 'attr' => ['class' => 'col-12 col-md-9 form-control'],
                 'label' => 'Après :',
-                'label_attr' => ['class' => 'col-12 col-md-3'],
-                
+                'label_attr' => ['class' => 'col-12 col-md-3 pt-2'],
                 'required' => false
             ])
 
             // Recherche: date de fin
             ->add('dateFinSearch', DateType::class, [
-                'row_attr' => ['class' => 'form-group col-12 col-xl-6 form-row align-items-center'],
+                // 'row_attr' => ['class' => 'form-group col-12 col-xl-6 form-row align-items-center'],
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
                 'attr' => ['class' => 'col-12 col-md-9 form-control'],
                 'label' => 'Avant :',
-                'label_attr' => ['class' => 'col-12 col-md-3'],
+                'label_attr' => ['class' => 'col-12 col-md-3 pt-2'],
                 'required' => false
             ])
 

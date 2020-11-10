@@ -12,13 +12,13 @@
     <header class="jumbotron my-4">
         <div class="row">
 
-            <div class="col-6">
+            <div class="col-12 col-lg-6">
                 <h1 class="display-3">{{ title }}</h1>
                 <p class="lead">Gestion des Villes</p>
                 <h4 class="display">Ajouter une ville</h4>
             </div>
-            <div class="col-6">
-                <div id='map' style='width: 400px; height: 300px;'></div>
+            <div class="col-12 col-lg-6">
+                <div id='map' style='width: 100%; height: 300px;'></div>
             </div>
         </div>
 
@@ -73,11 +73,11 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
             <tbody>
             {% for ville in villes %}
                 <tr>
-                    <td><a class="btn btn-sm btn-light" href="javascript:void(0)" onclick="updateFieldWithList('{{ ville.nom }}',{{ ville.codePostal }},{{ ville.latitude }},{{ ville.longitude }})">{{ ville.nom }}</a></td>
-                    <td>{{ ville.codePostal }}</td>
-                    <td>{{ ville.latitude }}</td>
-                    <td>{{ ville.longitude }}</td>
-                    <td>
+                    <td data-label="Nom"><a class="btn btn-sm btn-light" href="javascript:void(0)" onclick="updateFieldWithList('{{ ville.nom }}',{{ ville.codePostal }},{{ ville.latitude }},{{ ville.longitude }})">{{ ville.nom }}</a></td>
+                    <td data-label="Code Postal">{{ ville.codePostal }}</td>
+                    <td data-label="latitude">{{ ville.latitude }}</td>
+                    <td data-label="longitude">{{ ville.longitude }}</td>
+                    <td data-label="supprimer">
                         <a class="btn btn-sm btn-light" href="javascript:void(0)" onclick="deleteVille('{{ ville.id }}')">x</a>
 
 

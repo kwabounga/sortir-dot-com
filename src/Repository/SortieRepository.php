@@ -35,12 +35,12 @@ class SortieRepository extends ServiceEntityRepository
 
         if ($filtre->getDateDebutSearch() !== null) {
             $qb->andWhere(':dateDebut <= s.debut')
-                ->setParameter('dateDebut', $filtre->getDateDebutSearch()->format('Y-m-d 00:00:00'));
+                ->setParameter('dateDebut', $filtre->getDateDebutSearch()->format('Y-m-d h:i:s'));
         }
 
         if ($filtre->getDateFinSearch() !== null) {
             $qb->andWhere(':dateFin >= s.debut')
-                ->setParameter('dateFin', $filtre->getDateFinSearch()->format('Y-m-d 23:59:59'));
+                ->setParameter('dateFin', $filtre->getDateFinSearch()->format('Y-m-d h:i:s'));
         }
 
         if ($filtre->getSortieOrgaSearch()) {
@@ -68,10 +68,10 @@ class SortieRepository extends ServiceEntityRepository
 
         if ($filtre->getSortiePasseeSearch()) {
             $qb->andWhere(':dateNow >= s.debut')
-                ->setParameter('dateNow', date('Y-m-d 00:00:00'));
+                ->setParameter('dateNow', date('Y-m-d h:i:s'));
         } else {
             $qb->andWhere(':dateNow <= s.debut')
-                ->setParameter('dateNow', date('Y-m-d 23:59:59'));
+                ->setParameter('dateNow', date('Y-m-d h:i:s'));
         }
 
         $query = $qb->getQuery();

@@ -53,7 +53,7 @@
             <p class="col-12">{{ sortie.infos }}</p>
         </div>
 
-        <a href="{{ path('sortie_modifier', {'id': sortie.id}) }}" class="btn btn-dark float-right">Modifier</a>
+        {# <a href="{{ path('sortie_modifier', {'id': sortie.id}) }}" class="btn btn-dark float-right">Modifier</a> #}
     </div>
 {% endblock %}
 
@@ -71,8 +71,8 @@
                 <tbody>
                     {% for particip in sortie.participants %}
                         <tr>
-                            <td>{{ particip.username }}</td>
-                            <td>{{ particip.firstname|capitalize }} {{ particip.lastname|lower }}</td>
+                            <td data-label="Pseudo">{{ particip.username }}</td>
+                            <td data-label="Nom">{{ particip.firstname|capitalize }} {{ particip.lastname|lower }}</td>
                         </tr> 
                     {% endfor %}
                 </tbody>
@@ -105,6 +105,7 @@
 
             // Datatable
             var table = $('#table_participants').DataTable({
+                responsive: true,
                 "dom": 'rtp',
                 "pageLength": 10,
                 "orderCellsTop": true,

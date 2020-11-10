@@ -12,7 +12,9 @@ use App\Form\FiltreHomeType;
 use App\Repository\SortieRepository;
 use DateTime;
 use App\Entity\Role;
+use App\Repository\EtatRepository;
 use App\Services\Msgr;
+use App\Services\RefreshEtatService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,7 +48,7 @@ class MainController extends CommonController {
     /**
      * @Route("/website", name="main_home")
      */
-    public function home(SortieRepository $sortieRepo, Request $request, EntityManagerInterface  $em) {
+    public function home(SortieRepository $sortieRepo, EtatRepository $etatRepo, Request $request, EntityManagerInterface  $em) {
         /* error examples */
         //        $this->addFlash(Msgr::TYPE_INFOS, '$this->addFlash(\'infos\', \'une information\');');
         //        $this->addFlash(Msgr::TYPE_SUCCESS, '$this->addFlash(\'success\', \'une reussite\');');
@@ -71,6 +73,7 @@ class MainController extends CommonController {
         }
 
         $listeSorties = $sortieRepo->findSortieFiltre($filtre, $user->getId());
+        RefreshEtatService::refresh($listeSorties, $etatRepo, $em);
 
         return $this->render('main/home.html.twig',
             [
