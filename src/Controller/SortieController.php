@@ -7,6 +7,7 @@ use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,6 +37,7 @@ class SortieController extends CommonController {
     public function ajouterSortie(EntityManagerInterface $em, Request $request, $lieu = null) {
         $sortie = new Sortie();
         if($lieu){
+            dump($request->query->all());
             $sortie->setLieu( $em->getRepository(Lieu::class)->find($lieu));
         }
         $sortieForm = $this->createForm(SortieType::class, $sortie, [
