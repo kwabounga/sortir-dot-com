@@ -1,20 +1,33 @@
 {% extends "base.html.twig" %}
 
-{% block title %} {{ parent() }} | Sortie {% endblock %}
+{% block title %} {{ parent()|default('Sortie') }} {% endblock %}
 
 {% block header %}
-
+	<div class="jumbotron my-4">
+		<h1 class="display-3">{{ title | capitalize | default('Créer une sortie') }}</h1>
+		<p class="lead">Créer un événement et inviter vos amis</p>
+{#		<a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
+	</div>
 {% endblock %}
 
 {% block body %}
 	{{ form_start(sortie_form) }}
-	
-	
+
+{#	<div class="form-group row" id="">#}
+{#		<div class="col-sm-2 col-form-label">#}
+{#			{{ form_label(sortie_form.nom) }}#}
+{#		</div>#}
+{#		<div class="col-sm-10">#}
+{#			<input type="text" class="form-control "id="sortie_nom" name="sortie[nom]" required="required" maxlength="100">#}
+{#			#}{#{{ form_widget(sortie_form.nom) }}#}
+{#			{{ form_errors(sortie_form.nom) }}#}
+{#		</div>#}
+{#	</div>#}
 	<div class="row" id="">
-    		<div class="col-sm-3">
+    		<div class="col-sm-2">
     			{{ form_label(sortie_form.nom) }}
         	</div>
-        	<div class="col-sm-3">
+        	<div class="col-sm-10">
     			{{ form_widget(sortie_form.nom) }}
         	</div>
         	<div class="col-sm-3">
@@ -22,10 +35,10 @@
         	</div>
 	</div>
 	<div class="row">
-    		<div class="col-sm-3">
+    		<div class="col-sm-2">
     			{{ form_label(sortie_form.debut) }}
         	</div>
-        	<div class="col-sm-3">
+        	<div class="col-sm-10">
     			{{ form_widget(sortie_form.debut) }}
         	</div>
         	<div class="col-sm-3">
@@ -33,10 +46,10 @@
         	</div>
 	</div>
 	<div class="row">
-    		<div class="col-sm-3">
+    		<div class="col-sm-2">
     			{{ form_label(sortie_form.duree) }}
         	</div>
-        	<div class="col-sm-3">
+        	<div class="col-sm-10">
     			{{ form_widget(sortie_form.duree) }}
         	</div>
         	<div class="col-sm-3">
@@ -44,10 +57,10 @@
         	</div>
 	</div>
 	<div class="row">
-    		<div class="col-sm-3">
+    		<div class="col-sm-2">
     			{{ form_label(sortie_form.limiteInscription) }}
         	</div>
-        	<div class="col-sm-3">
+        	<div class="col-sm-10">
     			{{ form_widget(sortie_form.limiteInscription) }}
         	</div>
         	<div class="col-sm-3">
@@ -55,10 +68,10 @@
         	</div>
 	</div>
 	<div class="row">
-    		<div class="col-sm-3">
+    		<div class="col-sm-2">
     			{{ form_label(sortie_form.inscriptionMax) }}
         	</div>
-        	<div class="col-sm-3">
+        	<div class="col-sm-10">
     			{{ form_widget(sortie_form.inscriptionMax) }}
         	</div>
         	<div class="col-sm-3">
@@ -66,10 +79,10 @@
         	</div>
 	</div>
 	<div class="row">
-    		<div class="col-sm-3">
+    		<div class="col-sm-2">
     			{{ form_label(sortie_form.campus) }}
         	</div>
-        	<div class="col-sm-3">
+        	<div class="col-sm-10">
     			{{ form_widget(sortie_form.campus) }}
         	</div>
         	<div class="col-sm-3">
@@ -77,12 +90,12 @@
         	</div>
 	</div>
 	<div class="row">
-    		<div class="col-sm-3">
+    		<div class="col-sm-2">
     			{{ form_label(sortie_form.lieu) }}
         	</div>
-        	<div class="col-sm-3">
+        	<div class="col-sm-10">
     			{{ form_widget(sortie_form.lieu) }}
-    			<button type="button" 
+    			<button class="btn btn-sm btn-success " type="button"
     					onclick="location.href='{{ path('lieu_ajouter',
     					    {
     					        'nom': sortie_form.nom.vars.value,
@@ -102,10 +115,10 @@
         	</div>
 	</div>
 	<div class="row">
-    		<div class="col-sm-3">
+    		<div class="col-sm-2">
     			{{ form_label(sortie_form.infos) }}
         	</div>
-        	<div class="col-sm-3">
+        	<div class="col-sm-10">
     			{{ form_widget(sortie_form.infos) }}
         	</div>
         	<div class="col-sm-3">
@@ -115,12 +128,14 @@
 	<div class="row">
     		<div class="col-sm-2">
     			{{ form_row(sortie_form.save) }}
+{#				<div class="form-group"><button type="submit" class="save btn btn-success">Enregistrer</button></div>#}
         	</div>
         	<div class="col-sm-2">
     			{{ form_row(sortie_form.publish) }}
+{#				<div class="form-group"><button type="submit"  class="publish btn btn-warning">Publier</button></div>#}
         	</div>
         	<div class="col-sm-2">
-    			<input type="button" onclick="location.href='{{ path('home') }}';" value="Annuler" />
+    			<input class="publish btn btn-danger"  type="button" onclick="location.href='{{ path('home') }}';" value="Annuler" />
         	</div>
 	</div>
     {{ form_end(sortie_form) }}
@@ -129,4 +144,8 @@
 
 
 {% endblock %}
-
+{% block javascripts %}
+	<script>
+		document.getElementById('sortie_lieu').style="display: inline-block; width:96%;"
+	</script>
+{% endblock %}

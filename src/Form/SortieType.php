@@ -21,6 +21,8 @@ class SortieType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $date = new \DateTime();
+        $date->modify('+1 day');
         $builder
             ->add('nom')
             ->add('debut', DateTimeType::class, [
@@ -28,13 +30,11 @@ class SortieType extends AbstractType
                 'required' => true,
                 'widget' => 'choice',
                 'format' => 'yyyy-MM-dd',
-                'data' => new \DateTime(),
-                'invalid_message' => 'The password fields must match.',
+                'data' => $date,
             ])
             ->add('duree', TimeType::class, [
                 'label' => 'Durée',
                 'required' => true,
-                'invalid_message' => 'The password fields must match.',
             ])
             ->add('limiteInscription', DateTimeType::class, [
                 'label' => 'Limite inscription',
@@ -42,11 +42,10 @@ class SortieType extends AbstractType
                 'widget' => 'choice',
                 'format' => 'dd/MM/yyyy',
                 'data' => new \DateTime(),
-                'invalid_message' => 'The password fields must match.',
             ])
             ->add('inscriptionMax', IntegerType::class, [
                 'required' => true,
-                'data' => '2'
+                'data' => '20'
             ])
             ->add('infos', TextareaType::class)
             ->add('campus', TextType::class, [
@@ -59,11 +58,11 @@ class SortieType extends AbstractType
                 'choice_value' => 'id',
             ])
             ->add('save', SubmitType::class, [
-                'attr' => ['class' => 'save'],
+                'attr' => ['class' => 'save bg-success'],
                 'label' => 'Enregistrer',
             ])
             ->add('publish', SubmitType::class, [
-                'attr' => ['class' => 'publish'],
+                'attr' => ['class' => 'publish bg-primary'],
                 'label' => 'Publier',
             ]);
             

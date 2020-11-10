@@ -3,75 +3,145 @@
 {% block title %} {{ parent() }} | lieu {% endblock %}
 
 {% block header %}
-
+	<div class="jumbotron my-4">
+		<h1 class="display-3">{{ title }}</h1>
+		<p class="lead">Gestion des lieux</p>
+	</div>
 {% endblock %}
 
 {% block body %}
-	{{ form_start(lieu_form) }}
-	
-	
-	<div class="row" id="">
-    		<div class="col-sm-3">
-    			{{ form_label(lieu_form.nom) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_widget(lieu_form.nom) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(lieu_form.nom) }}
-        	</div>
-	</div>
 	<div class="row">
-    		<div class="col-sm-3">
-    			{{ form_label(lieu_form.rue) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_widget(lieu_form.rue) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(lieu_form.rue) }}
-        	</div>
+
+		<div class="col-sm-6">
+		{{ form_start(lieu_form) }}
+			<div class="row" id="">
+				<div class="col-sm-2">
+					{{ form_label(lieu_form.nom) }}
+				</div>
+				<div class="col-sm-10">
+					{{ form_widget(lieu_form.nom) }}
+				</div>
+				<div class="col-sm-3">
+					{{ form_errors(lieu_form.nom) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					{{ form_label(lieu_form.rue) }}
+				</div>
+				<div class="col-sm-10">
+					{{ form_widget(lieu_form.rue) }}
+				</div>
+				<div class="col-sm-3">
+					{{ form_errors(lieu_form.rue) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					{{ form_label(lieu_form.ville) }}
+				</div>
+				<div class="col-sm-10">
+					{{ form_widget(lieu_form.ville) }}
+				</div>
+				<div class="col-sm-3">
+					{{ form_errors(lieu_form.ville) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					{{ form_label(lieu_form.latitude) }}
+				</div>
+				<div class="col-sm-10">
+					{{ form_widget(lieu_form.latitude) }}
+				</div>
+				<div class="col-sm-3">
+					{{ form_errors(lieu_form.latitude) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					{{ form_label(lieu_form.longitude) }}
+				</div>
+				<div class="col-sm-10">
+					{{ form_widget(lieu_form.longitude) }}
+				</div>
+				<div class="col-sm-3">
+					{{ form_errors(lieu_form.longitude) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					{{ form_row(lieu_form.save) }}
+				</div>
+				<div class="col-sm-6">
+					<input class="btn btn-warning" type="button" onclick="location.href='{{ path('sortie_ajouter') }}';" value="Annuler" />
+				</div>
+			</div>
+		{{ form_end(lieu_form) }}
+		</div>
+		<div class="col-sm-6">
+			<div id='map' style='width: 400px; height: 300px;'></div>
+		</div>
+
 	</div>
-	<div class="row">
-    		<div class="col-sm-3">
-    			{{ form_label(lieu_form.ville) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_widget(lieu_form.ville) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(lieu_form.ville) }}
-        	</div>
-	</div>
-	<div class="row">
-    		<div class="col-sm-3">
-    			{{ form_label(lieu_form.latitude) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_widget(lieu_form.latitude) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(lieu_form.latitude) }}
-        	</div>
-	</div>
-	<div class="row">
-    		<div class="col-sm-3">
-    			{{ form_label(lieu_form.longitude) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_widget(lieu_form.longitude) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(lieu_form.longitude) }}
-        	</div>
-	</div>
-	<div class="row">
-    		<div class="col-sm-2">
-    			{{ form_row(lieu_form.save) }}
-        	</div>
-        	<div class="col-sm-2">
-    			<input type="button" onclick="location.href='{{ path('sortie_ajouter') }}';" value="Annuler" />
-        	</div>
-	</div>
-	{{ form_end(lieu_form) }}
+
+{% endblock %}
+{% block javascripts %}
+
+	<script>
+		var marker;
+		var map;
+		$(document).ready(() => {
+			/* MapBox part begin */
+			mapboxgl.accessToken = '{{ ctAccessor.MAPBOXTOKEN }}';
+			if (!mapboxgl.supported()) {
+				document.getElementById('map').innerText = ' votre navigateur ne supporte pas MapGL'
+			} else {
+				coord = {lat:'{{ ctAccessor.getVilleFromCampus.latitude }}',lng:'{{ ctAccessor.getVilleFromCampus.longitude }}'}
+				map = new mapboxgl.Map({
+					container: 'map',
+					style: 'mapbox://styles/mapbox/dark-v10', // stylesheet location
+					center: [coord.lng, coord.lat], // starting position [lng, lat]
+					zoom: 12 // starting zoom
+				});
+				marker = new mapboxgl.Marker()
+						.setLngLat([coord.lng, coord.lat])
+						.addTo(map);
+				// disable map rotation using right click + drag
+				map.dragRotate.disable();
+
+				// disable map rotation using touch rotation gesture
+				map.touchZoomRotate.disableRotation();
+				map.on('click', function (e) {
+					console.log(map);
+					//
+					updateFieldWithMap(e.lngLat.lng, e.lngLat.lat);
+
+				});
+			}
+			/* MapBox part end */
+		});
+		function updateFieldWithMap(lng, lat) {
+			document.getElementById('lieu_latitude').value = lat;
+			document.getElementById('lieu_longitude').value = lng;
+			showFlash('Coordonnées mises à jour');
+			viewInMapBox();
+		}
+		function viewInMapBox(event) {
+			let lat = document.getElementById('lieu_latitude').value;
+			let lng = document.getElementById('lieu_longitude').value;
+			marker.remove();
+			marker = new mapboxgl.Marker()
+					.setLngLat([lng, lat])
+					.addTo(map);
+			map.flyTo({
+				center: [
+					lng,
+					lat
+				],
+				essential: true // this animation is considered essential with respect to prefers-reduced-motion
+			});
+
+		}
+	</script>
 {% endblock %}
