@@ -5,10 +5,13 @@ namespace App\Controller;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Form\RegisterType;
+
 use App\Services\CSVLoaderService;
+use App\Services\FileUploader;
 use App\Services\InitialisationService;
 use App\Services\Msgr;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -177,27 +180,58 @@ class UserController extends CommonController
 
     // gestion des profils utilisateurs lambda (role user)
     /**
-     * @Route("/profil", name="profil")
+     * @Route("/profile", name="profil")
      */
-    public function profile(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder){
+    public function profile(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder, FileUploader $fu){
         if($this->isGranted('ROLE_ADMIN')){
             $this->addFlash(Msgr::TYPE_WARNING, 'en admin aller sur register pour avoir plus de modification');
         }
-        $user = $this->getUser();
-        $userForm = $this->createForm(RegisterType::class, $user);
+        $user = $em->getRepository(User::class)->findOneBy(['username' => $this->getUser()->getUsername()]);
+        $current_role = $user->getRole();
+        $current_campus = $user->getCampus();
+        if($user === null){
+            $this->addFlash(Msgr::TYPE_ERROR, Msgr::IMPOSSIBLE);
+            return $this->redirectToRoute('main_home');
+        }else {
+            if($user->getPhoto() != null){
+//                $photo= new File('uploads/photo/'.$user->getId().'/'.$user->getPhoto());
+//                $user->setPhoto($photo);
+            }
+        }
+        //$userForm = $this->createForm(RegisterType::class, $user);
         $registerForm = $this->createForm(RegisterType::class,$user);
         $registerForm->handleRequest($request);
         if($registerForm->isSubmitted() && $registerForm->isValid()){
-            $user->setDateCreated(new \DateTime());
+            $photoFile = $registerForm->get('photo')->getData();
+
+            if ($photoFile!== null) {
+
+                $newFilename = $fu->upload($photoFile, $em->getRepository(\App\Entity\User::class)->findOneBy(['username' => $user->getUsername()]));
+                $user->setPhoto($newFilename);
+            } else {
+                $pathParts = explode('/', $user->getPhoto());
+                $photoName = $pathParts[count($pathParts)-1];
+                //dump($logoName);
+                $user->setPhoto($photoName);
+            }
+            // pour eviter de se  faire ecraser les roles avec le "form disabled"
+            $user->setRole($current_role);
+            $user->setCampus($current_campus);
+//            $user->setDateCreated(new \DateTime());
             $hash = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
             $em->persist($user);
             $em->flush();
             return $this->redirectToRoute('profil');
+        }else {
+            if($user->getPhoto()){
+//                $user->setPhoto(new File($user->getPhoto()));
+
+            }
         }
         return $this->render("user/profile.html.twig", [
             'user' => $user,
-            'register_form'=> $userForm->createView(),
+            'register_form'=> $registerForm->createView(),
             'title' => 'Profil',
             // 'routes' => $this->getAllRoutes(),
         ]);

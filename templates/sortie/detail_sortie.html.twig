@@ -161,7 +161,7 @@
             }
             // envoi preview sur gmap
             map.on('click', function (e) {
-                window.open("https://www.google.es/maps?q="+translateGoogleMap(e.lngLat.lat)+','+translateGoogleMap(e.lngLat.lng),'_blank');
+                window.open("https://www.google.es/maps?q=" + translateGoogleMap(e.lngLat.lat) + ',' + translateGoogleMap(e.lngLat.lng),'_blank').focus();
 
             });
             /* displayer MapBox part end */

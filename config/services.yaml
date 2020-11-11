@@ -6,6 +6,8 @@
 parameters:
     app.admin_login: 'admin'
     app.admin_password: 'admin'
+
+    pictures_directory: '%kernel.project_dir%/public/uploads/pictures'
 services:
     # default configuration for services in *this* file
     _defaults:

@@ -113,7 +113,12 @@
                             <i class="fas fa-times" style="color: red;"></i>
                         {% endif %}
                     </td>
-                    <td data-label="Organisateur">{{ sortie.organisateur.username }}</td>
+                    <td data-label="Organisateur">
+                        {{ sortie.organisateur.username }}
+                        {% if sortie.organisateur.photo != null %}
+                            <img class="mini" src="{{ asset('uploads/photo/') ~ sortie.organisateur.id ~ '/' ~ sortie.organisateur.photo }}">
+                        {% endif %}
+                    </td>
                     <td>
                         {# Si la date de début n'est pas passé #}
                         {% if sortie.debut|date('d/m/Y') > "now"|date('d/m/Y') %}

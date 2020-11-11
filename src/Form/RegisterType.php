@@ -8,11 +8,13 @@ use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class RegisterType extends AbstractType
 {
@@ -34,12 +36,31 @@ class RegisterType extends AbstractType
             ->add('role', EntityType::class, [
                 'class' => Role::class,
                 'choice_label' => 'value',
-                'choice_value' => 'id'
+                'choice_value' => 'id',
+                'required' => false,
             ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'nom',
-                'choice_value' => 'id'
+                'choice_value' => 'id',
+                'required' => false,
+            ])
+            ->add('photo', FileType::class, [
+                'attr'=>['class' => 'form-control-file'],
+                'label' => 'photo de profil',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/svg+xml',
+                        ],
+                        'mimeTypesMessage' => 'Fichiers supportés jgp, png et svg',
+                    ])
+                ],
             ])
         ;
     }

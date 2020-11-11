@@ -90,6 +90,27 @@ class User implements UserInterface
     private $actif = TRUE;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $photo;
+
+    /**
+     * @return mixed
+     */
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    /**
+     * @param mixed $photo
+     */
+    public function setPhoto($photo): void
+    {
+        $this->photo = $photo;
+    }
+
+    /**
      * @return mixed
      */
     public function getCampus()
@@ -296,5 +317,23 @@ class User implements UserInterface
         return $this;
     }
 
+    public function serialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'mail' => $this->mail,
+            'username' => $this->username,
+            'password' => $this->password,
+        ];
+    }
+
+    public function unserialize(array $serialized): User
+    {
+        $this->id = $serialized['id'];
+        $this->mail = $serialized['mail'];
+        $this->username = $serialized['username'];
+        $this->password = $serialized['password'];
+        return $this;
+    }
 
 }

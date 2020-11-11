@@ -3,14 +3,26 @@
 {% block title %} Profil {% endblock %}
 
 {% block header %}
-    <header class="jumbotron my-4">
-        <h1 class="display-3">{{  title }}</h1>
-        <p class="lead">Modification de votre profil</p>
-{#        <a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
+    <header class="jumbotron my-4 row">
+        <div class="col-sm-6">
+            <h1 class="display-3">{{  title }}</h1>
+            <p class="lead">Modification de votre profil</p>
+            {#        <a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
+        </div>
+        <div class="col-sm-6 ">
+        <div class="thumbnail img-thumbnail">
+            <div class="image">
+                <img class="img img-responsive full-width" src="{{ asset('uploads/photo/') ~ user.id ~ '/' ~ user.photo }}">
+            </div>
+        </div>
+
+        </div>
+
     </header>
 {% endblock %}
 
 {% block body  %}
+    {{ form_start(register_form, { 'attr' : { 'id': 'register_form', 'class': 'form text-center'} }) }}
 <form method="post" class="form text-center">
     <div class="form-group row">
     {{ form_label(register_form.username) }}
@@ -35,9 +47,20 @@
         {{ form_label(register_form.phone) }}
         {{ form_widget(register_form.phone) }}
     </div>
-
-    <button class="btn btn-sm btn-success" type="submit">Register</button>
+    <div class="form-group row">
+        {{ form_label(register_form.photo) }}
+        {{ form_widget(register_form.photo) }}
+    </div><div class="form-group row">
+        {{ form_label(register_form.campus) }}
+        {{ form_widget(register_form.campus,{'attr' : { 'disabled': 'true'}}) }}
+    </div><div class="form-group row">
+        {{ form_label(register_form.role) }}
+        {{ form_widget(register_form.role,{'attr' : { 'disabled': 'true'}}) }}
+    </div>
+    {{ form_rest(register_form) }}
+    <button class="btn btn-sm btn-success"  type="submit">Register</button>
     <a href="{{ path('home') }}" class="btn btn-sm btn-warning">Annuler</a>
+{#    {{ form_end(register_form) }}#}
 </form>
 {% endblock %}
 
