@@ -68,9 +68,20 @@
             });
         });
 
+        function revertModify(evt){
+            console.log(evt)
+            let t = evt.srcElement.parentNode.id;
+            console.log(t)
+            let id = t.split('_')[2];
+            console.log(id)
+            document.getElementById('campus_input_' + id).className = 'd-none';
+            document.getElementById('campus_text_' + id).className = 'd-block';
+        }
         function initModify(id){
             document.getElementById('campus_text_' + id).className = 'd-none';
             document.getElementById('campus_input_' + id).className = 'd-block';
+            document.getElementById('campus_input_' + id).addEventListener('blur',revertModify,true);
+            document.getElementById('campus_input_' + id).firstChild.focus();
         }
         function modify(id){
 
