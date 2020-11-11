@@ -52,6 +52,21 @@
             <div class="col-12"><b>Description : </b></div>
             <p class="col-12">{{ sortie.infos }}</p>
         </div>
+        <div class="row">
+            <p class="col-12">
+                {% if app.user in sortie.participants and sortie.etat.libelle in ['ouverte', 'clôturée'] %}
+                    <button type="button" class="btn btn-light"
+                            onClick="actionSortie('{{ path('sortie_api_deinscription') }}', {{ sortie.id }}, 'DELETE')">
+                        Se désister
+                    </button>
+                {% elseif sortie.etat.libelle == 'ouverte' %}
+                    <button type="button" class="btn btn-light"
+                            onClick="actionSortie('{{ path('sortie_api_inscription') }}', {{ sortie.id }}, 'POST')">
+                        S'inscrire
+                    </button>
+                {% endif %}
+            </p>
+        </div>
 
         {# <a href="{{ path('sortie_modifier', {'id': sortie.id}) }}" class="btn btn-dark float-right">Modifier</a> #}
     </div>
@@ -84,6 +99,7 @@
             <div id='map-static' style='width: 100%; height: 300px;'></div>
         </div>
     </div>
+
 {% endblock %}
 
 {% block javascripts %}
@@ -118,8 +134,6 @@
                 },
             });
 
-        });
-
         /* displayer MapBox part begin */
 
         mapboxgl.accessToken = '{{ ctAccessor.MAPBOXTOKEN }}';
@@ -139,5 +153,22 @@
         // disable map rotation using touch rotation gesture
         map.touchZoomRotate.disableRotation();
         /* displayer MapBox part end */
+        });
+        function actionSortie(url, idSortie, method) {
+            $.ajax({
+                type: method,
+                url: url,
+                data: {
+                    'id': idSortie
+                },
+                success: function(data) {
+                    // console.log('success');
+                    window.location.reload();
+                },
+                error: function(err) {
+                    console.log('erreur', err);
+                }
+            });
+        }
     </script>
 {% endblock %}

@@ -23,7 +23,7 @@ class Msgr
 
     /* messages inscription */
     const INSCRIPTION = 'Inscription réussi';
-    const DEINSCRIPTION = 'Séinscription réussi';
+    const DEINSCRIPTION = 'Déinscription réussi';
 
     /* Gestion sortie */
     const PUBLICATION = 'Publication réussi';
