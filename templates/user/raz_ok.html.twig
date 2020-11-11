@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Login {% endblock %}
+{% block header %}
+    <header class="jumbotron my-4">
+        <h1 class="display-3">{{  title }}</h1>
+        <p class="lead">Entrez votre email pour demander un nouveau mot de pass</p>
+        {#        <a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
+    </header>
+{% endblock %}
+{% block body %}
+    <form method="post" class="form">
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2" for="username">Password:</label>
+            <div class="col-sm-10"><input class="form-control" type="password" id="password" name="_password" autofocus required autocomplete="password" placeholder="votre nouveau mot de passe"> </div>
+            <label class="col-form-label col-sm-2" for="username">Password confirmation:</label>
+            <div class="col-sm-10"><input class="form-control" type="password" id="passwordConfirm" name="_passwordConfirm" autofocus required autocomplete="password" placeholder="confirmer votre mot de passe"> </div>
+        </div>
+
+        <button class="btn btn-info btn-lg btn-block" type="submit">Demande de Reinitialisation</button>
+
+        </div>
+    </form>
+{% endblock %}
+

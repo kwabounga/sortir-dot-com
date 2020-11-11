@@ -28,6 +28,9 @@ class Msgr
     /* Gestion sortie */
     const PUBLICATION = 'Publication réussi';
     const ANNULATION = 'Annulation réussi';
+    const RAZMDPSENDED = 'Une demande de confirmation vient de vous être envoyé: lien valable ce jour';
+    const USERNOEXIST = 'L\'Utilisateur n\'existe pas';
+    const RAZMDPOK = 'la reinitialisation du mot de passe c\'est déroulé avec succes';
 
 
 }

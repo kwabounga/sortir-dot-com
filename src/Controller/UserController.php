@@ -264,4 +264,80 @@ class UserController extends CommonController
 
         return $this->redirectToRoute('home');
     }
+    /**
+     * @Route("/new/password/", name="new_password")
+     */
+    public function newPassword(EntityManagerInterface $em , Request $request){
+
+        $params = $request->request->all();
+        if($params!= [] ){
+            dump($params['_mail']);
+            $user = $em->getRepository(User::class)->findOneBy(['mail'=>$params['_mail']]);
+            if($user) {
+                $this->addFlash(Msgr::TYPE_INFOS,Msgr::RAZMDPSENDED);
+                $time = new \DateTime();
+                $fTime = $time->format('d/M/yy');
+                dump($fTime);
+                $token = base64_encode($user->getMail().':'.$user->getDateCreated()->format('d/M/yy').':'.$fTime);
+                /*return $this->redirectToRoute('main_home',[
+
+                ]);*/
+                return $this->redirectToRoute('new_password_send',['tokken'=>$token]);
+            } else {
+                $this->addFlash(Msgr::TYPE_INFOS,Msgr::USERNOEXIST);
+                return $this->render("user/raz.html.twig", [
+                    'title'=>'Demande de mot de passe'
+                ]);
+            }
+        }
+
+        return $this->render("user/raz.html.twig", [
+            'title'=>'Demande de mot de passe'
+        ]);
+
+    }
+    /**
+     * @Route("/new/password/send", name="new_password_send")
+     */
+    public function newPasswordSend(EntityManagerInterface $em , Request $request, UserPasswordEncoderInterface $encoder){
+        $token = $request->query->all()['tokken'];
+
+        dump($request->query->all());
+        dump($token);
+        $time = new \DateTime();
+        $fTime = $time->format('d/M/yy');
+        if($token!=null){
+            $allUsers = $em->getRepository(User::class)->findAll();
+            foreach ($allUsers as $user ){
+                $t = base64_encode($user->getMail().':'.$user->getDateCreated()->format('d/M/yy').':'.$fTime);
+                if($token == $t){
+                    $newInfos = $request->request->all();
+                    dump($newInfos);
+                    if($newInfos != [] and $newInfos['_password'] and $newInfos['_passwordConfirm']){
+                        if(trim($newInfos['_password']) === trim($newInfos['_passwordConfirm'])){
+                            $hash = $encoder->encodePassword($user, trim($newInfos['_password']));
+                           $user-> setPassword($hash);
+                           $em->persist($user);
+                           $em->flush();
+                           $this->addFlash(Msgr::TYPE_INFOS,Msgr::RAZMDPOK);
+                            return $this->redirectToRoute('main_home');
+                        }
+                    }
+                    return $this->render("user/raz_ok.html.twig", [
+                        'title'=>'Demande de mot de passe',
+                        'tokken'=>$token
+                    ]);
+                }
+            }
+        } else {
+            return $this->redirectToRoute('main_home');
+
+        }
+
+//        return $this->redirectToRoute('main_home');
+        return $this->render("user/raz_ok.html.twig", [
+            'title'=>'Demande de mot de passe'
+        ]);
+
+    }
 }
