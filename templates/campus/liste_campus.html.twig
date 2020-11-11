@@ -1,7 +1,10 @@
 {% extends "base.html.twig" %}
 
 {% block title %} {{ title }} {% endblock %}
-
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('js/jquery/jquery.dataTables.min.css') }}">
+    <script type="text/javascript" src="{{ asset('js/jquery/jquery.dataTables.min.js') }}"></script>
+{% endblock %}
 {% block header %}
     <header class="jumbotron my-4">
         <h1 class="display-3">{{ title }}</h1>
@@ -11,5 +14,106 @@
 {% endblock %}
 
 {% block body %}
-    Liste campus
+    <div class="mx-3 mt-3">
+        <table id="table_campus" class="table table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th>Campus</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for campus in listeCampus %}
+                <tr>
+                    <td data-label="Nom">
+                        <span class="d-block" id="campus_text_{{ campus.id }}" onclick="initModify({{ campus.id }})">{{ campus.nom }}</span>
+                        <span class="d-none" id="campus_input_{{ campus.id }}"><input type="text" value="{{ campus.nom }}"></span>
+                    </td>
+                    <td data-label="Action">
+                        <a class="btn btn-sm btn-light" href="javascript:void(0)" onclick="modify({{ campus.id }})">Modifier</a>
+                        <a class="btn btn-sm btn-light" href="javascript:void(0)" onclick="deleteCampus({{ campus.id }})">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+            <tbody>
+            <tr>
+                <td data-label="NouveauCampus"><input id="new_campus" type="text" placeholder="Nouveau Campus"></td>
+                <td data-label="Ajouter">
+                    <a class="btn btn-sm btn-light" href="javascript:void(0)" onclick="add()">Ajouter</a>
+                </td>
+            </tr>
+
+
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready(() => {
+            var table = $('#table_campus').DataTable({
+                "dom": 'rtp',
+                "pageLength": 10,
+                "orderCellsTop": true,
+                "fixedHeader": true,
+                "oLanguage": {
+                    "oPaginate": {
+                        "sNext": "Suivant",
+                        "sPrevious": "Précédent"
+                    }
+                },
+            });
+        });
+
+        function initModify(id){
+            document.getElementById('campus_text_' + id).className = 'd-none';
+            document.getElementById('campus_input_' + id).className = 'd-block';
+        }
+        function modify(id){
+
+            var nVal = $('#campus_input_' + id +' > input').val()
+            document.getElementById('campus_text_' + id).innerText = nVal;
+            document.getElementById('campus_input_' + id).className = 'd-none';
+            document.getElementById('campus_text_' + id).className = 'd-block';
+            // appel ajax ici
+            ajaxPost(('{{ path('campus_modify') }}?id='+id+'&campus='+nVal.trim()),null,function(data,err){
+                console.log(data);
+                showFlash(data)
+                setTimeout(function(){
+                    window.location = "{{ path('campus_liste') }}";
+                },1000);
+            },false)
+        }
+        function add(){
+
+            var nVal = $('#new_campus').val();
+            // appel ajax ici
+            ajaxPost(('{{ path('campus_add') }}?action=add&campus='+nVal.trim()),null,function(data,err){
+                console.log(data);
+                showFlash(data)
+                setTimeout(function(){
+                    window.location = "{{ path('campus_liste') }}";
+                },1000);
+            },false)
+        }
+        function deleteCampus(id) {
+            // appel ajax ici
+            if(confirm("Etes vous sur ?")){
+                ajaxPost(('{{ path('campus_delete') }}?action=delete&id='+id),null,function(data,err){
+                    console.log(data);
+                    showFlash(data)
+                    setTimeout(function(){
+                        window.location = "{{ path('campus_liste') }}";
+                    },1000);
+                },false)
+            } else {
+                showFlash('annulation de la suppression');
+            }
+
+
+        }
+    </script>
 {% endblock %}

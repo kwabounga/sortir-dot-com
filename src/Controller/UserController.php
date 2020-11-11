@@ -95,6 +95,7 @@ class UserController extends CommonController
             } else{
                 // si co et pas d'id : nouvel user
                 $user = new User();
+                $user->setRole($em->getRepository(Role::class)->findOneBy(['value'=>'ROLE_USER']));
             }
 
             // récupération du formulaire et traitement

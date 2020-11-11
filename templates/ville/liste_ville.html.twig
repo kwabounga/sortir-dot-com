@@ -60,7 +60,7 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
             {{ ville.nom }}
     {% endfor %}#}
     <div class="mx-3 mt-3">
-        <table id="table_sortie" class="table table-bordered">
+        <table id="table_villes" class="table table-bordered">
             <thead class="thead-dark">
             <tr>
                 <th>Nom</th>
@@ -99,8 +99,8 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
         var xhr = new XMLHttpRequest();
         $(document).ready(() => {
 
-            $('#table_sortie thead tr').clone(true).appendTo('#table_sortie thead');
-            $('#table_sortie thead tr:eq(1) th').each(function(i) {
+            $('#table_villes thead tr').clone(true).appendTo('#table_villes thead');
+            $('#table_villes thead tr:eq(1) th').each(function(i) {
                 var title = $(this).text();
 
                 if (['Nom', 'Etat', 'Organisateur'].includes(title)) {
@@ -275,7 +275,7 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
                 table.destroy();
             }
             // Datatable
-            table = $('#table_sortie').DataTable({
+            table = $('#table_villes').DataTable({
                 "dom": 'rtp',
                 "pageLength": document.getElementById('pagination').value,
                 "orderCellsTop": true,
