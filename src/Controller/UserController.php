@@ -279,9 +279,9 @@ class UserController extends CommonController
                 $fTime = $time->format('d/M/yy');
                 dump($fTime);
                 $token = base64_encode($user->getMail().':'.$user->getDateCreated()->format('d/M/yy').':'.$fTime);
-                /*return $this->redirectToRoute('main_home',[
-
-                ]);*/
+                // ici on simule un envoi de lien par mail
+                // par exemple : http://localhost/sortir-dot-com/public/new/password/send?tokken=a3JvQG5lbmJvdXJnLmNvbToxMS9Ob3YvMjAyMDoxMi9Ob3YvMjAyMA%3D%3D
+                // le lien est valable seulement le jour de la demande
                 return $this->redirectToRoute('new_password_send',['tokken'=>$token]);
             } else {
                 $this->addFlash(Msgr::TYPE_INFOS,Msgr::USERNOEXIST);
@@ -313,7 +313,7 @@ class UserController extends CommonController
                 if($token == $t){
                     $newInfos = $request->request->all();
                     dump($newInfos);
-                    if($newInfos != [] and $newInfos['_password'] and $newInfos['_passwordConfirm']){
+                    if($newInfos != [] and $newInfos['_password'] and $newInfos['_passwordConfirm'] and trim($newInfos['_password']) != '' and trim($newInfos['_passwordConfirm']) != ''){
                         if(trim($newInfos['_password']) === trim($newInfos['_passwordConfirm'])){
                             $hash = $encoder->encodePassword($user, trim($newInfos['_password']));
                            $user-> setPassword($hash);
