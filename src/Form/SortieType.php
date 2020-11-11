@@ -30,6 +30,7 @@ class SortieType extends AbstractType
                 'required' => true,
                 'widget' => 'choice',
                 'format' => 'dd/MM/yyyy',
+                'data' => $date,
             ])
             ->add('duree', TimeType::class, [
                 'label' => 'Durée',
@@ -40,6 +41,7 @@ class SortieType extends AbstractType
                 'required' => true,
                 'widget' => 'choice',
                 'format' => 'dd/MM/yyyy',
+                'data' => new \DateTime(),
             ])
             ->add('inscriptionMax', IntegerType::class, [
                 'required' => true,
