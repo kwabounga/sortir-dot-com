@@ -1,0 +1,12 @@
+@media all and (max-width:850px) {
+    .btn-sm-block { display:block; }
+    .container-fluid.mb-3 {
+        margin-top: 1em;
+    }
+}
+
+@media (max-width: 850px){
+    #map_routes_footer {
+        display:none;
+    }
+}

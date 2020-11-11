@@ -1,8 +1,4 @@
-@media (max-width: 850px){
-    #map_routes_footer {
-        display:none;
-    }
-}
+
 @media (max-width: 850px){
     .table {
         width: 100% !important;
