@@ -90,7 +90,7 @@
             document.getElementById('campus_input_' + id).className = 'd-none';
             document.getElementById('campus_text_' + id).className = 'd-block';
             // appel ajax ici
-            ajaxPost(('{{ path('campus_modify') }}?id='+id+'&campus='+nVal.trim()),null,function(data,err){
+            ajaxPost(('{{ path('campus_api_modify') }}?id='+id+'&campus='+nVal.trim()),null,function(data,err){
                 console.log(data);
                 showFlash(data)
                 setTimeout(function(){
@@ -102,7 +102,7 @@
 
             var nVal = $('#new_campus').val();
             // appel ajax ici
-            ajaxPost(('{{ path('campus_add') }}?action=add&campus='+nVal.trim()),null,function(data,err){
+            ajaxPost(('{{ path('campus_api_add') }}?action=add&campus='+nVal.trim()),null,function(data,err){
                 console.log(data);
                 showFlash(data)
                 setTimeout(function(){
@@ -113,7 +113,7 @@
         function deleteCampus(id) {
             // appel ajax ici
             if(confirm("Etes vous sur ?")){
-                ajaxPost(('{{ path('campus_delete') }}?action=delete&id='+id),null,function(data,err){
+                ajaxPost(('{{ path('campus_api_delete') }}?action=delete&id='+id),null,function(data,err){
                     console.log(data);
                     showFlash(data)
                     setTimeout(function(){
