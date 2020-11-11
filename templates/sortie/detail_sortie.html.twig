@@ -79,6 +79,7 @@
             <table id="table_participants" class="table table-bordered text-center">
                 <thead class="thead-dark">
                     <tr>
+                        <th></th>
                         <th>Pseudo</th>
                         <th>Nom</th>
                     </tr>
@@ -86,6 +87,7 @@
                 <tbody>
                     {% for particip in sortie.participants %}
                         <tr>
+                            <td data-label="">{% if particip.photo != null %}<img class="mini" src="{{ asset('uploads/photo/') ~ particip.id ~ '/' ~ particip.photo }}">{% endif %}</td>
                             <td data-label="Pseudo">{{ particip.username }}</td>
                             <td data-label="Nom">{{ particip.firstname|capitalize }} {{ particip.lastname|lower }}</td>
                         </tr> 
