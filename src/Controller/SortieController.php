@@ -36,9 +36,23 @@ class SortieController extends CommonController {
      */
     public function ajouterSortie(EntityManagerInterface $em, Request $request, $lieu = null) {
         $sortie = new Sortie();
+        
+        $p = $request->query->all();
+        
+        if (!empty($p)) {
+            $sortie->setNom($p['params']['nom']);
+            $sortie->setDebut(new \DateTime($p['params']['debut']['date']));
+            $sortie->setDuree(new \DateTime($p['params']['duree']['date']));
+            $sortie->setLimiteInscription(new \DateTime($p['params']['limiteInscription']['date']));
+            $sortie->setInscriptionMax($p['params']['inscriptionMax']);
+            $sortie->setInfos($p['params']['infos']);
+        } else {
+            $sortie->setDebut(new \DateTime());
+            $sortie->setLimiteInscription(new \DateTime());
+        }
+        
         if($lieu){
-            dump($request->query->all());
-            $sortie->setLieu( $em->getRepository(Lieu::class)->find($lieu));
+            $sortie->setLieu($em->getRepository(Lieu::class)->find($lieu));
         }
         $sortieForm = $this->createForm(SortieType::class, $sortie, [
             'user' => $this->getUser(),

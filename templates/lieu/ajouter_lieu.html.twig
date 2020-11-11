@@ -74,7 +74,7 @@
 					{{ form_row(lieu_form.save) }}
 				</div>
 				<div class="col-sm-6">
-					<input class="btn btn-warning" type="button" onclick="location.href='{{ path('sortie_ajouter') }}';" value="Annuler" />
+					<input class="btn btn-warning" type="button" onclick="location.href='{{ path('sortie_ajouter', {'params': params}) }}';" value="Annuler" />
 				</div>
 			</div>
 		{{ form_end(lieu_form) }}

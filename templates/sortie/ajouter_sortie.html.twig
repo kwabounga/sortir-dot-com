@@ -96,18 +96,7 @@
 {#		TODO: ici pas bon  faire un fonction js et prendre les infos au moment 't'#}
         	<div class="col-sm-10">
     			{{ form_widget(sortie_form.lieu) }}
-    			<button class="btn btn-sm btn-success " type="button"
-    					onclick="location.href='{{ path('lieu_ajouter',
-    					    {
-    					        'nom': sortie_form.nom.vars.value,
-    					        'debut': sortie_form.debut.vars.value,
-    					        'duree': sortie_form.duree.vars.value,
-    					        'limiteInscription': sortie_form.limiteInscription.vars.value,
-    					        'inscriptionMax': sortie_form.inscriptionMax.vars.value,
-    					        'infos': sortie_form.infos.vars.value,
-    					        
-    					    }
-					    )}}';">
+    			<button class="btn btn-sm btn-success " type="button" onclick="ajouterLieu('{{ path('lieu_ajouter') }}');">
     				<i class="fas fa-plus-circle"></i>
     			</button>
         	</div>
@@ -148,5 +137,50 @@
 {% block javascripts %}
 	<script>
 		document.getElementById('sortie_lieu').style="display: inline-block; width:96%;"
+			
+    	function ajouterLieu(url) {
+	    	var nom = document.getElementById('sortie_nom').value;
+	    	
+	    	var debutMonth = document.getElementById('sortie_debut_date_month').value;
+	    	var debutDay = document.getElementById('sortie_debut_date_day').value;
+	    	var debutYear = document.getElementById('sortie_debut_date_year').value;
+	    	var debutHour = document.getElementById('sortie_debut_time_hour').value;
+	    	var debutMinute = document.getElementById('sortie_debut_time_minute').value;
+
+			var dureeHour = document.getElementById('sortie_duree_hour').value;
+			var dureeMinute = document.getElementById('sortie_duree_minute').value;
+
+			var limiteInscriptionMonth = document.getElementById('sortie_limiteInscription_date_month').value;
+			var limiteInscriptionDay = document.getElementById('sortie_limiteInscription_date_day').value;
+			var limiteInscriptionYear = document.getElementById('sortie_limiteInscription_date_year').value;
+			var limiteInscriptionHour = document.getElementById('sortie_limiteInscription_time_hour').value;
+			var limiteInscriptionMinute = document.getElementById('sortie_limiteInscription_time_minute').value;
+
+			var inscriptionMax = document.getElementById('sortie_inscriptionMax').value;
+
+			var infos = document.getElementById('sortie_infos').value;
+
+			if (debutMinute < 10 ) {
+				debutMinute = '0' + debutMinute;
+			}
+			var debut = debutDay + '/' + debutMonth + '/' + debutYear + ' ' + debutHour + ':' + debutMinute;
+
+			if (dureeMinute < 10 ) {
+				dureeMinute = '0' + dureeMinute;
+			}
+			var duree = dureeHour + ':' + dureeMinute;
+
+			if (limiteInscriptionMinute < 10 ) {
+				limiteInscriptionMinute = '0' + limiteInscriptionMinute;
+			}
+			var limiteInscription = limiteInscriptionDay + '/' + limiteInscriptionMonth + '/' + limiteInscriptionYear + ' ' 
+										+ limiteInscriptionHour + ':' + limiteInscriptionMinute;
+
+			var parametres = 'nom=' + nom + '&' + 'debut=' + debut + '&' + 'duree=' + duree + '&' + 'limiteInscription=' + limiteInscription + '&' 
+										+ 'inscriptionMax=' + inscriptionMax + '&' + 'infos=' + infos;
+			
+			window.location = url + '?' + parametres;
+
+    	}
 	</script>
 {% endblock %}
