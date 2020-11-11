@@ -135,25 +135,27 @@
                 },
             });
 
-        /* displayer MapBox part begin */
+            /* displayer MapBox part begin */
 
-        mapboxgl.accessToken = '{{ ctAccessor.MAPBOXTOKEN }}';
-        let coord = {lat:'{{ sortie.lieu.latitude }}',lng:'{{ sortie.lieu.longitude }}'}
-        let map = new mapboxgl.Map({
-            container: 'map-static',
-            style: 'mapbox://styles/mapbox/dark-v10', // stylesheet location
-            center: [coord.lng, coord.lat], // starting position [lng, lat]
-            zoom: 14.503774413768701, // starting zoom
-                // interactive: false
-        });
-        let marker = new mapboxgl.Marker()
-            .setLngLat([coord.lng, coord.lat])
-            .addTo(map);
-        map.dragRotate.disable();
+            mapboxgl.accessToken = '{{ ctAccessor.MAPBOXTOKEN }}';
+            let coord = {lat:'{{ sortie.lieu.latitude }}',lng:'{{ sortie.lieu.longitude }}'}
+            let map = new mapboxgl.Map({
+                container: 'map-static',
+                style: 'mapbox://styles/mapbox/dark-v10', // stylesheet location
+                center: [coord.lng, coord.lat], // starting position [lng, lat]
+                zoom: 14.503774413768701, // starting zoom
+                    // interactive: false
+            });
+            let marker = new mapboxgl.Marker()
+                .setLngLat([coord.lng, coord.lat])
+                .addTo(map);
+            map.dragRotate.disable();
+            map.touchZoomRotate.disableRotation();
+            /* displayer MapBox part end */
+            map.on('click', function (e) {
+                window.open("https://www.google.es/maps?q="+e.lngLat.lat+','+e.lngLat.lng,'_blank');
 
-        // disable map rotation using touch rotation gesture
-        map.touchZoomRotate.disableRotation();
-        /* displayer MapBox part end */
+            });
         });
         function actionSortie(url, idSortie, method) {
             $.ajax({
