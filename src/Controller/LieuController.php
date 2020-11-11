@@ -20,18 +20,24 @@ class LieuController extends CommonController
      */
     public function ajouterLieu(EntityManagerInterface $em, Request $request) {
         $lieu = new Lieu();
-        dump($request->query->all());
+        $params = $request->query->all();
+        
+        $params['debut'] = date_create_from_format('j/n/Y G:s', $params['debut']);
+        $params['duree'] = date_create_from_format('G:s', $params['duree']);
+        $params['limiteInscription'] = date_create_from_format('j/n/Y G:s', $params['limiteInscription']);
+        
         $lieuForm = $this->createForm(LieuType::class, $lieu, []);
         $lieuForm->handleRequest($request);
         if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
             $em->persist($lieu);
             $em->flush();
-            return $this->redirectToRoute('sortie_ajouter',['lieu'=>$lieu->getId(), 'params' => $request->query->all()]);
+            return $this->redirectToRoute('sortie_ajouter',['lieu'=>$lieu->getId(), 'params' => $params]);
         } else {
             return $this->render('lieu/ajouter_lieu.html.twig', [
                 'page_name' => 'Création d\'un lieu',
                 'lieu_form' => $lieuForm->createView(),
                 'title' => 'Ajout de lieu',
+                'params' => $params,
                 // 'routes' => $this->getAllRoutes()
             ]);
         }
