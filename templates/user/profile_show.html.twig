@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Profil {% endblock %}
+
+{% block header %}
+    <header class="jumbotron my-4 row">
+        <div class="col-sm-6">
+            <h1 class="display-3">{{  title }}</h1>
+            <p class="lead">Profil de {{ user.username | capitalize }}</p>
+            {#        <a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
+            <div class="row">
+                <div class="col-12 col-lg-6">
+                    <div class="row">
+                        <div class="col-6"><b>Nom : </b></div>
+                        <div class="col-6">{{ user.firstname|capitalize }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><b>Prenom : </b></div>
+                        <div class="col-6">{{ user.lastname |capitalize }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><b>Téléphone : </b></div>
+                        <div class="col-6">{{ user.phone }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><b>Email : </b></div>
+                        <div class="col-6">{{ user.mail  }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><b>Campus : </b></div>
+                        <div class="col-6">{{ user.campus.nom |capitalize }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 ">
+        <div class="thumbnail img-thumbnail">
+            <div class="image">
+                {%  if user.photo != null %}
+                    <img class="img img-responsive full-width" src="{{ asset('uploads/photo/') ~ user.id ~ '/' ~ user.photo }}">
+                    {% else %}
+                    No picture
+                {% endif %}
+            </div>
+        </div>
+        </div>
+
+    </header>
+{% endblock %}
+
+{% block body  %}
+
+
+{% endblock %}
+

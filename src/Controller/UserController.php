@@ -236,6 +236,24 @@ class UserController extends CommonController
             // 'routes' => $this->getAllRoutes(),
         ]);
     }
+
+    /**
+     * @Route("/profile/show/{id}", name="profil_show",requirements={"id": "\d+"})
+     */
+    public function profileShow(Request $request, EntityManagerInterface $em, $id = null){
+        $user = $em->getRepository(User::class)->find($id);
+        if($user) {
+            return $this->render("user/profile_show.html.twig", [
+                'user' => $user,
+                'title' => 'Profil',
+                // 'routes' => $this->getAllRoutes(),
+            ]);
+        } else {
+            $this->addFlash(Msgr::TYPE_INFOS,Msgr::USERNOEXIST);
+            return $this->redirectToRoute('main_home');
+        }
+    }
+
     /*
      * suppression de compte attention faire en sorte de gérér une desactivation de base et de forcer si on veux la suppression
      */

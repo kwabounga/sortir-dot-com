@@ -114,10 +114,12 @@
                         {% endif %}
                     </td>
                     <td data-label="Organisateur">
+                        <a href="{{ path('profil_show', {'id': sortie.organisateur.id}) }}" class="btn text-dark">
                         {{ sortie.organisateur.username }}
                         {% if sortie.organisateur.photo != null %}
                             <img class="mini" src="{{ asset('uploads/photo/') ~ sortie.organisateur.id ~ '/' ~ sortie.organisateur.photo }}">
                         {% endif %}
+                        </a>
                     </td>
                     <td>
                         {# Si la date de début n'est pas passé #}

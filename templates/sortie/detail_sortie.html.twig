@@ -86,11 +86,13 @@
                 </thead>
                 <tbody>
                     {% for particip in sortie.participants %}
-                        <tr>
-                            <td data-label="">{% if particip.photo != null %}<img class="mini" src="{{ asset('uploads/photo/') ~ particip.id ~ '/' ~ particip.photo }}">{% endif %}</td>
+                    <tr>
+                            <td data-label=""><a href="{{ path('profil_show', {'id': particip.id}) }}" class="btn text-dark">{% if particip.photo != null %}<img class="mini" src="{{ asset('uploads/photo/') ~ particip.id ~ '/' ~ particip.photo }}">{% else %}{{particip.username|slice(0,2)|capitalize }}{% endif %}</a></td>
                             <td data-label="Pseudo">{{ particip.username }}</td>
                             <td data-label="Nom">{{ particip.firstname|capitalize }} {{ particip.lastname|lower }}</td>
-                        </tr> 
+                        </tr>
+
+
                     {% endfor %}
                 </tbody>
             </table>
