@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <p class="p-2 text-center text-success bg-dark2">Copyright &copy; Sortir.com {{ "now"|date("Y")  }}</p>
     </div>
-    <div class="container">
+    <div id="map_routes_footer" class="container">
         <div class="row">
             {% set nbRoutes = ctAccessor.allroutes|length %}
             {% set id = 1 %}

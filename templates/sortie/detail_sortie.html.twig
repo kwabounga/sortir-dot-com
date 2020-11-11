@@ -95,7 +95,7 @@
         </div>
 
         {# Carte #}
-        <div class="col-12 col-xl-6">
+        <div class="col-12 col-xl-6 mb-4">
             <div id='map-static' style='width: 100%; height: 300px;'></div>
         </div>
     </div>
@@ -105,7 +105,7 @@
 {% block javascripts %}
     <script type="text/javascript">
         $(document).ready(() => {
-            $('#table_participants thead tr').clone(true).appendTo('#table_participants thead'); 
+            /*$('#table_participants thead tr').clone(true).appendTo('#table_participants thead');
             $('#table_participants thead tr:eq(1) th').each(function(i) {
                 var title = $(this).text();
                 $(this).html('<input type="text" placeholder="rechercher" class="form-control">');
@@ -117,13 +117,14 @@
                             .draw();
                     }
                 });
-            });
+            });*/
 
             // Datatable
+            //div.dataTables_wrapper { min-height: 300px; }
             var table = $('#table_participants').DataTable({
                 responsive: true,
                 "dom": 'rtp',
-                "pageLength": 10,
+                "pageLength": 5,
                 "orderCellsTop": true,
                 "fixedHeader": true,
                 "oLanguage": {
