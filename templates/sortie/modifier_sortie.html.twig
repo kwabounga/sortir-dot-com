@@ -140,7 +140,10 @@
 	</div>
     {{ form_end(sortie_form) }}
 
-
+	{# Carte #}
+	<div class="col-12 col-xl-6 mb-4">
+		<div id='map-static' style='width: 100%; height: 300px;'></div>
+	</div>
 
 
 {% endblock %}
@@ -193,6 +196,38 @@
 			window.location = url + '?' + parametres;
 
     	}
+		$(document).ready(() => {
+			/* displayer MapBox part begin */
+			// donne le id token de mapBox pour pouvoir l'utiliser
+			mapboxgl.accessToken = '{{ ctAccessor.MAPBOXTOKEN }}';
+			// créer un obj de coordonnées
+			let coord = {lat:'{{ sortie.lieu.latitude }}',lng:'{{ sortie.lieu.longitude }}'}
+			// initalisation de la map mapBox
+			let map = new mapboxgl.Map({
+				container: 'map-static',
+				style: 'mapbox://styles/mapbox/dark-v10', // stylesheet location
+				center: [coord.lng, coord.lat], // starting position [lng, lat]
+				zoom: 14.503774413768701, // starting zoom
+			});
+			// ajout du marqueur
+			let marker = new mapboxgl.Marker()
+					.setLngLat([coord.lng, coord.lat])
+					.addTo(map);
+			// empecher l'utilisateur de tourner la map
+			map.dragRotate.disable();
+			map.touchZoomRotate.disableRotation();
+
+			// legere rectification de coordonnées pour l'affichage sur ggmap
+			function translateGoogleMap(coord){
+				return (coord + 0.00015);
+			}
+			// envoi preview sur gmap
+			map.on('click', function (e) {
+				window.open("https://www.google.es/maps?q=" + translateGoogleMap(e.lngLat.lat) + ',' + translateGoogleMap(e.lngLat.lng),'_blank').focus();
+
+			});
+			/* displayer MapBox part end */
+		});
 	</script>
 {% endblock %}
 

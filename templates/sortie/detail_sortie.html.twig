@@ -78,13 +78,15 @@
                         S'inscrire
                     </button>
                 {% endif %}
-                {% if is_granted('ROLE_ADMIN')%}
-                    {% if not sortie.annulation == null %}
-                        <a href="{{ path('sortie_remettre', {'id': sortie.id}) }}" class="btn btn-success btn-lg">Remettre la Sortie</a>
-                    {% else %}
-                        <a href="{{ path('sortie_annuler', {'id': sortie.id}) }}" class="btn btn-danger btn-lg">Annuler la Sortie</a>
+                {% set dateActuel = date("now") %}
+                    {% if sortie.debut > dateActuel %}
+                        {% if is_granted('ROLE_ADMIN')%}
+                            {% if not sortie.annulation == null %}
+                                <a href="{{ path('sortie_remettre', {'id': sortie.id}) }}" class="btn btn-success btn-lg">Remettre la Sortie</a>
+                            {% else %}
+                                <a href="{{ path('sortie_annuler', {'id': sortie.id}) }}" class="btn btn-danger btn-lg">Annuler la Sortie</a>
+                            {% endif %}
                     {% endif %}
-
                 {% endif %}
             </p>
         </div>
