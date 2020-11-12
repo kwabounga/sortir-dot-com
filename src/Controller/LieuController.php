@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Lieu;
+use App\Entity\Ville;
 use App\Form\LieuType;
 
 /**
@@ -17,16 +18,17 @@ use App\Form\LieuType;
 class LieuController extends CommonController
 {
     /**
-     * @Route("/ajouter", name="lieu_ajouter")
+     * @Route("/ajouter/{ville}", name="lieu_ajouter")
      */
-    public function ajouterLieu(EntityManagerInterface $em, Request $request) {
+    public function ajouterLieu(EntityManagerInterface $em, Request $request, $ville = null) {
         $lieu = new Lieu();
         $params = $request->query->all();
-        
-        $params['debut'] = date_create_from_format('j/n/Y G:s', $params['debut']);
-        $params['duree'] = date_create_from_format('G:s', $params['duree']);
-        $params['limiteInscription'] = date_create_from_format('j/n/Y G:s', $params['limiteInscription']);
-        
+        if (array_key_exists('debut', $params)) {
+            $params['debut'] = date_create_from_format('j/n/Y G:s', $params['debut']);
+            $params['duree'] = date_create_from_format('G:s', $params['duree']);
+            $params['limiteInscription'] = date_create_from_format('j/n/Y G:s', $params['limiteInscription']);
+        }
+
         $lieuForm = $this->createForm(LieuType::class, $lieu, []);
         $lieuForm->handleRequest($request);
         if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {

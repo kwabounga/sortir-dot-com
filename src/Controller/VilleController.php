@@ -93,6 +93,27 @@ class VilleController extends CommonController {
         return $this->json(['response'=>'the citie '.$id.' as been deleted']);
 
     }
-
-
+    
+    /**
+     * @Route("/ajouter/", name="ville_ajouter")
+     */
+    public function ajouterVille(EntityManagerInterface $em, Request $request) {
+        $ville = new Ville();
+        $params = $request->query->all();
+        $villeForm = $this->createForm(VilleType::class, $ville, []);
+        $villeForm->handleRequest($request);
+        if ($villeForm->isSubmitted() && $villeForm->isValid()) {
+            $em->persist($ville);
+            $em->flush();
+            return $this->redirectToRoute('lieu_ajouter',['ville'=>$ville->getId()]);
+        } else {
+            return $this->render('ville/ajouter_ville.html.twig', [
+                'page_name' => 'Création d\'une ville',
+                'ville_form' => $villeForm->createView(),
+                'title' => 'Ajout des villes',
+                'params' => $params,
+                // 'routes' => $this->getAllRoutes()
+            ]);
+        }
+    }
 }
