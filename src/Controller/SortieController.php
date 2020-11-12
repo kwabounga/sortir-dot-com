@@ -100,6 +100,8 @@ class SortieController extends CommonController {
         $sortie = $em->getRepository(Sortie::class)->find($id);
         
         $p = $request->query->all();
+        $date = new \DateTime();
+        $date->modify('+1 day');
         
         if (!empty($p)) {
             $sortie->setNom($p['params']['nom']);
@@ -108,9 +110,6 @@ class SortieController extends CommonController {
             $sortie->setLimiteInscription(new \DateTime($p['params']['limiteInscription']['date']));
             $sortie->setInscriptionMax($p['params']['inscriptionMax']);
             $sortie->setInfos($p['params']['infos']);
-        } else {
-            $sortie->setDebut(new \DateTime());
-            $sortie->setLimiteInscription(new \DateTime());
         }
         
         if($lieu){
