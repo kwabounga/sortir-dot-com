@@ -93,14 +93,57 @@ class SortieController extends CommonController {
     /**
      * @Route("/modifier/{id}", name="sortie_modifier", requirements={"id": "\d+"})
      */
-    public function modifierSortie(SortieRepository $sortieRepo, $id) {
-        $sortie = $sortieRepo->find($id);
-
-        return $this->render('sortie/modifier_sortie.html.twig', [
-            'sortie' => $sortie,
-            // 'routes' => $this->getAllRoutes(),
-            'title' => 'Sortie '. $sortie->getNom(),
+    public function modifierSortie(EntityManagerInterface $em, $id, Request $request, $lieu = null) {
+        $sortie = $em->getRepository(Sortie::class)->find($id);
+        
+        $p = $request->query->all();
+        
+        if (!empty($p)) {
+            $sortie->setNom($p['params']['nom']);
+            $sortie->setDebut(new \DateTime($p['params']['debut']['date']));
+            $sortie->setDuree(new \DateTime($p['params']['duree']['date']));
+            $sortie->setLimiteInscription(new \DateTime($p['params']['limiteInscription']['date']));
+            $sortie->setInscriptionMax($p['params']['inscriptionMax']);
+            $sortie->setInfos($p['params']['infos']);
+        } else {
+            $sortie->setDebut(new \DateTime());
+            $sortie->setLimiteInscription(new \DateTime());
+        }
+        
+        if($lieu){
+            $sortie->setLieu($em->getRepository(Lieu::class)->find($lieu));
+        }
+        $sortieForm = $this->createForm(SortieType::class, $sortie, [
+            'user' => $this->getUser(),
         ]);
+        $sortieForm->handleRequest($request);
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+            $sortie->setOrganisateur($this->getUser());
+            $sortie->setCampus($this->getUser()->getCampus());
+            
+            if ($sortieForm->get('save')->isClicked()) {
+                $em->persist($sortie);
+                $em->flush();
+                return $this->redirectToRoute('sortie_modifier', ['id' => $sortie->getId()]);
+            } elseif ($sortieForm->get('publish')->isClicked()) {
+                $sortie->setEtat($this->getDoctrine()->getRepository(Etat::class)->find(2));
+                $em->persist($sortie);
+                $em->flush();
+                return $this->redirectToRoute('home');
+            } else {
+                return $this->redirectToRoute('home');
+            }
+           
+            
+        } else {
+            return $this->render('sortie/modifier_sortie.html.twig', [
+                'page_name' => 'Modification d\'une sortie',
+                'sortie_form' => $sortieForm->createView(),
+                'user' => $this->getUser(),
+                'title' => 'Modification de Sortie',
+                'sortie' => $sortie,
+            ]);
+        }
     }
 
     /**
