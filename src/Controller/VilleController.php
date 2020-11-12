@@ -102,10 +102,12 @@ class VilleController extends CommonController {
         $params = $request->query->all();
         $villeForm = $this->createForm(VilleType::class, $ville, []);
         $villeForm->handleRequest($request);
+        dump($params);
         if ($villeForm->isSubmitted() && $villeForm->isValid()) {
             $em->persist($ville);
             $em->flush();
-            return $this->redirectToRoute('lieu_ajouter',['ville'=>$ville->getId()]);
+            $params['ville'] = $ville->getId();
+            return $this->redirectToRoute('lieu_ajouter', $params);
         } else {
             return $this->render('ville/ajouter_ville.html.twig', [
                 'page_name' => 'Création d\'une ville',

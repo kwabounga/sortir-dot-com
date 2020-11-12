@@ -23,18 +23,37 @@ class LieuController extends CommonController
     public function ajouterLieu(EntityManagerInterface $em, Request $request, $ville = null) {
         $lieu = new Lieu();
         $params = $request->query->all();
-        if (array_key_exists('debut', $params)) {
+        if (is_string($params['debut'])) {
             $params['debut'] = date_create_from_format('j/n/Y G:s', $params['debut']);
             $params['duree'] = date_create_from_format('G:s', $params['duree']);
             $params['limiteInscription'] = date_create_from_format('j/n/Y G:s', $params['limiteInscription']);
         }
+        
+        if (array_key_exists('lieu_nom', $params)) {
+            if ($params['lieu_lat'] == '') {
+                $params['lieu_lat'] = null;
+            }
+            if ($params['lieu_lon'] == '') {
+                $params['lieu_lon'] = null;
+            }
+            $lieu->setNom( $params['lieu_nom']);
+            $lieu->setRue( $params['lieu_rue']);
+            $lieu->setLatitude($params['lieu_lat']);
+            $lieu->setLongitude($params['lieu_lon']);
+        }
+            
+        if ($ville) {
+            $lieu->setVille($em->getRepository(Ville::class)->find($ville));
+        }
 
         $lieuForm = $this->createForm(LieuType::class, $lieu, []);
         $lieuForm->handleRequest($request);
+        dump($params);
         if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
             $em->persist($lieu);
             $em->flush();
-            return $this->redirectToRoute('sortie_ajouter',['lieu'=>$lieu->getId(), 'params' => $params]);
+            $params['lieu'] = $lieu->getId();
+            return $this->redirectToRoute('sortie_ajouter', $params);
         } else {
             return $this->render('lieu/ajouter_lieu.html.twig', [
                 'page_name' => 'Création d\'un lieu',
