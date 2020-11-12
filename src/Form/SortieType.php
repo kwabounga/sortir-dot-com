@@ -22,37 +22,79 @@ class SortieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom')
+            // Nom
+            ->add('nom', TextType::class, [
+                'label' => 'Nom',
+                'row_attr' => ['class' => 'form-row'],
+                'attr' => ['class' => 'col-12 col-sm-10'],
+                'label_attr' => ['class' => 'col-12 col-sm-2'],
+            ])
+
+            // Date de début
             ->add('debut', DateTimeType::class, [
+                'date_widget' => 'single_text',
+                'date_format' => 'yyyy-MM-dd',
+                'time_widget' => 'single_text',
                 'label' => 'Débute le',
                 'required' => true,
-                'widget' => 'choice',
-                'format' => 'dd/MM/yyyy',
+                // 'widget' => 'choice',
+                // 'format' => 'dd/MM/yyyy',
             ])
+
+            // Durée
             ->add('duree', TimeType::class, [
+                'widget' => 'single_text',
                 'label' => 'Durée',
+                'row_attr' => ['class' => 'form-row'],
+                'attr' => ['class' => 'col-12 col-sm-10'],
+                'label_attr' => ['class' => 'col-12 col-sm-2'],
                 'required' => true,
             ])
+
+            // Date limite d'inscription
             ->add('limiteInscription', DateTimeType::class, [
+                'date_widget' => 'single_text',
+                'date_format' => 'yyyy-MM-dd',
+                'time_widget' => 'single_text',
                 'label' => 'Limite inscription',
                 'required' => true,
-                'widget' => 'choice',
-                'format' => 'dd/MM/yyyy',
             ])
+
+            // Nombre maximum d'incription
             ->add('inscriptionMax', IntegerType::class, [
+                'row_attr' => ['class' => 'form-row'],
+                'attr' => ['class' => 'col-12 col-sm-10'],
+                'label_attr' => ['class' => 'col-12 col-sm-2'],
                 'required' => true,
                 'data' => '20'
             ])
-            ->add('infos', TextareaType::class)
+
+            // Campus
             ->add('campus', TextType::class, [
+                'row_attr' => ['class' => 'form-row'],
+                'attr' => ['class' => 'col-12 col-sm-10'],
+                'label_attr' => ['class' => 'col-12 col-sm-2'],
                 'data' => $options['user']->getCampus()->getNom(),
                 'disabled' => true,
             ])
+
+            // Lieu
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
                 'choice_value' => 'id',
+                'attr' => ['class' => 'col-12 col-sm-10'],
+                'label_attr' => ['class' => 'col-12 col-sm-2'],
             ])
+
+            // Description
+            ->add('infos', TextareaType::class, [
+                'row_attr' => ['class' => 'form-row'],
+                'attr' => ['class' => 'col-12 col-sm-10'],
+                'label_attr' => ['class' => 'col-12 col-sm-2'],
+                'label' => 'Infos'
+            ])
+
             ->add('save', SubmitType::class, [
                 'attr' => ['class' => 'save bg-success'],
                 'label' => 'Enregistrer',
