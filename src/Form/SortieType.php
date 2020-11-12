@@ -21,8 +21,6 @@ class SortieType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $date = new \DateTime();
-        $date->modify('+1 day');
         $builder
             ->add('nom')
             ->add('debut', DateTimeType::class, [
@@ -30,7 +28,6 @@ class SortieType extends AbstractType
                 'required' => true,
                 'widget' => 'choice',
                 'format' => 'dd/MM/yyyy',
-                'data' => $date,
             ])
             ->add('duree', TimeType::class, [
                 'label' => 'Durée',
@@ -41,7 +38,6 @@ class SortieType extends AbstractType
                 'required' => true,
                 'widget' => 'choice',
                 'format' => 'dd/MM/yyyy',
-                'data' => new \DateTime(),
             ])
             ->add('inscriptionMax', IntegerType::class, [
                 'required' => true,
