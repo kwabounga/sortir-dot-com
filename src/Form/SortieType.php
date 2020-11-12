@@ -37,8 +37,6 @@ class SortieType extends AbstractType
                 'time_widget' => 'single_text',
                 'label' => 'Débute le',
                 'required' => true,
-                // 'widget' => 'choice',
-                // 'format' => 'dd/MM/yyyy',
             ])
 
             // Durée

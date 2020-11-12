@@ -23,11 +23,8 @@ class LieuController extends CommonController
     public function ajouterLieu(EntityManagerInterface $em, Request $request, $ville = null) {
         $lieu = new Lieu();
         $params = $request->query->all();
-        if (is_string($params['debut'])) {
-            $params['debut'] = date_create_from_format('j/n/Y G:s', $params['debut']);
-            $params['duree'] = date_create_from_format('G:s', $params['duree']);
-            $params['limiteInscription'] = date_create_from_format('j/n/Y G:s', $params['limiteInscription']);
-        }
+
+        dump($request->getRequestUri());
         
         if (array_key_exists('lieu_nom', $params)) {
             if ($params['lieu_lat'] == '') {
@@ -48,7 +45,7 @@ class LieuController extends CommonController
 
         $lieuForm = $this->createForm(LieuType::class, $lieu, []);
         $lieuForm->handleRequest($request);
-        dump($params);
+
         if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
             $em->persist($lieu);
             $em->flush();

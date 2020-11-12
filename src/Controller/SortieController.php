@@ -45,10 +45,13 @@ class SortieController extends CommonController {
         $date->modify('+1 day');
        	
         if (!empty($p)) {
+            dump($p);
             $sortie->setNom($p['nom']);
-            $sortie->setDebut(new \DateTime($p['debut']['date']));
-            $sortie->setDuree(new \DateTime($p['duree']['date']));
-            $sortie->setLimiteInscription(new \DateTime($p['limiteInscription']['date']));
+            $sortie->setDebut(new \DateTime($p['debut']));
+            if ($p['duree'] !== '') {
+                $sortie->setDuree(new \DateTime($p['duree']));
+            }
+            $sortie->setLimiteInscription(new \DateTime($p['limiteInscription']));
             $sortie->setInscriptionMax($p['inscriptionMax']);
             $sortie->setInfos($p['infos']);
         } else {
@@ -105,9 +108,11 @@ class SortieController extends CommonController {
         
         if (!empty($p)) {
             $sortie->setNom($p['params']['nom']);
-            $sortie->setDebut(new \DateTime($p['params']['debut']['date']));
-            $sortie->setDuree(new \DateTime($p['params']['duree']['date']));
-            $sortie->setLimiteInscription(new \DateTime($p['params']['limiteInscription']['date']));
+            $sortie->setDebut(new \DateTime($p['params']));
+            if ($p['duree'] !== '') {
+                $sortie->setDuree(new \DateTime($p['duree']));
+            }
+            $sortie->setLimiteInscription(new \DateTime($p['params']));
             $sortie->setInscriptionMax($p['params']['inscriptionMax']);
             $sortie->setInfos($p['params']['infos']);
         }

@@ -4,7 +4,7 @@
 
 {% block header %}
 	<div class="jumbotron my-4">
-		<h1 class="display-3">{{ title | capitalize | default('Créer une sortie') }}</h1>
+		<h1>{{ title | capitalize | default('Créer une sortie') }}</h1>
 		<p class="lead">Créer un événement et inviter vos amis</p>
 {#		<a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
 	</div>
@@ -13,30 +13,8 @@
 {% block body %}
 	{{ form_start(sortie_form) }}
 
-{#	<div class="form-group row" id="">#}
-{#		<div class="col-sm-2 col-form-label">#}
-{#			{{ form_label(sortie_form.nom) }}#}
-{#		</div>#}
-{#		<div class="col-sm-10">#}
-{#			<input type="text" class="form-control "id="sortie_nom" name="sortie[nom]" required="required" maxlength="100">#}
-{#			#}{#{{ form_widget(sortie_form.nom) }}#}
-{#			{{ form_errors(sortie_form.nom) }}#}
-{#		</div>#}
-{#	</div>#}
-
 	{# Nom #}
 	{{ form_row(sortie_form.nom) }}
-	{# <div class="form-row form-group">
-    	<div class="col-12 col-sm-2">
-    		{{ form_label(sortie_form.nom) }}
-        </div>
-        <div class="col-12 col-sm-10">
-    		{{ form_widget(sortie_form.nom) }}
-        </div>
-        <div class="col-12 offset-sm-2 col-sm-10">
-    		{{ form_errors(sortie_form.nom) }}
-        </div>
-	</div>  #}
 
 	{# Date de début #}
 	<div class="form-row form-group">
@@ -56,17 +34,6 @@
 
 	{# Durée #}
 	{{ form_row(sortie_form.duree) }}
-	{# <div class="form-row form-group">
-    	<div class="col-sm-2">
-    		{{ form_label(sortie_form.duree) }}
-        </div>
-        <div class="col-sm-10">
-    		{{ form_widget(sortie_form.duree) }}
-        </div>
-        <div class="col-sm-3">
-    		{{ form_errors(sortie_form.duree) }}
-        </div>
-	</div> #}
 
 	{# Date limite d'inscription #}
 	<div class="form-row form-group">
@@ -86,31 +53,9 @@
 
 	{# Nombre max d'inscription #}
 	{{ form_row(sortie_form.inscriptionMax) }}
-	{# <div class="row">
-    		<div class="col-sm-2">
-    			{{ form_label(sortie_form.inscriptionMax) }}
-        	</div>
-        	<div class="col-sm-10">
-    			{{ form_widget(sortie_form.inscriptionMax) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(sortie_form.inscriptionMax) }}
-        	</div>
-	</div> #}
 
 	{# Campus #}
 	{{ form_row(sortie_form.campus) }}
-	{# <div class="row">
-    		<div class="col-sm-2">
-    			{{ form_label(sortie_form.campus) }}
-        	</div>
-        	<div class="col-sm-10">
-    			{{ form_widget(sortie_form.campus) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(sortie_form.campus) }}
-        	</div>
-	</div> #}
 
 	{# Lieu #}
 	<div class="form-row form-group input-group">
@@ -126,35 +71,8 @@
         </div>
 	</div>
 
-	{# <div class="row">
-    		<div class="col-sm-2">
-    			{{ form_label(sortie_form.lieu) }}
-        	</div> #}
-{#		TODO: ici pas bon  faire un fonction js et prendre les infos au moment 't'#}
-        	{# <div class="col-sm-10">
-    			{{ form_widget(sortie_form.lieu) }}
-    			<button class="btn btn-sm btn-success " type="button" onclick="ajouterLieu('{{ path('lieu_ajouter') }}');">
-    				<i class="fas fa-plus-circle"></i>
-    			</button>
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(sortie_form.lieu) }}
-        	</div>
-	</div> #}
-
 	{# Description #}
 	{{ form_row(sortie_form.infos) }}
-	{# <div class="row">
-    		<div class="col-sm-2">
-    			{{ form_label(sortie_form.infos) }}
-        	</div>
-        	<div class="col-sm-10">
-    			{{ form_widget(sortie_form.infos) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(sortie_form.infos) }}
-        	</div>
-	</div> #}
 
 	{# Boutons #}
 	<div class="row justify-content-center">
@@ -178,70 +96,26 @@
 {% endblock %}
 {% block javascripts %}
 	<script>
-		// document.getElementById('sortie_lieu').style="display: inline-block; width:96%;"
-			
     	function ajouterLieu(url) {
 	    	var nom = document.getElementById('sortie_nom').value;
-	    	
-	    	// var debutMonth = document.getElementById('sortie_debut_date_month').value;
-	    	// var debutDay = document.getElementById('sortie_debut_date_day').value;
-	    	// var debutYear = document.getElementById('sortie_debut_date_year').value;
-	    	// var debutHour = document.getElementById('sortie_debut_time_hour').value;
-	    	// var debutMinute = document.getElementById('sortie_debut_time_minute').value;
 
-			var dateDebut = document.getElementById('sortie_debut_date').value.split('-').reverse().join('/');;
+			var dateDebut = document.getElementById('sortie_debut_date').value;
 			var timeDebut = document.getElementById('sortie_debut_time').value;
-
-			console.log('Date début', dateDebut);
-			console.log('Heure début', timeDebut);
-
-			// var dureeHour = document.getElementById('sortie_duree_hour').value;
-			// var dureeMinute = document.getElementById('sortie_duree_minute').value;
+			var debut = dateDebut + ' ' + timeDebut;
 
 			var duree = document.getElementById('sortie_duree').value;
-			console.log('Durée', duree)
 
-			// var limiteInscriptionMonth = document.getElementById('sortie_limiteInscription_date_month').value;
-			// var limiteInscriptionDay = document.getElementById('sortie_limiteInscription_date_day').value;
-			// var limiteInscriptionYear = document.getElementById('sortie_limiteInscription_date_year').value;
-			// var limiteInscriptionHour = document.getElementById('sortie_limiteInscription_time_hour').value;
-			// var limiteInscriptionMinute = document.getElementById('sortie_limiteInscription_time_minute').value;
-
-			var dateLimiteIns = document.getElementById('sortie_limiteInscription_date').value.split('-').reverse().join('/');
+			var dateLimiteIns = document.getElementById('sortie_limiteInscription_date').value;
 			var timeLimiteIns = document.getElementById('sortie_limiteInscription_time').value;
-
-			console.log('date inscription', dateLimiteIns);
-			console.log('Heure inscription', timeLimiteIns);
+			var limiteInscription = dateLimiteIns + ' ' + timeLimiteIns;
 
 			var inscriptionMax = document.getElementById('sortie_inscriptionMax').value;
 
 			var infos = document.getElementById('sortie_infos').value;
 
-			// if (debutMinute < 10 ) {
-			// 	debutMinute = '0' + debutMinute;
-			// }
-			// var debut = debutDay + '/' + debutMonth + '/' + debutYear + ' ' + debutHour + ':' + debutMinute;
-			var debut = dateDebut + ' ' + timeDebut;
-			console.log(debut);
-
-			// if (dureeMinute < 10 ) {
-			// 	dureeMinute = '0' + dureeMinute;
-			// }
-			// var duree = dureeHour + ':' + dureeMinute;
-
-			// if (limiteInscriptionMinute < 10 ) {
-			// 	limiteInscriptionMinute = '0' + limiteInscriptionMinute;
-			// }
-			// var limiteInscription = limiteInscriptionDay + '/' + limiteInscriptionMonth + '/' + limiteInscriptionYear + ' ' 
-			// 							+ limiteInscriptionHour + ':' + limiteInscriptionMinute;
-
-			var limiteInscription = dateLimiteIns + ' ' + timeLimiteIns;
-			console.log(limiteInscription);
-
 			var parametres = 'nom=' + nom + '&' + 'debut=' + debut + '&' + 'duree=' + duree + '&' + 'limiteInscription=' + limiteInscription + '&' 
 										+ 'inscriptionMax=' + inscriptionMax + '&' + 'infos=' + infos;
 			
-			// console.log(url + '?' + parametres);
 			window.location = url + '?' + parametres;
 
     	}
