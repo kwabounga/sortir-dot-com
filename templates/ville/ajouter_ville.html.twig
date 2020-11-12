@@ -1,0 +1,37 @@
+ {% extends "base.html.twig" %}
+
+{% block title %} {{ parent()|default('Sortie') }} {% endblock %}
+
+{% block header %}
+	<div class="jumbotron my-4">
+		<h1 class="display-3">{{ title | capitalize | default('Créer un lieu') }}</h1>
+		<p class="lead">Créer un lieu</p>
+{#		<a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
+	</div>
+{% endblock %}
+
+{% block body %}
+ 
+ <form name="ville" method="post">
+            <table id="table_add_sortie" class="table table-light">
+                <tbody>
+                <tr>
+                    <td>{{form_row(ville_form.nom)}}</td>
+                    <td>{{form_row(ville_form.codePostal)}}</td>
+                    <td>{{form_row(ville_form.latitude)}}</td>
+                    <td>{{form_row(ville_form.longitude)}}</td>
+                    <td>
+{#                        <a class="btn btn-sm btn-outline-dark" href="javascript:void(0)" onclick="addVille()">Ajouter</a>
+                        <a class="btn btn-sm btn-info" id="viewInMapBox" onclick="viewInMapBox()">view</a>#}
+                        <button class="btn btn-sm btn-success" type="submit" >Ajouter</button>
+                        <div class="col-sm-6">
+							<input class="btn btn-warning" type="button" onclick="location.href='{{ path('lieu_ajouter', params) }}';" value="Annuler" />
+						</div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            {{form_end(ville_form)}}
+        </form>
+        
+{% endblock %}

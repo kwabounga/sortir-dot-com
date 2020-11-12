@@ -43,14 +43,14 @@ class SortieController extends CommonController {
         
         $date = new \DateTime();
         $date->modify('+1 day');
-        
+       	
         if (!empty($p)) {
-            $sortie->setNom($p['params']['nom']);
-            $sortie->setDebut(new \DateTime($p['params']['debut']['date']));
-            $sortie->setDuree(new \DateTime($p['params']['duree']['date']));
-            $sortie->setLimiteInscription(new \DateTime($p['params']['limiteInscription']['date']));
-            $sortie->setInscriptionMax($p['params']['inscriptionMax']);
-            $sortie->setInfos($p['params']['infos']);
+            $sortie->setNom($p['nom']);
+            $sortie->setDebut(new \DateTime($p['debut']['date']));
+            $sortie->setDuree(new \DateTime($p['duree']['date']));
+            $sortie->setLimiteInscription(new \DateTime($p['limiteInscription']['date']));
+            $sortie->setInscriptionMax($p['inscriptionMax']);
+            $sortie->setInfos($p['infos']);
         } else {
             $sortie->setDebut($date);
             $sortie->setLimiteInscription(new \DateTime());
