@@ -73,37 +73,11 @@
             var fr = new FileReader();
             fr.onload = imageHandler;
             fr.readAsDataURL(filename);
-            //console.log(document.getElementById("register_photo").files[0])
-            //handleFiles(document.getElementById("register_photo").files[0]);
-
         }
         function imageHandler(event)
         {
             document.getElementById('image').innerHTML = '<img class="img img-responsive full-width" src="' + event.target.result +'">';
 
-        }
-        function handleFiles(file) {
-            var imageType = /^image\//;
-            // var file = files[i];
-            if (!imageType.test(file.type)) {
-                alert("veuillez sélectionner une image");
-            }else{
-                document.getElementById('image').innerHTML = '';
-                var img = document.createElement("img");
-                img.classList.add("obj");
-                img.file = file;
-                document.getElementById('image').innerHTML = img;
-                var reader = new FileReader();
-                reader.onload = ( function(aImg) {
-                    return function(e) {
-                        console.log(e)
-                        aImg.src = e.target.result;
-                    };
-                })(img);
-
-                reader.readAsDataURL(file);
-            }
-            console.log(file)
         }
     </script>
 {% endblock %}
