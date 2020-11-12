@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\CommonController;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,6 +44,20 @@ class LieuController extends CommonController
         }
         
         
+    }
+    /**
+     * @Route("/get/location", name="lieu_location", methods={"POST"})
+     */
+    public function locationLieu(EntityManagerInterface $em, Request $request) {
+        dump($request->query->all());
+        dump($request->request->all());
+        $l = $em->getRepository(Lieu::class)->find($request->request->all()['id']);
+        if($l){
+            return new JsonResponse(['lat'=>$l->getLatitude(), 'lng'=>$l->getLongitude()]);
+        }
+            return new JsonResponse(['lat'=>42.01212, 'lng'=>-1.1234]);
+
+
     }
     
 }

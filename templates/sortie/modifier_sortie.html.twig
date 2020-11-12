@@ -13,137 +13,135 @@
 {% block body %}
 	{{ form_start(sortie_form) }}
 
-{#	<div class="form-group row" id="">#}
-{#		<div class="col-sm-2 col-form-label">#}
-{#			{{ form_label(sortie_form.nom) }}#}
-{#		</div>#}
-{#		<div class="col-sm-10">#}
-{#			<input type="text" class="form-control "id="sortie_nom" name="sortie[nom]" required="required" maxlength="100">#}
-{#			#}{#{{ form_widget(sortie_form.nom) }}#}
-{#			{{ form_errors(sortie_form.nom) }}#}
-{#		</div>#}
-{#	</div>#}
-	<div class="row" id="">
-    		<div class="col-sm-2">
-    			{{ form_label(sortie_form.nom) }}
-        	</div>
-        	<div class="col-sm-10">
-    			{{ form_widget(sortie_form.nom) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(sortie_form.nom) }}
-        	</div>
-	</div>
-	<div class="row">
-    		<div class="col-sm-2">
-    			{{ form_label(sortie_form.debut) }}
-        	</div>
-        	<div class="col-sm-10">
-    			{{ form_widget(sortie_form.debut) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(sortie_form.debut) }}
-        	</div>
-	</div>
-	<div class="row">
-    		<div class="col-sm-2">
-    			{{ form_label(sortie_form.duree) }}
-        	</div>
-        	<div class="col-sm-10">
-    			{{ form_widget(sortie_form.duree) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(sortie_form.duree) }}
-        	</div>
-	</div>
-	<div class="row">
-    		<div class="col-sm-2">
-    			{{ form_label(sortie_form.limiteInscription) }}
-        	</div>
-        	<div class="col-sm-10">
-    			{{ form_widget(sortie_form.limiteInscription) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(sortie_form.limiteInscription) }}
-        	</div>
-	</div>
-	<div class="row">
-    		<div class="col-sm-2">
-    			{{ form_label(sortie_form.inscriptionMax) }}
-        	</div>
-        	<div class="col-sm-10">
-    			{{ form_widget(sortie_form.inscriptionMax) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(sortie_form.inscriptionMax) }}
-        	</div>
-	</div>
-	<div class="row">
-    		<div class="col-sm-2">
-    			{{ form_label(sortie_form.campus) }}
-        	</div>
-        	<div class="col-sm-10">
-    			{{ form_widget(sortie_form.campus) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(sortie_form.campus) }}
-        	</div>
-	</div>
-	<div class="row">
-    		<div class="col-sm-2">
-    			{{ form_label(sortie_form.lieu) }}
-        	</div>
-{#		TODO: ici pas bon  faire un fonction js et prendre les infos au moment 't'#}
-        	<div class="col-sm-10">
-    			{{ form_widget(sortie_form.lieu) }}
-    			<button class="btn btn-sm btn-success " type="button" onclick="ajouterLieu('{{ path('lieu_ajouter') }}');">
-    				<i class="fas fa-plus-circle"></i>
-    			</button>
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(sortie_form.lieu) }}
-        	</div>
-	</div>
-	<div class="row">
-    		<div class="col-sm-2">
-    			{{ form_label(sortie_form.infos) }}
-        	</div>
-        	<div class="col-sm-10">
-    			{{ form_widget(sortie_form.infos) }}
-        	</div>
-        	<div class="col-sm-3">
-    			{{ form_errors(sortie_form.infos) }}
-        	</div>
-	</div>
-	<div class="row">
-    		<div class="col-sm-2">
-    			{{ form_row(sortie_form.save) }}
-{#				<div class="form-group"><button type="submit" class="save btn btn-success">Enregistrer</button></div>#}
-        	</div>
-        	<div class="col-sm-2" {% if sortie.etat.id == 2 %}hidden{% endif %}>
-    			{{ form_row(sortie_form.publish) }}
-{#				<div class="form-group"><button type="submit"  class="publish btn btn-warning">Publier</button></div>#}
-        	</div>
-        	
-        	{% if sortie.etat.libelle in ['ouverte', 'clôturée'] %}
-        		<div class="col-sm-2">
-                    <button type="button" class="btn btn-light"
-                            onClick="annulerSortie('{{ path('sortie_api_annuler') }}', {{ sortie.id }}, 'PUT')">
-                        Annuler
-                    </button>
-        		</div>
-            {% endif %}
-        	<div class="col-sm-2">
-    			<input class="publish btn btn-danger"  type="button" onclick="location.href='{{ path('home') }}';" value="Retour" />
-        	</div>
-        	
-	</div>
-    {{ form_end(sortie_form) }}
+	<div class="form-group row" id="">
+		<div class="col-sm-6">
+			<div class="row" id="">
+				<div class="col-sm-2">
+					{{ form_label(sortie_form.nom) }}
+				</div>
+				<div class="col-sm-10">
+					{{ form_widget(sortie_form.nom) }}
+				</div>
+				<div class="col-sm-3">
+					{{ form_errors(sortie_form.nom) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					{{ form_label(sortie_form.debut) }}
+				</div>
+				<div class="col-sm-10">
+					{{ form_widget(sortie_form.debut) }}
+				</div>
+				<div class="col-sm-3">
+					{{ form_errors(sortie_form.debut) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					{{ form_label(sortie_form.duree) }}
+				</div>
+				<div class="col-sm-10">
+					{{ form_widget(sortie_form.duree) }}
+				</div>
+				<div class="col-sm-3">
+					{{ form_errors(sortie_form.duree) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					{{ form_label(sortie_form.limiteInscription) }}
+				</div>
+				<div class="col-sm-10">
+					{{ form_widget(sortie_form.limiteInscription) }}
+				</div>
+				<div class="col-sm-3">
+					{{ form_errors(sortie_form.limiteInscription) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					{{ form_label(sortie_form.inscriptionMax) }}
+				</div>
+				<div class="col-sm-10">
+					{{ form_widget(sortie_form.inscriptionMax) }}
+				</div>
+				<div class="col-sm-3">
+					{{ form_errors(sortie_form.inscriptionMax) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					{{ form_label(sortie_form.campus) }}
+				</div>
+				<div class="col-sm-10">
+					{{ form_widget(sortie_form.campus) }}
+				</div>
+				<div class="col-sm-3">
+					{{ form_errors(sortie_form.campus) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					{{ form_label(sortie_form.lieu) }}
+				</div>
+				{#		TODO: ici pas bon  faire un fonction js et prendre les infos au moment 't'#}
+				<div class="col-sm-10">
+					{{ form_widget(sortie_form.lieu) }}
+					<button class="btn btn-sm btn-success " type="button" onclick="ajouterLieu('{{ path('lieu_ajouter') }}');">
+						<i class="fas fa-plus-circle"></i>
+					</button>
+				</div>
+				<div class="col-sm-3">
+					{{ form_errors(sortie_form.lieu) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					{{ form_label(sortie_form.infos) }}
+				</div>
+				<div class="col-sm-10">
+					{{ form_widget(sortie_form.infos) }}
+				</div>
+				<div class="col-sm-3">
+					{{ form_errors(sortie_form.infos) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-2">
+					{{ form_row(sortie_form.save) }}
+					{#				<div class="form-group"><button type="submit" class="save btn btn-success">Enregistrer</button></div>#}
+				</div>
+				<div class="col-sm-2" {% if sortie.etat.id == 2 %}hidden{% endif %}>
+					{{ form_row(sortie_form.publish) }}
+					{#				<div class="form-group"><button type="submit"  class="publish btn btn-warning">Publier</button></div>#}
+				</div>
 
-	{# Carte #}
-	<div class="col-12 col-xl-6 mb-4">
-		<div id='map-static' style='width: 100%; height: 300px;'></div>
+				{% if sortie.etat.libelle in ['ouverte', 'clôturée'] %}
+					<div class="col-sm-2">
+						<button type="button" class="btn btn-light"
+								onClick="annulerSortie('{{ path('sortie_api_annuler') }}', {{ sortie.id }}, 'PUT')">
+							Annuler
+						</button>
+					</div>
+				{% endif %}
+				<div class="col-sm-2">
+					<input class="publish btn btn-danger"  type="button" onclick="location.href='{{ path('home') }}';" value="Retour" />
+				</div>
+
+			</div>
+			{{ form_end(sortie_form) }}
+		</div>
+
+
+		<div class="col-12 col-xl-6 mb-4">
+			<div id='map-static' style='width: 100%; height: 300px;'></div>
+		</div>
+
 	</div>
+
+
+
 
 
 {% endblock %}
@@ -196,6 +194,8 @@
 			window.location = url + '?' + parametres;
 
     	}
+		let map;
+		let marker;
 		$(document).ready(() => {
 			/* displayer MapBox part begin */
 			// donne le id token de mapBox pour pouvoir l'utiliser
@@ -203,14 +203,14 @@
 			// créer un obj de coordonnées
 			let coord = {lat:'{{ sortie.lieu.latitude }}',lng:'{{ sortie.lieu.longitude }}'}
 			// initalisation de la map mapBox
-			let map = new mapboxgl.Map({
+			map = new mapboxgl.Map({
 				container: 'map-static',
 				style: 'mapbox://styles/mapbox/dark-v10', // stylesheet location
 				center: [coord.lng, coord.lat], // starting position [lng, lat]
 				zoom: 14.503774413768701, // starting zoom
 			});
 			// ajout du marqueur
-			let marker = new mapboxgl.Marker()
+			marker = new mapboxgl.Marker()
 					.setLngLat([coord.lng, coord.lat])
 					.addTo(map);
 			// empecher l'utilisateur de tourner la map
@@ -227,7 +227,38 @@
 
 			});
 			/* displayer MapBox part end */
+			document.getElementById('sortie_lieu').addEventListener("change", onChange,true);
 		});
+		function onChange(event) {
+			console.log(document.getElementById('sortie_lieu').value)
+			let idLieu = document.getElementById('sortie_lieu').value;
+			$.ajax({
+				type: 'POST',
+				url: '{{ path('lieu_location') }}',
+				data: {
+					'id': idLieu
+				},
+				success: function(data) {
+					console.log(data);
+					marker.remove();
+					marker = new mapboxgl.Marker()
+							.setLngLat([data.lng, data.lat])
+							.addTo(map);
+					map.flyTo({
+						center: [
+							data.lng,
+							data.lat
+						],
+						essential: true // this animation is considered essential with respect to prefers-reduced-motion
+					});
+					//window.location.reload();
+				},
+				error: function(err) {
+					console.log('erreur', err);
+				}
+			});
+
+		}
 	</script>
 {% endblock %}
 
