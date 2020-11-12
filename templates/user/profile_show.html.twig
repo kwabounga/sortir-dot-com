@@ -32,6 +32,9 @@
                     </div>
                 </div>
             </div>
+            {%  if app.user.id == user.id %}
+                <a href="{{ path('profil', {'id': user.id}) }}" class="btn btn-success btn-lg">Modifier mon profil</a>
+            {% endif %}
             {% if is_granted('ROLE_ADMIN')%}
             {% if user.actif %}
                     <a href="{{ path('desactivateUser', {'id': user.id}) }}" class="btn btn-warning btn-lg">Desactiver</a>

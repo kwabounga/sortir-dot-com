@@ -8,10 +8,15 @@
             <h1 class="display-3">{{  title }}</h1>
             <p class="lead">Modification de votre profil</p>
             {#        <a href="#" class="btn btn-success btn-lg">bouton sample</a>#}
+    {{ form_start(register_form, { 'attr' : { 'id': 'register_form', 'class': 'form text-center'} }) }}
+            <div class="form-group row">
+                {{ form_label(register_form.photo) }}
+                {{ form_widget(register_form.photo) }}
+            </div>
         </div>
         <div class="col-sm-6 ">
         <div class="thumbnail img-thumbnail">
-            <div class="image">
+            <div class="image" id="image">
                 <img class="img img-responsive full-width" src="{{ asset('uploads/photo/') ~ user.id ~ '/' ~ user.photo }}">
             </div>
         </div>
@@ -22,7 +27,6 @@
 {% endblock %}
 
 {% block body  %}
-    {{ form_start(register_form, { 'attr' : { 'id': 'register_form', 'class': 'form text-center'} }) }}
 <form method="post" class="form text-center">
     <div class="form-group row">
     {{ form_label(register_form.username) }}
@@ -47,10 +51,8 @@
         {{ form_label(register_form.phone) }}
         {{ form_widget(register_form.phone) }}
     </div>
+
     <div class="form-group row">
-        {{ form_label(register_form.photo) }}
-        {{ form_widget(register_form.photo) }}
-    </div><div class="form-group row">
         {{ form_label(register_form.campus) }}
         {{ form_widget(register_form.campus,{'attr' : { 'disabled': 'true'}}) }}
     </div><div class="form-group row">
@@ -63,4 +65,47 @@
 {#    {{ form_end(register_form) }}#}
 </form>
 {% endblock %}
+{% block javascripts %}
+    <script>
+        document.getElementById('register_photo').addEventListener('change', onChange);
+        function onChange(event) {
+            var filename = event.target.files[0];
+            var fr = new FileReader();
+            fr.onload = imageHandler;
+            fr.readAsDataURL(filename);
+            //console.log(document.getElementById("register_photo").files[0])
+            //handleFiles(document.getElementById("register_photo").files[0]);
+
+        }
+        function imageHandler(event)
+        {
+            document.getElementById('image').innerHTML = '<img class="img img-responsive full-width" src="' + event.target.result +'">';
+
+        }
+        function handleFiles(file) {
+            var imageType = /^image\//;
+            // var file = files[i];
+            if (!imageType.test(file.type)) {
+                alert("veuillez sélectionner une image");
+            }else{
+                document.getElementById('image').innerHTML = '';
+                var img = document.createElement("img");
+                img.classList.add("obj");
+                img.file = file;
+                document.getElementById('image').innerHTML = img;
+                var reader = new FileReader();
+                reader.onload = ( function(aImg) {
+                    return function(e) {
+                        console.log(e)
+                        aImg.src = e.target.result;
+                    };
+                })(img);
+
+                reader.readAsDataURL(file);
+            }
+            console.log(file)
+        }
+    </script>
+{% endblock %}
+
 
