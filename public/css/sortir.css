@@ -188,3 +188,31 @@ body{
         display:none;
     }
 }
+#over {
+    position: absolute;
+    height: 300%;
+    width: 100%;
+    z-index: 100;
+    background-color: rgba(0,0,0,0.33);
+    overflow: hidden;
+}
+.box {
+
+    background-color: #dc2027;
+    margin-top: 10em;
+    padding: 5% 20px; /* Added a percentage value for top/bottom padding to keep the wrapper inside of the parent */
+
+    -webkit-transform: skewY(-15deg);
+    -moz-transform: skewY(-15deg);
+    -ms-transform: skewY(-15deg);
+    -o-transform: skewY(-15deg);
+    transform: skewY(-15deg);
+}
+
+.box > .wrapper {
+    -webkit-transform: skewY(15deg);
+    -moz-transform: skewY(15deg);
+    -ms-transform: skewY(15deg);
+    -o-transform: skewY(15deg);
+    transform: skewY(15deg);
+}

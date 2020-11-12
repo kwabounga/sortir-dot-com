@@ -34,10 +34,11 @@
             </div>
             {% if is_granted('ROLE_ADMIN')%}
             {% if user.actif %}
-                    <a href="{{ path('desactivateUser', {'id': user.id}) }}" class="btn btn-success btn-lg">Desactiver</a>
+                    <a href="{{ path('desactivateUser', {'id': user.id}) }}" class="btn btn-warning btn-lg">Desactiver</a>
                 {% else %}
                     <a href="{{ path('activateUser', {'id': user.id}) }}" class="btn btn-success btn-lg">Activer</a>
             {% endif %}
+                <a href="{{ path('desactivateUser', {'id': user.id}) }}" class="btn btn-danger btn-lg">Supprimer</a>
             {% endif %}
 
         </div>

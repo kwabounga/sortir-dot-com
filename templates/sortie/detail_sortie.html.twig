@@ -6,9 +6,22 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('js/jquery/jquery.dataTables.min.css') }}">
     <script type="text/javascript" src="{{ asset('js/jquery/jquery.dataTables.min.js') }}"></script>
 {% endblock %}
+{% block annulation %}
+    {% if not sortie.annulation == null  or sortie.etat.id == 5%}
+        <div class="container-fluid" id="{% if not is_granted('ROLE_ADMIN')%}over{% endif %}">
+            <div class="box bg-danger">
+                <div class="wrapper text-center">
+                    <h2 class="">ANNULEE</h2>
+                    <p class="jumbotron my-4 bg-danger">{{ sortie.annulation.motif | default('annulée par le createur')}}</p>
+                </div>
+            </div>
+        </div>
 
+    {% endif %}
+{% endblock %}
 {% block header %}
     {# Détail de la sortie #}
+
     <div class="jumbotron">
         <div class="row">
             <div class="col-12 col-lg-6">
@@ -65,11 +78,20 @@
                         S'inscrire
                     </button>
                 {% endif %}
+                {% if is_granted('ROLE_ADMIN')%}
+                    {% if not sortie.annulation == null %}
+                        <a href="{{ path('sortie_remettre', {'id': sortie.id}) }}" class="btn btn-success btn-lg">Remettre la Sortie</a>
+                    {% else %}
+                        <a href="{{ path('sortie_annuler', {'id': sortie.id}) }}" class="btn btn-danger btn-lg">Annuler la Sortie</a>
+                    {% endif %}
+
+                {% endif %}
             </p>
         </div>
 
         {# <a href="{{ path('sortie_modifier', {'id': sortie.id}) }}" class="btn btn-dark float-right">Modifier</a> #}
     </div>
+
 {% endblock %}
 
 {% block body %}
@@ -102,6 +124,7 @@
         <div class="col-12 col-xl-6 mb-4">
             <div id='map-static' style='width: 100%; height: 300px;'></div>
         </div>
+
     </div>
 
 {% endblock %}

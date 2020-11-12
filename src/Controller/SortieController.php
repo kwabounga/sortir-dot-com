@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Etat;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Entity\SortieAnnulees;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -102,10 +104,38 @@ class SortieController extends CommonController {
     }
 
     /**
+     * @Route("/remettre/{id}", name="sortie_remettre", requirements={"id": "\d+"})
+     */
+    public function remettreSortie(EntityManagerInterface $em, Request $request,SortieRepository $sortieRepo, $id) {
+        $sortie = $sortieRepo->find($id);
+        $sa = $sortie->getAnnulation();
+        $sortie->setAnnulation(null);
+        $sortie->setEtat($em->getRepository(Etat::class)->find(1));
+        $em->remove($sa);
+        $em->flush();
+        return $this->redirectToRoute('sortie_detail',['id'=>$id]);
+    }
+
+    /**
      * @Route("/annuler/{id}", name="sortie_annuler", requirements={"id": "\d+"})
      */
-    public function annulerSortie(SortieRepository $sortieRepo, $id) {
+    public function annulerSortie(EntityManagerInterface $em, Request $request,SortieRepository $sortieRepo, $id) {
         $sortie = $sortieRepo->find($id);
+        $params = $request->request->all();
+
+        if($params != []){
+            if($params['id'] == $id){
+                $sa = new SortieAnnulees();
+                $sa->setMotif($params['motif']);
+                $sortie->setAnnulation($sa);
+                $sortie->setEtat($em->getRepository(Etat::class)->find(5));
+                $em->persist($sortie);
+                $em->persist($sa);
+                $em->flush();
+                return new JsonResponse('ok');
+            }
+
+        }
 
         return $this->render('sortie/annuler_sortie.html.twig', [
             'sortie' => $sortie,

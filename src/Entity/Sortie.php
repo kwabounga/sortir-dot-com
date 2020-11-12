@@ -79,6 +79,28 @@ class Sortie
     */
     private $lieu;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\SortieAnnulees")
+     */
+    private $annulation;
+
+    /**
+     * @return mixed
+     */
+    public function getAnnulation()
+    {
+        return $this->annulation;
+    }
+
+    /**
+     * @param mixed $annulation
+     */
+    public function setAnnulation($annulation): void
+    {
+        $this->annulation = $annulation;
+    }
+
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();

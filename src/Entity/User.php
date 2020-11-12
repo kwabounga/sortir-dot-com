@@ -74,7 +74,7 @@ class User implements UserInterface
      */
     private $sorties;
     /**
-     * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
+     * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur", cascade={"remove"}, orphanRemoval=true)
      */
     private $sortiesOrganisees;
 

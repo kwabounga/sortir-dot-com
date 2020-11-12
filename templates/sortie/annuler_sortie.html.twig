@@ -1,8 +1,63 @@
 {% extends "base.html.twig" %}
 
 {% block title %} {{ parent() }} | Sortie {% endblock %}
+{% block javascripts %}
+    <script>
+        function actionSortie(url, idSortie, method) {
 
+            $.ajax({
+                type: method,
+                url: url,
+                data: {
+                    'id': idSortie,
+                    'motif': document.getElementById('sortie_annulee_motif').value,
+                },
+                success: function(data) {
+                    console.log('data');
+                    window.location = '../../sortie/'+idSortie;
+                },
+                error: function(err) {
+                    console.log('erreur', err);
+                }
+            });
+        }
+    </script>
+{% endblock %}
 
+{% block header %}
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <div class="row">
+                <div class="col-6"><b>Nom de la sotie : </b></div>
+                <div class="col-6">{{ sortie.nom }}</div>
+            </div>
+            <div class="row">
+                <div class="col-6"><b>Date de la sotie : </b></div>
+                <div class="col-6">{{ sortie.debut|date('d/m/Y à H:i') }}</div>
+            </div>
+            <div class="row">
+                <div class="col-6"><b>Campus : </b></div>
+                <div class="col-6">{{ sortie.organisateur.campus.nom }}</div>
+            </div>
+            <div class="row">
+                <div class="col-6"><b>lieu : </b></div>
+                <div class="col-6">{{ sortie.lieu.rue|capitalize }} {{ sortie.lieu.ville.codePostal }} {{ sortie.lieu.ville.nom |capitalize }}</div>
+            </div>
+            <button onclick="actionSortie('{{ path('sortie_annuler', {'id': sortie.id}) }}', {{ sortie.id }}, 'POST')" class="btn btn-danger btn-lg">Annuler la Sortie</button>
+            <a href="{{ path('sortie_detail', {'id': sortie.id}) }}" class="btn btn-success btn-lg">Retourner vers detail</a>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="row">
+                <div class="col-12"><b>Motif : </b></div>
+                <div class="col-12"><textarea id="sortie_annulee_motif" name="sortie_annulee[motif]" required="required" class="form-control" rows="7"></textarea></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
 {% block body %}
     Annuler sortie
 {% endblock %}
