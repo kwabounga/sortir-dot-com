@@ -73,7 +73,7 @@ class MainController extends CommonController {
         }
 
         $listeSorties = $sortieRepo->findSortieFiltre($filtre, $user->getId());
-        RefreshEtatService::refresh($listeSorties, $etatRepo, $em);
+        RefreshEtatService::refreshListSortie($listeSorties, $etatRepo, $em);
 
         return $this->render('main/home.html.twig',
             [

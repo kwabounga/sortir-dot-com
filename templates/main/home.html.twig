@@ -89,6 +89,7 @@
             </tr>
         </thead>
         <tbody>
+            {% set dateActuel = date("now") %}
             {% for sortie in listeSorties %}
                 <tr>
                     <td data-label="Nom">
@@ -123,17 +124,23 @@
                     </td>
                     <td>
                         {# Si la date de début n'est pas passé #}
-                        {% if sortie.debut|date('d/m/Y') > "now"|date('d/m/Y') %}
+                        {% if sortie.debut > dateActuel %}
 
                             {% if app.user.id == sortie.organisateur.id %}
-                                <a href="{{ path('sortie_modifier', {'id': sortie.id}) }}" class="btn btn-light">modifer</a>
+                                {% if sortie.etat.id ==  1 %}
+                                    <a href="{{ path('sortie_modifier', {'id': sortie.id}) }}" class="btn btn-light">modifer</a>
+                                {% else %}
+                                    <a href="{{ path('sortie_detail', {'id': sortie.id}) }}" class="btn btn-light">afficher</a>
+                                {% endif %}
 
-                                {% if sortie.etat.libelle == 'en creation' %}
-                                    <button type="button" class="btn btn-light"
-                                            onClick="actionSortie('{{ path('sortie_api_publier') }}', {{ sortie.id }}, 'PUT')">
-                                        Publier
-                                    </button>
-                                {% elseif sortie.etat.libelle in ['ouverte', 'clôturée'] %}
+                                {% if sortie.etat.id == 1 %}
+                                    {% if sortie.limiteInscription > dateActuel %}
+                                        <button type="button" class="btn btn-light"
+                                                onClick="actionSortie('{{ path('sortie_api_publier') }}', {{ sortie.id }}, 'PUT')">
+                                            Publier
+                                        </button>
+                                    {% endif %}
+                                {% elseif sortie.etat.id in [2, 3] %}
                                     <button type="button" class="btn btn-light"
                                             onClick="annulerSortie('{{ path('sortie_api_annuler') }}', {{ sortie.id }}, 'PUT')">
                                         Annuler
@@ -143,12 +150,12 @@
                                 <a href="{{ path('sortie_detail', {'id': sortie.id}) }}" class="btn btn-light">afficher</a>
                             {% endif %}
 
-                            {% if app.user in sortie.participants and sortie.etat.libelle in ['ouverte', 'clôturée'] %}
+                            {% if app.user in sortie.participants and sortie.etat.id in [2, 3] %}
                                 <button type="button" class="btn btn-light"
                                         onClick="actionSortie('{{ path('sortie_api_deinscription') }}', {{ sortie.id }}, 'DELETE')">
                                     Se désister
                                 </button>
-                            {% elseif sortie.etat.libelle == 'ouverte' %}
+                            {% elseif sortie.etat.id == 2 %}
                                 <button type="button" class="btn btn-light"
                                         onClick="actionSortie('{{ path('sortie_api_inscription') }}', {{ sortie.id }}, 'POST')">
                                     S'inscrire

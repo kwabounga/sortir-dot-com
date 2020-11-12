@@ -6,6 +6,7 @@ use App\Controller\CommonController;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use App\Services\Msgr;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,13 +25,17 @@ class SortieRestController extends CommonController {
         try {
             $idSortie = $request->get('id');
             $sortie = $sortieRepo->find($idSortie);
+            $dateActuel = new DateTime();
+
+            if ($sortie->getEtat()->getId() != 1) {
+                $this->addFlash(Msgr::TYPE_ERROR, 'La sortie à déjà été publier');
 
             // Si la date actuel est supérieur ou égal à la date de la sortie
-            if ($sortie->getDebut() >= date('D, d M Y 00:00:00')) {
+            } elseif ($sortie->getDebut() >= $dateActuel) {
                 $this->addFlash(Msgr::TYPE_ERROR, 'La date de la sortie est déjà passé');
 
             // Si la date actuel est supérieur ou égal à la date d'inscription
-            } elseif ($sortie->getLimiteInscription() >= date('D, d M Y 00:00:00')) {
+            } elseif ($sortie->getLimiteInscription() >= $dateActuel) {
                 $this->addFlash(Msgr::TYPE_ERROR, 'La date limite d\'inscription est déjà passé');
 
             // Si tout est bon
@@ -125,6 +130,7 @@ class SortieRestController extends CommonController {
         try {
             $idSortie = $request->get('id');
             $sortie = $sortieRepo->find($idSortie);
+            $dateActuel = new DateTime();
 
             // Si l'état de la sortie est 'ouverte' ou 'clôturée'
             if (in_array($sortie->getEtat()->getId(), array(2, 3))) {
@@ -134,7 +140,7 @@ class SortieRestController extends CommonController {
             }
 
             // Si la sortie est clôturée et que la date limite de clôturation n'est pas passée
-            if ($sortie->getEtat()->getId() == 3 && $sortie->getLimiteInscription() >= date('D, d M Y 00:00:00')) {
+            if ($sortie->getEtat()->getId() == 3 && $sortie->getLimiteInscription() >= $dateActuel) {
                 $etat = $etatRepo->find(2);
                 $sortie->setEtat($etat);
 
