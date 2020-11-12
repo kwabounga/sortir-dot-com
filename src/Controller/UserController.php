@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use function Sodium\add;
 
 class UserController extends CommonController
 {
@@ -152,6 +153,8 @@ class UserController extends CommonController
      */
     public function login(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $encoder){
         $user = $this->getUser();
+
+
         return $this->render("user/login.html.twig", [
             "user" => $user,
             'title' => 'Login',
@@ -162,10 +165,19 @@ class UserController extends CommonController
     /**
      * @Route("/login/connexion", name="after_login")
      */
-    public function afterLogin() {
+    public function afterLogin(Request $request, EntityManagerInterface $em) {
         // si authentifié bienvenue
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')){
-            $this->addFlash(Msgr::TYPE_SUCCESS, Msgr::WELCOME.$this->getUser()->getUsername());
+            $user = $this->getUser();
+            $AppUser = $em->getRepository(User::class)->findOneBy(['username' => $user->getUsername()]);
+            if($AppUser->getActif() == false){
+                $this->get('security.token_storage')->setToken(null);
+                $request->getSession()->invalidate();
+                $this->addFlash(Msgr::TYPE_WARNING,Msgr::USERDESACTIVATED);
+            } else {
+                $this->addFlash(Msgr::TYPE_SUCCESS, Msgr::WELCOME.$this->getUser()->getUsername());
+            }
+
         }
 
         return $this->redirectToRoute('main_home');
@@ -269,7 +281,6 @@ class UserController extends CommonController
             if($force == 'force'){
                 $em->remove($user);
                 $em->flush();
-
                 $this->addFlash(Msgr::TYPE_WARNING, 'utilisateur '.$username.' supprimé');
             } else {
                 $user->setActif(false);
@@ -279,7 +290,33 @@ class UserController extends CommonController
             }
 
         }
+        return $this->redirectToRoute('home');
+    }
+    /**
+     * @Route("/admin/desactivate/{id}", name="desactivateUser")
+     */
+    public function desactivateUser(EntityManagerInterface $em , Request $request, $id =null){
+        if($this->isGranted('ROLE_ADMIN')){
+            $user = $em->getRepository(User::class)->find($id);
+            $username = $user->getLastname().' '.$user->getFirstname();
+            $user->setActif(false);
+            $em->flush();
+            $this->addFlash(Msgr::TYPE_INFOS, 'utilisateur '.$username.' désactivé');
 
+        }
+        return $this->redirectToRoute('home');
+    }
+    /**
+     * @Route("/admin/activate/{id}", name="activateUser")
+     */
+    public function activateUser(EntityManagerInterface $em , Request $request, $id =null){
+        if($this->isGranted('ROLE_ADMIN')){
+            $user = $em->getRepository(User::class)->find($id);
+            $username = $user->getLastname().' '.$user->getFirstname();
+            $user->setActif(true);
+            $em->flush();
+            $this->addFlash(Msgr::TYPE_INFOS, 'utilisateur '.$username.' réactivé');
+        }
         return $this->redirectToRoute('home');
     }
     /**

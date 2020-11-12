@@ -31,6 +31,7 @@ class Msgr
     const RAZMDPSENDED = 'Une demande de confirmation vient de vous être envoyé: lien valable ce jour';
     const USERNOEXIST = 'L\'Utilisateur n\'existe pas';
     const RAZMDPOK = 'la reinitialisation du mot de passe c\'est déroulé avec succes';
+    const USERDESACTIVATED = 'Votre Compte a été désactivé contactez votre administrateur';
 
 
 }
