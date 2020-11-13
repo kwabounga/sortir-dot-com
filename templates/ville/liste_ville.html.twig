@@ -9,7 +9,7 @@
 {% block header %}
 
 
-    <header class="jumbotron my-4">
+    <header class="jumbotron my-4"  id="ville_header">
         <div class="row">
 
             <div class="col-12 col-lg-6">
@@ -185,7 +185,7 @@ nom; codepostal; 'latitude'; 'longitude';</code></pre>
                 ],
                 essential: true // this animation is considered essential with respect to prefers-reduced-motion
             });
-
+            window.location = window.location+'#ville_header';
         }
         function updateFieldWithList(name, cityCode, lat, lng) {
             // console.log(name, cityCode, lat, lng);
