@@ -31,11 +31,11 @@ class SortieRestController extends CommonController {
                 $this->addFlash(Msgr::TYPE_ERROR, 'La sortie à déjà été publier');
 
             // Si la date actuel est supérieur ou égal à la date de la sortie
-            } elseif ($sortie->getDebut() >= $dateActuel) {
+            } elseif ($sortie->getDebut() < $dateActuel) {
                 $this->addFlash(Msgr::TYPE_ERROR, 'La date de la sortie est déjà passé');
 
             // Si la date actuel est supérieur ou égal à la date d'inscription
-            } elseif ($sortie->getLimiteInscription() >= $dateActuel) {
+            } elseif ($sortie->getLimiteInscription() < $dateActuel) {
                 $this->addFlash(Msgr::TYPE_ERROR, 'La date limite d\'inscription est déjà passé');
 
             // Si tout est bon
