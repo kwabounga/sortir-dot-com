@@ -64,7 +64,7 @@
 				{{ form_label(sortie_form.lieu) }}
 				{{ form_widget(sortie_form.lieu) }}
 				<div class="input-group-append">
-					<button type="button" class="btn btn-success" onclick="ajouterLieu('{{ path('lieu_ajouter') }}');">
+					<button type="button" class="btn btn-success" onclick="ajouterLieu('{{ path('lieu_ajouter',{'idSortie' : sortie.id}) }}');">
 						<i class="fas fa-plus-circle"></i>
 					</button>
 				</div>
@@ -140,7 +140,7 @@
 			var parametres = 'nom=' + nom + '&' + 'debut=' + debut + '&' + 'duree=' + duree + '&' + 'limiteInscription=' + limiteInscription + '&' 
 										+ 'inscriptionMax=' + inscriptionMax + '&' + 'infos=' + infos;
 			
-			window.location = url + '?' + parametres;
+			window.location = url + '&' + parametres;
 
     	}
 		let map;
