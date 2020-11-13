@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\CommonController;
+use App\Entity\Sortie;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,8 +25,9 @@ class LieuController extends CommonController
         $lieu = new Lieu();
         $params = $request->query->all();
 
+        dump($request->request->all());
         dump($request->getRequestUri());
-        
+
         if (array_key_exists('lieu_nom', $params)) {
             if ($params['lieu_lat'] == '') {
                 $params['lieu_lat'] = null;
@@ -50,7 +52,18 @@ class LieuController extends CommonController
             $em->persist($lieu);
             $em->flush();
             $params['lieu'] = $lieu->getId();
-            return $this->redirectToRoute('sortie_ajouter', $params);
+            if($params['idSortie'] != 'null'){
+                $s = $em->getRepository(Sortie::class)->find($params['idSortie'] );
+                if($s){
+                    $s->setLieu($lieu);
+                    $em->persist($s);
+                    $em->flush();
+                }
+                return $this->redirectToRoute('sortie_modifier', ['id'=>$params['idSortie']]);
+            } else {
+                return $this->redirectToRoute('sortie_ajouter', $params);
+
+            }
         } else {
             return $this->render('lieu/ajouter_lieu.html.twig', [
                 'page_name' => 'Création d\'un lieu',
