@@ -25,7 +25,7 @@ class SortieController extends CommonController {
      */
     public function detailSortie(SortieRepository $sortieRepo, $id) {
         $sortie = $sortieRepo->find($id);
-        dump($sortie);
+        // dump($sortie);
         return $this->render('sortie/detail_sortie.html.twig', [
             'sortie' => $sortie,
             // 'routes' => $this->getAllRoutes(),
@@ -45,7 +45,7 @@ class SortieController extends CommonController {
         $date->modify('+1 day');
        	
         if (!empty($p)) {
-            dump($p);
+            // dump($p);
             $sortie->setNom($p['nom']);
             $sortie->setDebut(new \DateTime($p['debut']));
             if ($p['duree'] !== '') {

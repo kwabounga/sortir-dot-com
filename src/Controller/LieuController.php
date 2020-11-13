@@ -25,8 +25,8 @@ class LieuController extends CommonController
         $lieu = new Lieu();
         $params = $request->query->all();
 
-        dump($request->request->all());
-        dump($request->getRequestUri());
+        // dump($request->request->all());
+        // dump($request->getRequestUri());
 
         if (array_key_exists('lieu_nom', $params)) {
             if ($params['lieu_lat'] == '') {
@@ -80,14 +80,14 @@ class LieuController extends CommonController
      * @Route("/get/location", name="lieu_location", methods={"POST"})
      */
     public function locationLieu(EntityManagerInterface $em, Request $request) {
-        dump($request->query->all());
-        dump($request->request->all());
+        // dump($request->query->all());
+        // dump($request->request->all());
         $l = $em->getRepository(Lieu::class)->find($request->request->all()['id']);
         if($l){
             return new JsonResponse(['lat'=>$l->getLatitude(), 'lng'=>$l->getLongitude()]);
         }
+        // pour prévenir d'un eventuel bug coordonnées par defaut
             return new JsonResponse(['lat'=>42.01212, 'lng'=>-1.1234]);
-
 
     }
     

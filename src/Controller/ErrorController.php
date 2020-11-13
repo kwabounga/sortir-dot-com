@@ -18,8 +18,8 @@ class ErrorController extends CommonController
      */
     public function show(string $garbage, Request $request): Response
     {
-        dump($garbage);
-        dump($this->getUser());
+        // dump($garbage);
+        // dump($this->getUser());
 
         return $this->render('bundles/TwigBundle/Exception/error404.html.twig', [
             'title' => 'Oups, Quelque Chose c\'est mal passé...',

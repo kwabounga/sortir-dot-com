@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use function Sodium\add;
+//use function Sodium\add;
 
 class UserController extends CommonController
 {
@@ -55,11 +55,11 @@ class UserController extends CommonController
         /** @var UploadedFile $csvFile */
         $csvFile = $request->files->get('upload');
         $csv = '';
-        dump($csvFile);
+        // dump($csvFile);
         if($csvFile['file']){
             $csv = $csvFile['file']->openFile('r')->fread($csvFile['file']->getSize());
         }
-        dump($csv);
+        // dump($csv);
         /** @var JsonResponse $output */
         $output = CSVLoaderService::loadUsersFromCSV($em,$encoder, $csv);;
         return $output;
@@ -326,13 +326,13 @@ class UserController extends CommonController
 
         $params = $request->request->all();
         if($params!= [] ){
-            dump($params['_mail']);
+            // dump($params['_mail']);
             $user = $em->getRepository(User::class)->findOneBy(['mail'=>$params['_mail']]);
             if($user) {
                 $this->addFlash(Msgr::TYPE_INFOS,Msgr::RAZMDPSENDED);
                 $time = new \DateTime();
                 $fTime = $time->format('d/M/yy');
-                dump($fTime);
+                // dump($fTime);
                 $token = base64_encode($user->getMail().':'.$user->getDateCreated()->format('d/M/yy').':'.$fTime);
                 // ici on simule un envoi de lien par mail
                 // par exemple : http://localhost/sortir-dot-com/public/new/password/send?tokken=a3JvQG5lbmJvdXJnLmNvbToxMS9Ob3YvMjAyMDoxMi9Ob3YvMjAyMA%3D%3D
@@ -357,8 +357,8 @@ class UserController extends CommonController
     public function newPasswordSend(EntityManagerInterface $em , Request $request, UserPasswordEncoderInterface $encoder){
         $token = $request->query->all()['tokken'];
 
-        dump($request->query->all());
-        dump($token);
+        // dump($request->query->all());
+        // dump($token);
         $time = new \DateTime();
         $fTime = $time->format('d/M/yy');
         if($token!=null){
@@ -367,7 +367,7 @@ class UserController extends CommonController
                 $t = base64_encode($user->getMail().':'.$user->getDateCreated()->format('d/M/yy').':'.$fTime);
                 if($token == $t){
                     $newInfos = $request->request->all();
-                    dump($newInfos);
+                    // dump($newInfos);
                     if($newInfos != [] and $newInfos['_password'] and $newInfos['_passwordConfirm'] and trim($newInfos['_password']) != '' and trim($newInfos['_passwordConfirm']) != ''){
                         if(trim($newInfos['_password']) === trim($newInfos['_passwordConfirm'])){
                             $hash = $encoder->encodePassword($user, trim($newInfos['_password']));

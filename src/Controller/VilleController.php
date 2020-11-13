@@ -47,7 +47,7 @@ class VilleController extends CommonController {
                 }
 
             } catch (\Exception $e){
-                dump($e);
+                // dump($e);
                 $this->addFlash(Msgr::TYPE_WARNING, 'la ville '.$v->getNom().' n\'a pas pu etre ajouté');
             }
             // vidage &  re-création d'un form tou neuf
@@ -69,11 +69,11 @@ class VilleController extends CommonController {
     /** @var UploadedFile $csvFile */
     $csvFile = $request->files->get('upload');
     $csv = '';
-    dump($csvFile);
+    // dump($csvFile);
     if($csvFile['file']){
         $csv = $csvFile['file']->openFile('r')->fread($csvFile['file']->getSize());
     }
-        dump($csv);
+        // dump($csv);
         /** @var JsonResponse $output */
         $output = CSVLoaderService::loadCitiesFromCSV($em, $csv);
         return $output;
@@ -102,7 +102,7 @@ class VilleController extends CommonController {
         $params = $request->query->all();
         $villeForm = $this->createForm(VilleType::class, $ville, []);
         $villeForm->handleRequest($request);
-        dump($params);
+        // dump($params);
         if ($villeForm->isSubmitted() && $villeForm->isValid()) {
             $em->persist($ville);
             $em->flush();
