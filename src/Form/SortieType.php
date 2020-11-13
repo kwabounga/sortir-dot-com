@@ -81,14 +81,14 @@ class SortieType extends AbstractType
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
                 'choice_value' => 'id',
-                'attr' => ['class' => 'col-12 col-sm-10'],
+                'attr' => ['class' => 'col-12 col-sm-10 form-control'],
                 'label_attr' => ['class' => 'col-12 col-sm-2'],
             ])
 
             // Description
             ->add('infos', TextareaType::class, [
-                'row_attr' => ['class' => 'form-row'],
-                'attr' => ['class' => 'col-12 col-sm-10'],
+                'row_attr' => ['class' => 'form-row' ],
+                'attr' => ['class' => 'col-12 col-sm-10', 'rows'=>5],
                 'label_attr' => ['class' => 'col-12 col-sm-2'],
                 'label' => 'Infos'
             ])
