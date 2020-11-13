@@ -79,7 +79,11 @@
 					{{ form_row(lieu_form.save) }}
 				</div>
 				<div class="col-sm-6">
+					{%  if params.idSortie != 'null' %}
+					<input class="btn btn-warning" type="button" onclick="location.href='{{ path('sortie_modifier', {'id':params.idSortie })}}';" value="Annuler" />
+					{%  else %}
 					<input class="btn btn-warning" type="button" onclick="location.href='{{ path('sortie_ajouter', params)}}';" value="Annuler" />
+					{%  endif %}
 				</div>
 			</div>
 		{{ form_end(lieu_form) }}
